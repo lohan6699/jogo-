@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Jogo do Pinguim - Visual Melhorado</title>
+  <title>Jogo do Pinguim - Aurora Boreal</title>
   <style>
     * {
       margin: 0;
@@ -25,11 +25,12 @@
       height: 620px;
       background: linear-gradient(
         to bottom,
-        #0b1c3a 0%,
-        #1a3a6e 25%,
-        #3a7ca5 55%,
-        #7ec8e3 78%,
-        #c8e9f5 100%
+        #040c1c 0%,
+        #0a1835 18%,
+        #132a55 38%,
+        #2a5080 58%,
+        #5a9fc0 78%,
+        #a8d8f0 100%
       );
       border: 8px solid #e8f4ff;
       border-radius: 24px;
@@ -38,61 +39,116 @@
       box-shadow: 
         0 0 0 4px #7eb8e0,
         0 20px 50px rgba(0, 40, 80, 0.6),
-        inset 0 0 80px rgba(255,255,255,0.1);
+        inset 0 0 80px rgba(255,255,255,0.08);
     }
 
-    /* Nuvens decorativas */
+    /* ========== AURORA BOREAL ========== */
+    .aurora {
+      position: absolute;
+      top: 0;
+      left: -20%;
+      width: 140%;
+      height: 48%;
+      pointer-events: none;
+      z-index: 0;
+      mix-blend-mode: screen;
+      filter: blur(28px);
+    }
+
+    .aurora1 {
+      background: 
+        radial-gradient(ellipse 80% 50% at 30% 40%, rgba(0, 255, 170, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 70% 30%, rgba(80, 200, 255, 0.25) 0%, transparent 70%);
+      animation: auroraWave1 14s ease-in-out infinite alternate;
+    }
+
+    .aurora2 {
+      background: 
+        radial-gradient(ellipse 70% 45% at 50% 35%, rgba(140, 80, 255, 0.28) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 35% at 20% 50%, rgba(0, 255, 200, 0.2) 0%, transparent 70%);
+      animation: auroraWave2 18s ease-in-out infinite alternate;
+      opacity: 0.85;
+    }
+
+    .aurora3 {
+      background: 
+        radial-gradient(ellipse 90% 40% at 60% 25%, rgba(0, 255, 140, 0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 30% at 85% 45%, rgba(180, 100, 255, 0.18) 0%, transparent 70%);
+      animation: auroraWave3 11s ease-in-out infinite alternate;
+      opacity: 0.7;
+    }
+
+    @keyframes auroraWave1 {
+      0%   { transform: translateX(-8%) scaleY(1) skewX(-4deg); opacity: 0.7; }
+      50%  { transform: translateX(5%) scaleY(1.15) skewX(3deg); opacity: 1; }
+      100% { transform: translateX(10%) scaleY(0.95) skewX(-2deg); opacity: 0.75; }
+    }
+
+    @keyframes auroraWave2 {
+      0%   { transform: translateX(6%) scaleY(1.1) skewX(5deg); opacity: 0.6; }
+      50%  { transform: translateX(-7%) scaleY(0.9) skewX(-4deg); opacity: 0.95; }
+      100% { transform: translateX(-4%) scaleY(1.2) skewX(2deg); opacity: 0.65; }
+    }
+
+    @keyframes auroraWave3 {
+      0%   { transform: translateX(-5%) scaleY(0.95) skewX(3deg); opacity: 0.55; }
+      50%  { transform: translateX(8%) scaleY(1.25) skewX(-5deg); opacity: 0.9; }
+      100% { transform: translateX(3%) scaleY(1) skewX(4deg); opacity: 0.6; }
+    }
+
+    /* Nuvens */
     .cloud {
       position: absolute;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.75);
       border-radius: 50px;
-      filter: blur(1px);
-      opacity: 0.7;
+      filter: blur(1.5px);
+      opacity: 0.55;
+      z-index: 1;
     }
     .cloud::before, .cloud::after {
       content: '';
       position: absolute;
-      background: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.75);
       border-radius: 50%;
     }
 
     #cloud1 {
-      width: 120px; height: 40px;
-      top: 50px; left: 30px;
-      animation: floatCloud 28s linear infinite;
+      width: 130px; height: 42px;
+      top: 55px; left: 20px;
+      animation: floatCloud 32s linear infinite;
     }
-    #cloud1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
-    #cloud1::after  { width: 60px; height: 40px; top: -15px; left: 50px; }
+    #cloud1::before { width: 55px; height: 55px; top: -28px; left: 18px; }
+    #cloud1::after  { width: 65px; height: 42px; top: -18px; left: 55px; }
 
     #cloud2 {
-      width: 90px; height: 30px;
-      top: 100px; left: 280px;
-      animation: floatCloud 35s linear infinite;
-      animation-delay: -10s;
+      width: 95px; height: 32px;
+      top: 110px; left: 300px;
+      animation: floatCloud 40s linear infinite;
+      animation-delay: -12s;
     }
-    #cloud2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
-    #cloud2::after  { width: 45px; height: 30px; top: -10px; left: 40px; }
+    #cloud2::before { width: 42px; height: 42px; top: -22px; left: 12px; }
+    #cloud2::after  { width: 48px; height: 32px; top: -12px; left: 42px; }
 
     @keyframes floatCloud {
-      from { transform: translateX(-150px); }
-      to   { transform: translateX(600px); }
+      from { transform: translateX(-160px); }
+      to   { transform: translateX(620px); }
     }
 
-    /* Neve caindo */
+    /* Neve */
     .snowflake {
       position: absolute;
       color: white;
       font-size: 14px;
-      opacity: 0.8;
+      opacity: 0.75;
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
       animation: fall linear infinite;
-      text-shadow: 0 0 6px rgba(255,255,255,0.8);
+      text-shadow: 0 0 8px rgba(255,255,255,0.9);
     }
 
     @keyframes fall {
-      0%   { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
-      100% { transform: translateY(650px) rotate(360deg); opacity: 0.3; }
+      0%   { transform: translateY(-30px) rotate(0deg); opacity: 0.85; }
+      100% { transform: translateY(660px) rotate(360deg); opacity: 0.2; }
     }
 
     /* Chão de gelo */
@@ -103,34 +159,33 @@
       height: 95px;
       background: linear-gradient(
         to bottom,
-        rgba(200, 240, 255, 0.95) 0%,
-        #a8d8f0 40%,
+        rgba(210, 245, 255, 0.97) 0%,
+        #a8d8f0 45%,
         #7ec8e3 100%
       );
-      border-top: 3px solid rgba(255,255,255,0.9);
+      border-top: 3px solid rgba(255,255,255,0.95);
       box-shadow: 
-        inset 0 8px 20px rgba(255,255,255,0.6),
-        0 -10px 30px rgba(100, 180, 220, 0.3);
-      z-index: 2;
+        inset 0 10px 25px rgba(255,255,255,0.55),
+        0 -12px 35px rgba(80, 160, 210, 0.25);
+      z-index: 3;
     }
 
-    /* Brilho no gelo */
     #ice::after {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 40%;
+      height: 45%;
       background: linear-gradient(
         90deg,
         transparent 0%,
-        rgba(255,255,255,0.4) 30%,
-        rgba(255,255,255,0.7) 50%,
-        rgba(255,255,255,0.4) 70%,
+        rgba(255,255,255,0.35) 25%,
+        rgba(255,255,255,0.65) 50%,
+        rgba(255,255,255,0.35) 75%,
         transparent 100%
       );
-      opacity: 0.6;
+      opacity: 0.55;
     }
 
     /* Placar */
@@ -141,14 +196,14 @@
       font-size: 24px;
       font-weight: 700;
       color: #ffffff;
-      background: rgba(10, 40, 80, 0.45);
-      backdrop-filter: blur(8px);
-      padding: 8px 18px;
+      background: rgba(8, 30, 60, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 8px 20px;
       border-radius: 30px;
-      border: 2px solid rgba(255,255,255,0.3);
+      border: 2px solid rgba(255,255,255,0.25);
       z-index: 10;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
     }
 
     /* Pinguim */
@@ -158,7 +213,7 @@
       left: 220px;
       font-size: 58px;
       z-index: 6;
-      filter: drop-shadow(0 8px 12px rgba(0,30,60,0.35));
+      filter: drop-shadow(0 8px 14px rgba(0,20,50,0.4));
       user-select: none;
       transition: transform 0.08s;
       animation: idle 2.2s ease-in-out infinite;
@@ -166,7 +221,7 @@
 
     @keyframes idle {
       0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(-4px); }
+      50%      { transform: translateY(-5px); }
     }
 
     /* Peixes */
@@ -175,34 +230,34 @@
       font-size: 34px;
       z-index: 5;
       user-select: none;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
-      animation: swim 1.4s ease-in-out infinite;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
+      animation: swim 1.5s ease-in-out infinite;
     }
 
     @keyframes swim {
-      0%, 100% { transform: rotate(-6deg); }
-      50%      { transform: rotate(6deg); }
+      0%, 100% { transform: rotate(-7deg); }
+      50%      { transform: rotate(7deg); }
     }
 
-    /* Obstáculos de gelo */
+    /* Obstáculos */
     .obstacle {
       position: absolute;
       font-size: 48px;
       z-index: 5;
       user-select: none;
       bottom: 95px;
-      filter: drop-shadow(0 6px 10px rgba(0,60,100,0.35));
+      filter: drop-shadow(0 6px 12px rgba(0,50,90,0.4));
     }
 
-    /* Mensagens (início / game over) */
+    /* Mensagens */
     #message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(12px);
-      padding: 32px 40px;
+      background: rgba(255, 255, 255, 0.93);
+      backdrop-filter: blur(14px);
+      padding: 32px 42px;
       border-radius: 24px;
       font-size: 26px;
       font-weight: 700;
@@ -211,10 +266,10 @@
       display: none;
       z-index: 30;
       box-shadow: 
-        0 15px 40px rgba(0,40,80,0.25),
-        0 0 0 4px rgba(255,255,255,0.6);
-      min-width: 280px;
-      border: 2px solid rgba(100,180,230,0.4);
+        0 18px 45px rgba(0,30,70,0.3),
+        0 0 0 4px rgba(255,255,255,0.5);
+      min-width: 290px;
+      border: 2px solid rgba(100,180,230,0.35);
     }
 
     .subtitle {
@@ -227,22 +282,22 @@
 
     #start-btn {
       margin-top: 20px;
-      padding: 12px 36px;
+      padding: 12px 38px;
       font-size: 18px;
-      background: linear-gradient(135deg, #0288d1, #0277bd);
+      background: linear-gradient(135deg, #0288d1, #01579b);
       color: white;
       border: none;
       border-radius: 40px;
       cursor: pointer;
       font-weight: 700;
-      box-shadow: 0 6px 18px rgba(2, 119, 189, 0.45);
+      box-shadow: 0 6px 20px rgba(2, 100, 180, 0.5);
       transition: all 0.2s;
     }
 
     #start-btn:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(2, 119, 189, 0.55);
-      background: linear-gradient(135deg, #039be5, #0288d1);
+      box-shadow: 0 10px 28px rgba(2, 100, 180, 0.6);
+      background: linear-gradient(135deg, #039be5, #0277bd);
     }
 
     #start-btn:active {
@@ -253,6 +308,11 @@
 <body>
 
   <div id="game">
+    <!-- Aurora Boreal -->
+    <div class="aurora aurora1"></div>
+    <div class="aurora aurora2"></div>
+    <div class="aurora aurora3"></div>
+
     <!-- Nuvens -->
     <div class="cloud" id="cloud1"></div>
     <div class="cloud" id="cloud2"></div>
@@ -265,7 +325,8 @@
       <div>Jogo do Pinguim</div>
       <div class="subtitle">
         Pegue os peixes 🐟<br>
-        Pule os blocos de gelo 🧊
+        Pule os blocos de gelo 🧊<br>
+        <span style="opacity:0.8">Sob a aurora boreal</span>
       </div>
       <button id="start-btn">Começar</button>
     </div>
@@ -293,17 +354,17 @@
 
     const keys = {};
 
-    // Cria flocos de neve
+    // Neve
     function createSnow() {
-      for (let i = 0; i < 35; i++) {
+      for (let i = 0; i < 38; i++) {
         const flake = document.createElement('div');
         flake.className = 'snowflake';
         flake.textContent = '❄';
         flake.style.left = Math.random() * 520 + 'px';
-        flake.style.fontSize = (10 + Math.random() * 12) + 'px';
-        flake.style.animationDuration = (4 + Math.random() * 7) + 's';
-        flake.style.animationDelay = (Math.random() * 8) + 's';
-        flake.style.opacity = 0.4 + Math.random() * 0.5;
+        flake.style.fontSize = (11 + Math.random() * 13) + 'px';
+        flake.style.animationDuration = (5 + Math.random() * 8) + 's';
+        flake.style.animationDelay = (Math.random() * 9) + 's';
+        flake.style.opacity = 0.35 + Math.random() * 0.5;
         game.appendChild(flake);
       }
     }
@@ -314,7 +375,7 @@
       if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
         isJumping = true;
         velocityY = jumpPower;
-        penguin.style.animation = 'none'; // para a animação idle no pulo
+        penguin.style.animation = 'none';
       }
       if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
         e.preventDefault();
@@ -420,7 +481,6 @@
         const px = penguinX;
         const py = penguinY;
 
-        // colisão (só se estiver próximo do chão)
         if (
           obsX < px + 48 &&
           obsX + 42 > px &&
