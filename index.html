@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Jogo do Pinguim</title>
+  <title>Jogo do Pinguim - Obstáculos de Gelo</title>
   <style>
     * {
       margin: 0;
@@ -23,7 +23,7 @@
     #game {
       width: 500px;
       height: 600px;
-      background: linear-gradient(#87CEEB 0%, #e0f7fa 60%, #b3e5fc 100%);
+      background: linear-gradient(#87CEEB 0%, #e0f7fa 55%, #b3e5fc 100%);
       border: 6px solid #ffffff;
       border-radius: 16px;
       position: relative;
@@ -31,7 +31,6 @@
       box-shadow: 0 0 40px rgba(100, 200, 255, 0.4);
     }
 
-    /* chão de gelo */
     #ice {
       position: absolute;
       bottom: 0;
@@ -57,18 +56,25 @@
       bottom: 80px;
       left: 220px;
       font-size: 52px;
-      transition: transform 0.1s;
       z-index: 5;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
       user-select: none;
+      transition: transform 0.08s;
     }
 
     .fish {
       position: absolute;
       font-size: 32px;
       z-index: 4;
-      transition: top 0.05s linear;
       user-select: none;
+    }
+
+    .obstacle {
+      position: absolute;
+      font-size: 42px;
+      z-index: 4;
+      user-select: none;
+      bottom: 80px;
     }
 
     #message {
@@ -76,21 +82,22 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255,255,255,0.9);
-      padding: 20px 40px;
+      background: rgba(255,255,255,0.95);
+      padding: 24px 40px;
       border-radius: 16px;
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
       color: #01579b;
       text-align: center;
       display: none;
       z-index: 20;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      min-width: 260px;
     }
 
     #start-btn {
-      margin-top: 12px;
-      padding: 10px 24px;
+      margin-top: 14px;
+      padding: 10px 28px;
       font-size: 18px;
       background: #0288d1;
       color: white;
@@ -103,6 +110,13 @@
     #start-btn:hover {
       background: #0277bd;
     }
+
+    .subtitle {
+      font-size: 15px;
+      font-weight: normal;
+      margin-top: 6px;
+      color: #0277bd;
+    }
   </style>
 </head>
 <body>
@@ -112,8 +126,8 @@
     <div id="penguin">🐧</div>
     <div id="ice"></div>
     <div id="message">
-      <div>Jogo do Pinguim!</div>
-      <div style="font-size:16px; margin-top:8px;">Pegue os peixes 🐟</div>
+      <div>Jogo do Pinguim</div>
+      <div class="subtitle">Pegue os peixes 🐟<br>Pule os gelos 🧊</div>
       <button id="start-btn">Começar</button>
     </div>
   </div>
@@ -127,18 +141,17 @@
 
     let score = 0;
     let penguinX = 220;
-    let penguinY = 0; // altura do pulo
+    let penguinY = 0;
     let isJumping = false;
     let velocityY = 0;
     let gameRunning = false;
-    let fishInterval;
+    let fishInterval, obstacleInterval;
     let animationId;
 
-    const gravity = 0.8;
-    const jumpPower = -14;
-    const speed = 8;
+    const gravity = 0.85;
+    const jumpPower = -15;
+    const speed = 7;
 
-    // teclas
     const keys = {};
 
     document.addEventListener('keydown', e => {
@@ -147,6 +160,10 @@
         isJumping = true;
         velocityY = jumpPower;
       }
+      // evita scroll da página
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
+        e.preventDefault();
+      }
     });
 
     document.addEventListener('keyup', e => {
@@ -154,19 +171,12 @@
     });
 
     function updatePenguin() {
-      // movimento horizontal
-      if (keys['ArrowLeft'] || keys['a']) {
-        penguinX -= speed;
-      }
-      if (keys['ArrowRight'] || keys['d']) {
-        penguinX += speed;
-      }
+      if (keys['ArrowLeft'] || keys['a']) penguinX -= speed;
+      if (keys['ArrowRight'] || keys['d']) penguinX += speed;
 
-      // limites
       if (penguinX < 0) penguinX = 0;
       if (penguinX > 440) penguinX = 440;
 
-      // física do pulo
       if (isJumping) {
         velocityY += gravity;
         penguinY += velocityY;
@@ -179,7 +189,7 @@
       }
 
       penguin.style.left = penguinX + 'px';
-      penguin.style.bottom = (80 + -penguinY) + 'px';
+      penguin.style.bottom = (80 - penguinY) + 'px';
     }
 
     function createFish() {
@@ -193,7 +203,7 @@
       game.appendChild(fish);
 
       let fishY = -40;
-      const fallSpeed = 2 + Math.random() * 2;
+      const fallSpeed = 2.2 + Math.random() * 1.8;
 
       function fall() {
         if (!gameRunning) {
@@ -204,35 +214,22 @@
         fishY += fallSpeed;
         fish.style.top = fishY + 'px';
 
-        // colisão com o pinguim
-        const fishRect = {
-          x: parseFloat(fish.style.left),
-          y: fishY,
-          w: 32,
-          h: 32
-        };
-
-        const pengRect = {
-          x: penguinX,
-          y: 600 - 80 - 52 + penguinY, // posição Y do pinguim
-          w: 52,
-          h: 52
-        };
+        // colisão com pinguim
+        const px = penguinX;
+        const py = 600 - 80 - 52 + penguinY;
 
         if (
-          fishRect.x < pengRect.x + pengRect.w &&
-          fishRect.x + fishRect.w > pengRect.x &&
-          fishRect.y < pengRect.y + pengRect.h &&
-          fishRect.y + fishRect.h > pengRect.y
+          parseFloat(fish.style.left) < px + 48 &&
+          parseFloat(fish.style.left) + 30 > px &&
+          fishY < py + 48 &&
+          fishY + 30 > py
         ) {
-          // pegou!
           score += 10;
           scoreEl.textContent = 'Pontos: ' + score;
           fish.remove();
           return;
         }
 
-        // peixe caiu no chão
         if (fishY > 520) {
           fish.remove();
           return;
@@ -244,6 +241,69 @@
       requestAnimationFrame(fall);
     }
 
+    function createObstacle() {
+      if (!gameRunning) return;
+
+      const obs = document.createElement('div');
+      obs.className = 'obstacle';
+      obs.textContent = '🧊';
+      obs.style.left = '520px';
+      game.appendChild(obs);
+
+      let obsX = 520;
+      const moveSpeed = 3.5 + Math.random() * 2.5;
+
+      function move() {
+        if (!gameRunning) {
+          obs.remove();
+          return;
+        }
+
+        obsX -= moveSpeed;
+        obs.style.left = obsX + 'px';
+
+        // colisão com pinguim (só se não estiver pulando alto)
+        const px = penguinX;
+        const py = penguinY; // 0 = no chão
+
+        if (
+          obsX < px + 45 &&
+          obsX + 40 > px &&
+          py > -25          // se o pinguim estiver baixo demais
+        ) {
+          // bateu no gelo!
+          gameOver();
+          return;
+        }
+
+        if (obsX < -50) {
+          obs.remove();
+          return;
+        }
+
+        requestAnimationFrame(move);
+      }
+
+      requestAnimationFrame(move);
+    }
+
+    function gameOver() {
+      gameRunning = false;
+      clearInterval(fishInterval);
+      clearInterval(obstacleInterval);
+      cancelAnimationFrame(animationId);
+
+      message.innerHTML = `
+        <div>Game Over!</div>
+        <div class="subtitle">Você fez ${score} pontos</div>
+        <button id="start-btn">Jogar de novo</button>
+      `;
+      message.style.display = 'block';
+
+      // precisa reatribuir o evento porque o botão foi recriado
+      document.getElementById('start-btn').addEventListener('click', startGame);
+    }
+
     function gameLoop() {
       if (!gameRunning) return;
       updatePenguin();
@@ -251,25 +311,25 @@
     }
 
     function startGame() {
-      // limpa peixes antigos
-      document.querySelectorAll('.fish').forEach(f => f.remove());
+      // limpa tudo
+      document.querySelectorAll('.fish, .obstacle').forEach(el => el.remove());
 
       score = 0;
       scoreEl.textContent = 'Pontos: 0';
       penguinX = 220;
       penguinY = 0;
       isJumping = false;
+      velocityY = 0;
       message.style.display = 'none';
       gameRunning = true;
 
-      // spawna peixes
-      fishInterval = setInterval(createFish, 900);
+      fishInterval = setInterval(createFish, 1100);
+      obstacleInterval = setInterval(createObstacle, 1800);
+
       gameLoop();
     }
 
     startBtn.addEventListener('click', startGame);
-
-    // mostra tela inicial
     message.style.display = 'block';
   </script>
 </body>
