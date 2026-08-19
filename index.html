@@ -3,26 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogo de Tiro 3D - Balões</title>
+  <title>Tiro 3D - Balões Melhorado</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="ui">Pontos: <span id="score">0</span></div>
-  <div id="crosshair"></div>
-  
-  <div id="instructions">
-    <h2>🎈 Jogo de Tiro 3D</h2>
-    <p>Clique para começar!</p>
-    <p class="controles">
-      WASD = andar<br>
-      Mouse = olhar<br>
-      Clique = atirar nos balões
-    </p>
+  <div id="ui">
+    <div>Pontos: <span id="score">0</span></div>
+    <div>Combo: <span id="combo">0</span>x</div>
+    <div class="highscore">Recorde: <span id="highscore">0</span></div>
   </div>
 
-  <!-- Three.js -->
+  <div id="crosshair"></div>
+
+  <div id="instructions">
+    <h1>🎈 Tiro 3D</h1>
+    <p>Clique para jogar!</p>
+    <div class="controles">
+      <p><b>WASD</b> → Andar</p>
+      <p><b>Espaço</b> → Pular</p>
+      <p><b>Mouse</b> → Olhar</p>
+      <p><b>Clique</b> → Atirar</p>
+    </div>
+  </div>
+
+  <div id="gameover" class="hidden">
+    <h2>Fim de Jogo!</h2>
+    <p>Pontuação: <span id="final-score">0</span></p>
+    <button id="restart-btn">Jogar Novamente</button>
+  </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- Seu código do jogo -->
   <script src="script.js"></script>
 </body>
 </html>
