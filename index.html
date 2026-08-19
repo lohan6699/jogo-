@@ -1,38 +1,276 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tiro 3D - Balões Melhorado</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Jogo do Pinguim</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a1628;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    #game {
+      width: 500px;
+      height: 600px;
+      background: linear-gradient(#87CEEB 0%, #e0f7fa 60%, #b3e5fc 100%);
+      border: 6px solid #ffffff;
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(100, 200, 255, 0.4);
+    }
+
+    /* chão de gelo */
+    #ice {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(#e0f7fa, #b3e5fc);
+      border-top: 4px solid #ffffff;
+    }
+
+    #score {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #01579b;
+      text-shadow: 1px 1px 0 white;
+      z-index: 10;
+    }
+
+    #penguin {
+      position: absolute;
+      bottom: 80px;
+      left: 220px;
+      font-size: 52px;
+      transition: transform 0.1s;
+      z-index: 5;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+      user-select: none;
+    }
+
+    .fish {
+      position: absolute;
+      font-size: 32px;
+      z-index: 4;
+      transition: top 0.05s linear;
+      user-select: none;
+    }
+
+    #message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,0.9);
+      padding: 20px 40px;
+      border-radius: 16px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #01579b;
+      text-align: center;
+      display: none;
+      z-index: 20;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    #start-btn {
+      margin-top: 12px;
+      padding: 10px 24px;
+      font-size: 18px;
+      background: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #start-btn:hover {
+      background: #0277bd;
+    }
+  </style>
 </head>
 <body>
-  <div id="ui">
-    <div>Pontos: <span id="score">0</span></div>
-    <div>Combo: <span id="combo">0</span>x</div>
-    <div class="highscore">Recorde: <span id="highscore">0</span></div>
-  </div>
 
-  <div id="crosshair"></div>
-
-  <div id="instructions">
-    <h1>🎈 Tiro 3D</h1>
-    <p>Clique para jogar!</p>
-    <div class="controles">
-      <p><b>WASD</b> → Andar</p>
-      <p><b>Espaço</b> → Pular</p>
-      <p><b>Mouse</b> → Olhar</p>
-      <p><b>Clique</b> → Atirar</p>
+  <div id="game">
+    <div id="score">Pontos: 0</div>
+    <div id="penguin">🐧</div>
+    <div id="ice"></div>
+    <div id="message">
+      <div>Jogo do Pinguim!</div>
+      <div style="font-size:16px; margin-top:8px;">Pegue os peixes 🐟</div>
+      <button id="start-btn">Começar</button>
     </div>
   </div>
 
-  <div id="gameover" class="hidden">
-    <h2>Fim de Jogo!</h2>
-    <p>Pontuação: <span id="final-score">0</span></p>
-    <button id="restart-btn">Jogar Novamente</button>
-  </div>
+  <script>
+    const game = document.getElementById('game');
+    const penguin = document.getElementById('penguin');
+    const scoreEl = document.getElementById('score');
+    const message = document.getElementById('message');
+    const startBtn = document.getElementById('start-btn');
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="script.js"></script>
+    let score = 0;
+    let penguinX = 220;
+    let penguinY = 0; // altura do pulo
+    let isJumping = false;
+    let velocityY = 0;
+    let gameRunning = false;
+    let fishInterval;
+    let animationId;
+
+    const gravity = 0.8;
+    const jumpPower = -14;
+    const speed = 8;
+
+    // teclas
+    const keys = {};
+
+    document.addEventListener('keydown', e => {
+      keys[e.key] = true;
+      if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
+        isJumping = true;
+        velocityY = jumpPower;
+      }
+    });
+
+    document.addEventListener('keyup', e => {
+      keys[e.key] = false;
+    });
+
+    function updatePenguin() {
+      // movimento horizontal
+      if (keys['ArrowLeft'] || keys['a']) {
+        penguinX -= speed;
+      }
+      if (keys['ArrowRight'] || keys['d']) {
+        penguinX += speed;
+      }
+
+      // limites
+      if (penguinX < 0) penguinX = 0;
+      if (penguinX > 440) penguinX = 440;
+
+      // física do pulo
+      if (isJumping) {
+        velocityY += gravity;
+        penguinY += velocityY;
+
+        if (penguinY >= 0) {
+          penguinY = 0;
+          isJumping = false;
+          velocityY = 0;
+        }
+      }
+
+      penguin.style.left = penguinX + 'px';
+      penguin.style.bottom = (80 + -penguinY) + 'px';
+    }
+
+    function createFish() {
+      if (!gameRunning) return;
+
+      const fish = document.createElement('div');
+      fish.className = 'fish';
+      fish.textContent = '🐟';
+      fish.style.left = Math.random() * 440 + 'px';
+      fish.style.top = '-40px';
+      game.appendChild(fish);
+
+      let fishY = -40;
+      const fallSpeed = 2 + Math.random() * 2;
+
+      function fall() {
+        if (!gameRunning) {
+          fish.remove();
+          return;
+        }
+
+        fishY += fallSpeed;
+        fish.style.top = fishY + 'px';
+
+        // colisão com o pinguim
+        const fishRect = {
+          x: parseFloat(fish.style.left),
+          y: fishY,
+          w: 32,
+          h: 32
+        };
+
+        const pengRect = {
+          x: penguinX,
+          y: 600 - 80 - 52 + penguinY, // posição Y do pinguim
+          w: 52,
+          h: 52
+        };
+
+        if (
+          fishRect.x < pengRect.x + pengRect.w &&
+          fishRect.x + fishRect.w > pengRect.x &&
+          fishRect.y < pengRect.y + pengRect.h &&
+          fishRect.y + fishRect.h > pengRect.y
+        ) {
+          // pegou!
+          score += 10;
+          scoreEl.textContent = 'Pontos: ' + score;
+          fish.remove();
+          return;
+        }
+
+        // peixe caiu no chão
+        if (fishY > 520) {
+          fish.remove();
+          return;
+        }
+
+        requestAnimationFrame(fall);
+      }
+
+      requestAnimationFrame(fall);
+    }
+
+    function gameLoop() {
+      if (!gameRunning) return;
+      updatePenguin();
+      animationId = requestAnimationFrame(gameLoop);
+    }
+
+    function startGame() {
+      // limpa peixes antigos
+      document.querySelectorAll('.fish').forEach(f => f.remove());
+
+      score = 0;
+      scoreEl.textContent = 'Pontos: 0';
+      penguinX = 220;
+      penguinY = 0;
+      isJumping = false;
+      message.style.display = 'none';
+      gameRunning = true;
+
+      // spawna peixes
+      fishInterval = setInterval(createFish, 900);
+      gameLoop();
+    }
+
+    startBtn.addEventListener('click', startGame);
+
+    // mostra tela inicial
+    message.style.display = 'block';
+  </script>
 </body>
 </html>
