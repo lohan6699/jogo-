@@ -2,251 +2,211 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Jogo do Pinguim - Aurora Boreal</title>
+  <title>Jogo do Pinguim - Pixel Art</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      image-rendering: pixelated;
     }
 
     body {
-      background: #020b18;
+      background: #0a0a12;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-family: 'Press Start 2P', cursive;
       overflow: hidden;
     }
 
     #game {
-      width: 520px;
-      height: 620px;
+      width: 512px;
+      height: 608px;
       background: linear-gradient(
         to bottom,
-        #040c1c 0%,
-        #0a1835 18%,
-        #132a55 38%,
-        #2a5080 58%,
-        #5a9fc0 78%,
-        #a8d8f0 100%
+        #0b0b1a 0%,
+        #12122b 25%,
+        #1c1c3a 50%,
+        #2a3a5a 75%,
+        #3a5a7a 100%
       );
-      border: 8px solid #e8f4ff;
-      border-radius: 24px;
+      border: 6px solid #ffffff;
       position: relative;
       overflow: hidden;
-      box-shadow: 
-        0 0 0 4px #7eb8e0,
-        0 20px 50px rgba(0, 40, 80, 0.6),
-        inset 0 0 80px rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 4px #222, 0 0 0 8px #555;
     }
 
-    /* ========== AURORA BOREAL ========== */
+    /* ========== AURORA BOREAL PIXEL ========== */
     .aurora {
-      position: absolute;
-      top: 0;
-      left: -20%;
-      width: 140%;
-      height: 48%;
-      pointer-events: none;
-      z-index: 0;
-      mix-blend-mode: screen;
-      filter: blur(28px);
-    }
-
-    .aurora1 {
-      background: 
-        radial-gradient(ellipse 80% 50% at 30% 40%, rgba(0, 255, 170, 0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 40% at 70% 30%, rgba(80, 200, 255, 0.25) 0%, transparent 70%);
-      animation: auroraWave1 14s ease-in-out infinite alternate;
-    }
-
-    .aurora2 {
-      background: 
-        radial-gradient(ellipse 70% 45% at 50% 35%, rgba(140, 80, 255, 0.28) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 35% at 20% 50%, rgba(0, 255, 200, 0.2) 0%, transparent 70%);
-      animation: auroraWave2 18s ease-in-out infinite alternate;
-      opacity: 0.85;
-    }
-
-    .aurora3 {
-      background: 
-        radial-gradient(ellipse 90% 40% at 60% 25%, rgba(0, 255, 140, 0.22) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 30% at 85% 45%, rgba(180, 100, 255, 0.18) 0%, transparent 70%);
-      animation: auroraWave3 11s ease-in-out infinite alternate;
-      opacity: 0.7;
-    }
-
-    @keyframes auroraWave1 {
-      0%   { transform: translateX(-8%) scaleY(1) skewX(-4deg); opacity: 0.7; }
-      50%  { transform: translateX(5%) scaleY(1.15) skewX(3deg); opacity: 1; }
-      100% { transform: translateX(10%) scaleY(0.95) skewX(-2deg); opacity: 0.75; }
-    }
-
-    @keyframes auroraWave2 {
-      0%   { transform: translateX(6%) scaleY(1.1) skewX(5deg); opacity: 0.6; }
-      50%  { transform: translateX(-7%) scaleY(0.9) skewX(-4deg); opacity: 0.95; }
-      100% { transform: translateX(-4%) scaleY(1.2) skewX(2deg); opacity: 0.65; }
-    }
-
-    @keyframes auroraWave3 {
-      0%   { transform: translateX(-5%) scaleY(0.95) skewX(3deg); opacity: 0.55; }
-      50%  { transform: translateX(8%) scaleY(1.25) skewX(-5deg); opacity: 0.9; }
-      100% { transform: translateX(3%) scaleY(1) skewX(4deg); opacity: 0.6; }
-    }
-
-    /* Nuvens */
-    .cloud {
-      position: absolute;
-      background: rgba(255,255,255,0.75);
-      border-radius: 50px;
-      filter: blur(1.5px);
-      opacity: 0.55;
-      z-index: 1;
-    }
-    .cloud::before, .cloud::after {
-      content: '';
-      position: absolute;
-      background: rgba(255,255,255,0.75);
-      border-radius: 50%;
-    }
-
-    #cloud1 {
-      width: 130px; height: 42px;
-      top: 55px; left: 20px;
-      animation: floatCloud 32s linear infinite;
-    }
-    #cloud1::before { width: 55px; height: 55px; top: -28px; left: 18px; }
-    #cloud1::after  { width: 65px; height: 42px; top: -18px; left: 55px; }
-
-    #cloud2 {
-      width: 95px; height: 32px;
-      top: 110px; left: 300px;
-      animation: floatCloud 40s linear infinite;
-      animation-delay: -12s;
-    }
-    #cloud2::before { width: 42px; height: 42px; top: -22px; left: 12px; }
-    #cloud2::after  { width: 48px; height: 32px; top: -12px; left: 42px; }
-
-    @keyframes floatCloud {
-      from { transform: translateX(-160px); }
-      to   { transform: translateX(620px); }
-    }
-
-    /* Neve */
-    .snowflake {
-      position: absolute;
-      color: white;
-      font-size: 14px;
-      opacity: 0.75;
-      pointer-events: none;
-      z-index: 2;
-      animation: fall linear infinite;
-      text-shadow: 0 0 8px rgba(255,255,255,0.9);
-    }
-
-    @keyframes fall {
-      0%   { transform: translateY(-30px) rotate(0deg); opacity: 0.85; }
-      100% { transform: translateY(660px) rotate(360deg); opacity: 0.2; }
-    }
-
-    /* Chão de gelo */
-    #ice {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 95px;
-      background: linear-gradient(
-        to bottom,
-        rgba(210, 245, 255, 0.97) 0%,
-        #a8d8f0 45%,
-        #7ec8e3 100%
-      );
-      border-top: 3px solid rgba(255,255,255,0.95);
-      box-shadow: 
-        inset 0 10px 25px rgba(255,255,255,0.55),
-        0 -12px 35px rgba(80, 160, 210, 0.25);
-      z-index: 3;
-    }
-
-    #ice::after {
-      content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 45%;
-      background: linear-gradient(
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
+    .aurora1 {
+      background: repeating-linear-gradient(
         90deg,
-        transparent 0%,
-        rgba(255,255,255,0.35) 25%,
-        rgba(255,255,255,0.65) 50%,
-        rgba(255,255,255,0.35) 75%,
-        transparent 100%
+        transparent 0px,
+        transparent 20px,
+        rgba(0, 255, 140, 0.25) 20px,
+        rgba(0, 255, 140, 0.25) 40px
       );
-      opacity: 0.55;
+      animation: auroraPixel1 8s steps(6) infinite;
+    }
+
+    .aurora2 {
+      background: repeating-linear-gradient(
+        95deg,
+        transparent 0px,
+        transparent 30px,
+        rgba(100, 80, 255, 0.3) 30px,
+        rgba(100, 80, 255, 0.3) 55px
+      );
+      animation: auroraPixel2 11s steps(5) infinite;
+      opacity: 0.7;
+    }
+
+    .aurora3 {
+      background: repeating-linear-gradient(
+        85deg,
+        transparent 0px,
+        transparent 25px,
+        rgba(0, 220, 255, 0.2) 25px,
+        rgba(0, 220, 255, 0.2) 45px
+      );
+      animation: auroraPixel3 9s steps(7) infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes auroraPixel1 {
+      0%   { transform: translateX(-30px); }
+      100% { transform: translateX(30px); }
+    }
+    @keyframes auroraPixel2 {
+      0%   { transform: translateX(20px); }
+      100% { transform: translateX(-40px); }
+    }
+    @keyframes auroraPixel3 {
+      0%   { transform: translateX(-15px); }
+      100% { transform: translateX(25px); }
+    }
+
+    /* Nuvens pixel */
+    .cloud {
+      position: absolute;
+      background: #c0c0d8;
+      z-index: 1;
+      image-rendering: pixelated;
+    }
+
+    #cloud1 {
+      width: 80px;
+      height: 24px;
+      top: 48px;
+      left: 40px;
+      box-shadow: 
+        16px -12px 0 #c0c0d8,
+        40px -8px 0 #c0c0d8,
+        56px 0 0 #c0c0d8;
+      animation: floatCloud 20s steps(10) infinite;
+    }
+
+    #cloud2 {
+      width: 60px;
+      height: 18px;
+      top: 100px;
+      left: 280px;
+      box-shadow: 
+        12px -10px 0 #c0c0d8,
+        32px -6px 0 #c0c0d8;
+      animation: floatCloud 26s steps(12) infinite;
+      animation-delay: -8s;
+    }
+
+    @keyframes floatCloud {
+      from { transform: translateX(-100px); }
+      to   { transform: translateX(520px); }
+    }
+
+    /* Neve */
+    .snowflake {
+      position: absolute;
+      color: #e0e0ff;
+      font-size: 12px;
+      z-index: 2;
+      pointer-events: none;
+      animation: fall linear infinite;
+      font-family: monospace;
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(-20px); opacity: 1; }
+      100% { transform: translateY(620px); opacity: 0.3; }
+    }
+
+    /* Chão de gelo pixel */
+    #ice {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 88px;
+      background: #a0d0e8;
+      border-top: 4px solid #e0f0ff;
+      z-index: 3;
+      box-shadow: inset 0 8px 0 #c0e0f0;
     }
 
     /* Placar */
     #score {
       position: absolute;
-      top: 18px;
-      left: 20px;
-      font-size: 24px;
-      font-weight: 700;
+      top: 16px;
+      left: 16px;
+      font-size: 14px;
       color: #ffffff;
-      background: rgba(8, 30, 60, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 8px 20px;
-      border-radius: 30px;
-      border: 2px solid rgba(255,255,255,0.25);
+      background: #000000;
+      padding: 8px 12px;
+      border: 3px solid #ffffff;
       z-index: 10;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+      text-shadow: 2px 2px 0 #000;
     }
 
     /* Pinguim */
     #penguin {
       position: absolute;
-      bottom: 95px;
+      bottom: 88px;
       left: 220px;
-      font-size: 58px;
+      font-size: 48px;
       z-index: 6;
-      filter: drop-shadow(0 8px 14px rgba(0,20,50,0.4));
       user-select: none;
-      transition: transform 0.08s;
-      animation: idle 2.2s ease-in-out infinite;
-    }
-
-    @keyframes idle {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(-5px); }
+      image-rendering: pixelated;
+      filter: contrast(1.1);
     }
 
     /* Peixes */
     .fish {
       position: absolute;
-      font-size: 34px;
+      font-size: 28px;
       z-index: 5;
       user-select: none;
-      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
-      animation: swim 1.5s ease-in-out infinite;
-    }
-
-    @keyframes swim {
-      0%, 100% { transform: rotate(-7deg); }
-      50%      { transform: rotate(7deg); }
+      image-rendering: pixelated;
     }
 
     /* Obstáculos */
     .obstacle {
       position: absolute;
-      font-size: 48px;
+      font-size: 40px;
       z-index: 5;
       user-select: none;
-      bottom: 95px;
-      filter: drop-shadow(0 6px 12px rgba(0,50,90,0.4));
+      bottom: 88px;
+      image-rendering: pixelated;
     }
 
     /* Mensagens */
@@ -255,60 +215,55 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.93);
-      backdrop-filter: blur(14px);
-      padding: 32px 42px;
-      border-radius: 24px;
-      font-size: 26px;
-      font-weight: 700;
-      color: #0d47a1;
+      background: #000000;
+      padding: 28px 24px;
+      border: 4px solid #ffffff;
+      font-size: 14px;
+      color: #ffffff;
       text-align: center;
       display: none;
       z-index: 30;
-      box-shadow: 
-        0 18px 45px rgba(0,30,70,0.3),
-        0 0 0 4px rgba(255,255,255,0.5);
-      min-width: 290px;
-      border: 2px solid rgba(100,180,230,0.35);
+      line-height: 1.6;
+      min-width: 280px;
+      box-shadow: 6px 6px 0 #333;
     }
 
     .subtitle {
-      font-size: 15px;
-      font-weight: 500;
-      margin-top: 10px;
-      color: #1565c0;
-      line-height: 1.5;
+      font-size: 10px;
+      margin-top: 12px;
+      color: #a0d0ff;
+      line-height: 1.8;
     }
 
     #start-btn {
       margin-top: 20px;
-      padding: 12px 38px;
-      font-size: 18px;
-      background: linear-gradient(135deg, #0288d1, #01579b);
-      color: white;
-      border: none;
-      border-radius: 40px;
+      padding: 12px 20px;
+      font-size: 12px;
+      font-family: 'Press Start 2P', cursive;
+      background: #2080d0;
+      color: #ffffff;
+      border: 3px solid #ffffff;
       cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(2, 100, 180, 0.5);
-      transition: all 0.2s;
+      box-shadow: 4px 4px 0 #000;
+      transition: none;
     }
 
     #start-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 28px rgba(2, 100, 180, 0.6);
-      background: linear-gradient(135deg, #039be5, #0277bd);
+      background: #30a0f0;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 #000;
     }
 
     #start-btn:active {
-      transform: translateY(0);
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #000;
     }
   </style>
 </head>
 <body>
 
   <div id="game">
-    <!-- Aurora Boreal -->
+    <!-- Aurora -->
     <div class="aurora aurora1"></div>
     <div class="aurora aurora2"></div>
     <div class="aurora aurora3"></div>
@@ -317,18 +272,18 @@
     <div class="cloud" id="cloud1"></div>
     <div class="cloud" id="cloud2"></div>
 
-    <div id="score">Pontos: 0</div>
+    <div id="score">PONTOS: 0</div>
     <div id="penguin">🐧</div>
     <div id="ice"></div>
 
     <div id="message">
-      <div>Jogo do Pinguim</div>
+      <div>JOGO DO<br>PINGUIM</div>
       <div class="subtitle">
-        Pegue os peixes 🐟<br>
-        Pule os blocos de gelo 🧊<br>
-        <span style="opacity:0.8">Sob a aurora boreal</span>
+        PEGUE OS PEIXES 🐟<br>
+        PULE OS GELOS 🧊<br>
+        AURORA PIXEL
       </div>
-      <button id="start-btn">Começar</button>
+      <button id="start-btn">COMEÇAR</button>
     </div>
   </div>
 
@@ -348,23 +303,22 @@
     let fishInterval, obstacleInterval;
     let animationId;
 
-    const gravity = 0.85;
-    const jumpPower = -15.5;
-    const speed = 7.5;
+    const gravity = 0.9;
+    const jumpPower = -15;
+    const speed = 6;
 
     const keys = {};
 
-    // Neve
+    // Neve pixel
     function createSnow() {
-      for (let i = 0; i < 38; i++) {
+      for (let i = 0; i < 28; i++) {
         const flake = document.createElement('div');
         flake.className = 'snowflake';
-        flake.textContent = '❄';
-        flake.style.left = Math.random() * 520 + 'px';
-        flake.style.fontSize = (11 + Math.random() * 13) + 'px';
-        flake.style.animationDuration = (5 + Math.random() * 8) + 's';
-        flake.style.animationDelay = (Math.random() * 9) + 's';
-        flake.style.opacity = 0.35 + Math.random() * 0.5;
+        flake.textContent = '•';
+        flake.style.left = Math.random() * 512 + 'px';
+        flake.style.fontSize = (8 + Math.random() * 10) + 'px';
+        flake.style.animationDuration = (4 + Math.random() * 6) + 's';
+        flake.style.animationDelay = (Math.random() * 7) + 's';
         game.appendChild(flake);
       }
     }
@@ -375,7 +329,6 @@
       if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
         isJumping = true;
         velocityY = jumpPower;
-        penguin.style.animation = 'none';
       }
       if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
         e.preventDefault();
@@ -390,7 +343,7 @@
       if (keys['ArrowLeft'] || keys['a']) penguinX -= speed;
       if (keys['ArrowRight'] || keys['d']) penguinX += speed;
 
-      if (penguinX < 5) penguinX = 5;
+      if (penguinX < 4) penguinX = 4;
       if (penguinX > 450) penguinX = 450;
 
       if (isJumping) {
@@ -401,12 +354,12 @@
           penguinY = 0;
           isJumping = false;
           velocityY = 0;
-          penguin.style.animation = 'idle 2.2s ease-in-out infinite';
         }
       }
 
-      penguin.style.left = penguinX + 'px';
-      penguin.style.bottom = (95 - penguinY) + 'px';
+      // movimento em "passos" para ficar mais pixel
+      penguin.style.left = Math.round(penguinX / 2) * 2 + 'px';
+      penguin.style.bottom = (88 - Math.round(penguinY / 2) * 2) + 'px';
     }
 
     function createFish() {
@@ -415,12 +368,12 @@
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.textContent = '🐟';
-      fish.style.left = Math.random() * 450 + 'px';
-      fish.style.top = '-50px';
+      fish.style.left = Math.floor(Math.random() * 22) * 20 + 'px';
+      fish.style.top = '-40px';
       game.appendChild(fish);
 
-      let fishY = -50;
-      const fallSpeed = 2.3 + Math.random() * 1.7;
+      let fishY = -40;
+      const fallSpeed = 2 + Math.random() * 1.5;
 
       function fall() {
         if (!gameRunning) {
@@ -429,24 +382,24 @@
         }
 
         fishY += fallSpeed;
-        fish.style.top = fishY + 'px';
+        fish.style.top = Math.round(fishY / 2) * 2 + 'px';
 
         const px = penguinX;
-        const py = 620 - 95 - 58 + penguinY;
+        const py = 608 - 88 - 48 + penguinY;
 
         if (
-          parseFloat(fish.style.left) < px + 50 &&
-          parseFloat(fish.style.left) + 32 > px &&
-          fishY < py + 50 &&
-          fishY + 30 > py
+          parseFloat(fish.style.left) < px + 44 &&
+          parseFloat(fish.style.left) + 28 > px &&
+          fishY < py + 44 &&
+          fishY + 28 > py
         ) {
           score += 10;
-          scoreEl.textContent = 'Pontos: ' + score;
+          scoreEl.textContent = 'PONTOS: ' + score;
           fish.remove();
           return;
         }
 
-        if (fishY > 540) {
+        if (fishY > 530) {
           fish.remove();
           return;
         }
@@ -463,11 +416,11 @@
       const obs = document.createElement('div');
       obs.className = 'obstacle';
       obs.textContent = '🧊';
-      obs.style.left = '540px';
+      obs.style.left = '520px';
       game.appendChild(obs);
 
-      let obsX = 540;
-      const moveSpeed = 3.8 + Math.random() * 2.8;
+      let obsX = 520;
+      const moveSpeed = 3.5 + Math.random() * 2.5;
 
       function move() {
         if (!gameRunning) {
@@ -476,21 +429,21 @@
         }
 
         obsX -= moveSpeed;
-        obs.style.left = obsX + 'px';
+        obs.style.left = Math.round(obsX / 2) * 2 + 'px';
 
         const px = penguinX;
         const py = penguinY;
 
         if (
-          obsX < px + 48 &&
-          obsX + 42 > px &&
-          py > -30
+          obsX < px + 44 &&
+          obsX + 40 > px &&
+          py > -28
         ) {
           gameOver();
           return;
         }
 
-        if (obsX < -60) {
+        if (obsX < -50) {
           obs.remove();
           return;
         }
@@ -508,9 +461,9 @@
       cancelAnimationFrame(animationId);
 
       message.innerHTML = `
-        <div>Game Over!</div>
-        <div class="subtitle">Você fez <strong>${score}</strong> pontos</div>
-        <button id="start-btn">Jogar de novo</button>
+        <div>GAME OVER!</div>
+        <div class="subtitle">PONTOS: <strong>${score}</strong></div>
+        <button id="start-btn">JOGAR DE NOVO</button>
       `;
       message.style.display = 'block';
 
@@ -527,7 +480,7 @@
       document.querySelectorAll('.fish, .obstacle').forEach(el => el.remove());
 
       score = 0;
-      scoreEl.textContent = 'Pontos: 0';
+      scoreEl.textContent = 'PONTOS: 0';
       penguinX = 220;
       penguinY = 0;
       isJumping = false;
@@ -535,10 +488,8 @@
       message.style.display = 'none';
       gameRunning = true;
 
-      penguin.style.animation = 'idle 2.2s ease-in-out infinite';
-
-      fishInterval = setInterval(createFish, 1050);
-      obstacleInterval = setInterval(createObstacle, 1750);
+      fishInterval = setInterval(createFish, 1100);
+      obstacleInterval = setInterval(createObstacle, 1800);
 
       gameLoop();
     }
