@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Jogo do Pinguim - Pixel Art</title>
+  <title>Fusca do Pinguim - Fuja da Orca!</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
@@ -28,10 +28,11 @@
       background: linear-gradient(
         to bottom,
         #0b0b1a 0%,
-        #12122b 25%,
-        #1c1c3a 50%,
-        #2a3a5a 75%,
-        #3a5a7a 100%
+        #12122b 22%,
+        #1a2a4a 45%,
+        #1e3a5a 65%,
+        #2a5a7a 85%,
+        #3a7a9a 100%
       );
       border: 6px solid #ffffff;
       position: relative;
@@ -39,108 +40,102 @@
       box-shadow: 0 0 0 4px #222, 0 0 0 8px #555;
     }
 
-    /* ========== AURORA BOREAL PIXEL ========== */
+    /* Aurora Pixel */
     .aurora {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 45%;
+      height: 42%;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.85;
+      opacity: 0.8;
     }
 
     .aurora1 {
       background: repeating-linear-gradient(
         90deg,
         transparent 0px,
-        transparent 20px,
-        rgba(0, 255, 140, 0.25) 20px,
-        rgba(0, 255, 140, 0.25) 40px
+        transparent 18px,
+        rgba(0, 255, 150, 0.28) 18px,
+        rgba(0, 255, 150, 0.28) 38px
       );
-      animation: auroraPixel1 8s steps(6) infinite;
+      animation: aurora1 9s steps(6) infinite;
     }
 
     .aurora2 {
       background: repeating-linear-gradient(
-        95deg,
+        100deg,
         transparent 0px,
-        transparent 30px,
-        rgba(100, 80, 255, 0.3) 30px,
-        rgba(100, 80, 255, 0.3) 55px
+        transparent 28px,
+        rgba(120, 80, 255, 0.3) 28px,
+        rgba(120, 80, 255, 0.3) 52px
       );
-      animation: auroraPixel2 11s steps(5) infinite;
+      animation: aurora2 12s steps(5) infinite;
       opacity: 0.7;
     }
 
     .aurora3 {
       background: repeating-linear-gradient(
-        85deg,
+        80deg,
         transparent 0px,
-        transparent 25px,
-        rgba(0, 220, 255, 0.2) 25px,
-        rgba(0, 220, 255, 0.2) 45px
+        transparent 22px,
+        rgba(0, 200, 255, 0.22) 22px,
+        rgba(0, 200, 255, 0.22) 42px
       );
-      animation: auroraPixel3 9s steps(7) infinite;
+      animation: aurora3 8s steps(7) infinite;
       opacity: 0.6;
     }
 
-    @keyframes auroraPixel1 {
-      0%   { transform: translateX(-30px); }
+    @keyframes aurora1 {
+      0%   { transform: translateX(-25px); }
       100% { transform: translateX(30px); }
     }
-    @keyframes auroraPixel2 {
+    @keyframes aurora2 {
       0%   { transform: translateX(20px); }
-      100% { transform: translateX(-40px); }
+      100% { transform: translateX(-35px); }
     }
-    @keyframes auroraPixel3 {
+    @keyframes aurora3 {
       0%   { transform: translateX(-15px); }
-      100% { transform: translateX(25px); }
+      100% { transform: translateX(20px); }
     }
 
-    /* Nuvens pixel */
+    /* Nuvens */
     .cloud {
       position: absolute;
-      background: #c0c0d8;
+      background: #b8b8d0;
       z-index: 1;
-      image-rendering: pixelated;
     }
 
     #cloud1 {
-      width: 80px;
-      height: 24px;
-      top: 48px;
-      left: 40px;
-      box-shadow: 
-        16px -12px 0 #c0c0d8,
-        40px -8px 0 #c0c0d8,
-        56px 0 0 #c0c0d8;
-      animation: floatCloud 20s steps(10) infinite;
+      width: 70px;
+      height: 20px;
+      top: 50px;
+      left: 30px;
+      box-shadow: 14px -10px 0 #b8b8d0, 36px -6px 0 #b8b8d0, 50px 0 0 #b8b8d0;
+      animation: floatCloud 18s steps(9) infinite;
     }
 
     #cloud2 {
-      width: 60px;
-      height: 18px;
-      top: 100px;
-      left: 280px;
-      box-shadow: 
-        12px -10px 0 #c0c0d8,
-        32px -6px 0 #c0c0d8;
-      animation: floatCloud 26s steps(12) infinite;
-      animation-delay: -8s;
+      width: 55px;
+      height: 16px;
+      top: 95px;
+      left: 290px;
+      box-shadow: 12px -8px 0 #b8b8d0, 28px -4px 0 #b8b8d0;
+      animation: floatCloud 24s steps(11) infinite;
+      animation-delay: -7s;
     }
 
     @keyframes floatCloud {
-      from { transform: translateX(-100px); }
+      from { transform: translateX(-90px); }
       to   { transform: translateX(520px); }
     }
 
     /* Neve */
     .snowflake {
       position: absolute;
-      color: #e0e0ff;
-      font-size: 12px;
+      color: #d0d0ff;
+      font-size: 11px;
       z-index: 2;
       pointer-events: none;
       animation: fall linear infinite;
@@ -149,64 +144,61 @@
 
     @keyframes fall {
       0%   { transform: translateY(-20px); opacity: 1; }
-      100% { transform: translateY(620px); opacity: 0.3; }
+      100% { transform: translateY(620px); opacity: 0.25; }
     }
 
-    /* Chão de gelo pixel */
+    /* Chão (gelo/água) */
     #ice {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 88px;
-      background: #a0d0e8;
-      border-top: 4px solid #e0f0ff;
+      height: 84px;
+      background: #70b0d0;
+      border-top: 4px solid #c0e0f0;
       z-index: 3;
-      box-shadow: inset 0 8px 0 #c0e0f0;
+      box-shadow: inset 0 8px 0 #90c8e0;
     }
 
     /* Placar */
     #score {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      font-size: 14px;
+      top: 14px;
+      left: 14px;
+      font-size: 13px;
       color: #ffffff;
       background: #000000;
       padding: 8px 12px;
       border: 3px solid #ffffff;
       z-index: 10;
-      text-shadow: 2px 2px 0 #000;
     }
 
-    /* Pinguim */
-    #penguin {
+    /* Fusca do Pinguim */
+    #fusca {
       position: absolute;
-      bottom: 88px;
-      left: 220px;
-      font-size: 48px;
+      bottom: 84px;
+      left: 200px;
+      font-size: 42px;
       z-index: 6;
       user-select: none;
-      image-rendering: pixelated;
-      filter: contrast(1.1);
+      line-height: 1;
+      filter: contrast(1.15);
     }
 
     /* Peixes */
     .fish {
       position: absolute;
-      font-size: 28px;
+      font-size: 26px;
       z-index: 5;
       user-select: none;
-      image-rendering: pixelated;
     }
 
-    /* Obstáculos */
-    .obstacle {
+    /* Orcas */
+    .orca {
       position: absolute;
-      font-size: 40px;
+      font-size: 48px;
       z-index: 5;
       user-select: none;
-      bottom: 88px;
-      image-rendering: pixelated;
+      bottom: 84px;
     }
 
     /* Mensagens */
@@ -216,40 +208,39 @@
       left: 50%;
       transform: translate(-50%, -50%);
       background: #000000;
-      padding: 28px 24px;
+      padding: 26px 22px;
       border: 4px solid #ffffff;
-      font-size: 14px;
+      font-size: 13px;
       color: #ffffff;
       text-align: center;
       display: none;
       z-index: 30;
-      line-height: 1.6;
-      min-width: 280px;
+      line-height: 1.7;
+      min-width: 290px;
       box-shadow: 6px 6px 0 #333;
     }
 
     .subtitle {
       font-size: 10px;
       margin-top: 12px;
-      color: #a0d0ff;
-      line-height: 1.8;
+      color: #80c0ff;
+      line-height: 1.9;
     }
 
     #start-btn {
-      margin-top: 20px;
-      padding: 12px 20px;
+      margin-top: 18px;
+      padding: 12px 18px;
       font-size: 12px;
       font-family: 'Press Start 2P', cursive;
-      background: #2080d0;
-      color: #ffffff;
+      background: #e8a020;
+      color: #000000;
       border: 3px solid #ffffff;
       cursor: pointer;
       box-shadow: 4px 4px 0 #000;
-      transition: none;
     }
 
     #start-btn:hover {
-      background: #30a0f0;
+      background: #ffc040;
       transform: translate(-2px, -2px);
       box-shadow: 6px 6px 0 #000;
     }
@@ -263,25 +254,23 @@
 <body>
 
   <div id="game">
-    <!-- Aurora -->
     <div class="aurora aurora1"></div>
     <div class="aurora aurora2"></div>
     <div class="aurora aurora3"></div>
 
-    <!-- Nuvens -->
     <div class="cloud" id="cloud1"></div>
     <div class="cloud" id="cloud2"></div>
 
     <div id="score">PONTOS: 0</div>
-    <div id="penguin">🐧</div>
+    <div id="fusca">🐧🚗</div>
     <div id="ice"></div>
 
     <div id="message">
-      <div>JOGO DO<br>PINGUIM</div>
+      <div>FUSCA DO<br>PINGUIM</div>
       <div class="subtitle">
-        PEGUE OS PEIXES 🐟<br>
-        PULE OS GELOS 🧊<br>
-        AURORA PIXEL
+        DIRIJA O FUSCA<br>
+        FUJA DAS ORCAS 🐋<br>
+        PEGUE OS PEIXES 🐟
       </div>
       <button id="start-btn">COMEÇAR</button>
     </div>
@@ -289,34 +278,33 @@
 
   <script>
     const game = document.getElementById('game');
-    const penguin = document.getElementById('penguin');
+    const fusca = document.getElementById('fusca');
     const scoreEl = document.getElementById('score');
     const message = document.getElementById('message');
     const startBtn = document.getElementById('start-btn');
 
     let score = 0;
-    let penguinX = 220;
-    let penguinY = 0;
+    let fuscaX = 200;
+    let fuscaY = 0;
     let isJumping = false;
     let velocityY = 0;
     let gameRunning = false;
-    let fishInterval, obstacleInterval;
+    let fishInterval, orcaInterval;
     let animationId;
 
     const gravity = 0.9;
-    const jumpPower = -15;
-    const speed = 6;
+    const jumpPower = -15.5;
+    const speed = 6.5;
 
     const keys = {};
 
-    // Neve pixel
     function createSnow() {
-      for (let i = 0; i < 28; i++) {
+      for (let i = 0; i < 26; i++) {
         const flake = document.createElement('div');
         flake.className = 'snowflake';
         flake.textContent = '•';
         flake.style.left = Math.random() * 512 + 'px';
-        flake.style.fontSize = (8 + Math.random() * 10) + 'px';
+        flake.style.fontSize = (8 + Math.random() * 9) + 'px';
         flake.style.animationDuration = (4 + Math.random() * 6) + 's';
         flake.style.animationDelay = (Math.random() * 7) + 's';
         game.appendChild(flake);
@@ -339,27 +327,26 @@
       keys[e.key] = false;
     });
 
-    function updatePenguin() {
-      if (keys['ArrowLeft'] || keys['a']) penguinX -= speed;
-      if (keys['ArrowRight'] || keys['d']) penguinX += speed;
+    function updateFusca() {
+      if (keys['ArrowLeft'] || keys['a']) fuscaX -= speed;
+      if (keys['ArrowRight'] || keys['d']) fuscaX += speed;
 
-      if (penguinX < 4) penguinX = 4;
-      if (penguinX > 450) penguinX = 450;
+      if (fuscaX < 4) fuscaX = 4;
+      if (fuscaX > 420) fuscaX = 420;
 
       if (isJumping) {
         velocityY += gravity;
-        penguinY += velocityY;
+        fuscaY += velocityY;
 
-        if (penguinY >= 0) {
-          penguinY = 0;
+        if (fuscaY >= 0) {
+          fuscaY = 0;
           isJumping = false;
           velocityY = 0;
         }
       }
 
-      // movimento em "passos" para ficar mais pixel
-      penguin.style.left = Math.round(penguinX / 2) * 2 + 'px';
-      penguin.style.bottom = (88 - Math.round(penguinY / 2) * 2) + 'px';
+      fusca.style.left = Math.round(fuscaX / 2) * 2 + 'px';
+      fusca.style.bottom = (84 - Math.round(fuscaY / 2) * 2) + 'px';
     }
 
     function createFish() {
@@ -373,7 +360,7 @@
       game.appendChild(fish);
 
       let fishY = -40;
-      const fallSpeed = 2 + Math.random() * 1.5;
+      const fallSpeed = 2.1 + Math.random() * 1.6;
 
       function fall() {
         if (!gameRunning) {
@@ -384,14 +371,14 @@
         fishY += fallSpeed;
         fish.style.top = Math.round(fishY / 2) * 2 + 'px';
 
-        const px = penguinX;
-        const py = 608 - 88 - 48 + penguinY;
+        const px = fuscaX;
+        const py = 608 - 84 - 42 + fuscaY;
 
         if (
-          parseFloat(fish.style.left) < px + 44 &&
-          parseFloat(fish.style.left) + 28 > px &&
-          fishY < py + 44 &&
-          fishY + 28 > py
+          parseFloat(fish.style.left) < px + 55 &&
+          parseFloat(fish.style.left) + 26 > px &&
+          fishY < py + 42 &&
+          fishY + 26 > py
         ) {
           score += 10;
           scoreEl.textContent = 'PONTOS: ' + score;
@@ -410,41 +397,42 @@
       requestAnimationFrame(fall);
     }
 
-    function createObstacle() {
+    function createOrca() {
       if (!gameRunning) return;
 
-      const obs = document.createElement('div');
-      obs.className = 'obstacle';
-      obs.textContent = '🧊';
-      obs.style.left = '520px';
-      game.appendChild(obs);
+      const orca = document.createElement('div');
+      orca.className = 'orca';
+      orca.textContent = '🐋';
+      orca.style.left = '530px';
+      game.appendChild(orca);
 
-      let obsX = 520;
-      const moveSpeed = 3.5 + Math.random() * 2.5;
+      let orcaX = 530;
+      const moveSpeed = 4 + Math.random() * 2.8;
 
       function move() {
         if (!gameRunning) {
-          obs.remove();
+          orca.remove();
           return;
         }
 
-        obsX -= moveSpeed;
-        obs.style.left = Math.round(obsX / 2) * 2 + 'px';
+        orcaX -= moveSpeed;
+        orca.style.left = Math.round(orcaX / 2) * 2 + 'px';
 
-        const px = penguinX;
-        const py = penguinY;
+        const px = fuscaX;
+        const py = fuscaY;
 
+        // Colisão com a orca
         if (
-          obsX < px + 44 &&
-          obsX + 40 > px &&
-          py > -28
+          orcaX < px + 58 &&
+          orcaX + 48 > px &&
+          py > -30
         ) {
           gameOver();
           return;
         }
 
-        if (obsX < -50) {
-          obs.remove();
+        if (orcaX < -60) {
+          orca.remove();
           return;
         }
 
@@ -457,13 +445,13 @@
     function gameOver() {
       gameRunning = false;
       clearInterval(fishInterval);
-      clearInterval(obstacleInterval);
+      clearInterval(orcaInterval);
       cancelAnimationFrame(animationId);
 
       message.innerHTML = `
-        <div>GAME OVER!</div>
+        <div>A ORCA<br>PEGOU VOCÊ!</div>
         <div class="subtitle">PONTOS: <strong>${score}</strong></div>
-        <button id="start-btn">JOGAR DE NOVO</button>
+        <button id="start-btn">TENTAR DE NOVO</button>
       `;
       message.style.display = 'block';
 
@@ -472,24 +460,24 @@
 
     function gameLoop() {
       if (!gameRunning) return;
-      updatePenguin();
+      updateFusca();
       animationId = requestAnimationFrame(gameLoop);
     }
 
     function startGame() {
-      document.querySelectorAll('.fish, .obstacle').forEach(el => el.remove());
+      document.querySelectorAll('.fish, .orca').forEach(el => el.remove());
 
       score = 0;
       scoreEl.textContent = 'PONTOS: 0';
-      penguinX = 220;
-      penguinY = 0;
+      fuscaX = 200;
+      fuscaY = 0;
       isJumping = false;
       velocityY = 0;
       message.style.display = 'none';
       gameRunning = true;
 
-      fishInterval = setInterval(createFish, 1100);
-      obstacleInterval = setInterval(createObstacle, 1800);
+      fishInterval = setInterval(createFish, 1150);
+      orcaInterval = setInterval(createOrca, 1600);
 
       gameLoop();
     }
