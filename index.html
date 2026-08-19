@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Jogo do Pinguim - Obstáculos de Gelo</title>
+  <title>Jogo do Pinguim - Visual Melhorado</title>
   <style>
     * {
       margin: 0;
@@ -11,7 +11,7 @@
     }
 
     body {
-      background: #0a1628;
+      background: #020b18;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -21,113 +21,252 @@
     }
 
     #game {
-      width: 500px;
-      height: 600px;
-      background: linear-gradient(#87CEEB 0%, #e0f7fa 55%, #b3e5fc 100%);
-      border: 6px solid #ffffff;
-      border-radius: 16px;
+      width: 520px;
+      height: 620px;
+      background: linear-gradient(
+        to bottom,
+        #0b1c3a 0%,
+        #1a3a6e 25%,
+        #3a7ca5 55%,
+        #7ec8e3 78%,
+        #c8e9f5 100%
+      );
+      border: 8px solid #e8f4ff;
+      border-radius: 24px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 40px rgba(100, 200, 255, 0.4);
+      box-shadow: 
+        0 0 0 4px #7eb8e0,
+        0 20px 50px rgba(0, 40, 80, 0.6),
+        inset 0 0 80px rgba(255,255,255,0.1);
     }
 
+    /* Nuvens decorativas */
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.85);
+      border-radius: 50px;
+      filter: blur(1px);
+      opacity: 0.7;
+    }
+    .cloud::before, .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.85);
+      border-radius: 50%;
+    }
+
+    #cloud1 {
+      width: 120px; height: 40px;
+      top: 50px; left: 30px;
+      animation: floatCloud 28s linear infinite;
+    }
+    #cloud1::before { width: 50px; height: 50px; top: -25px; left: 15px; }
+    #cloud1::after  { width: 60px; height: 40px; top: -15px; left: 50px; }
+
+    #cloud2 {
+      width: 90px; height: 30px;
+      top: 100px; left: 280px;
+      animation: floatCloud 35s linear infinite;
+      animation-delay: -10s;
+    }
+    #cloud2::before { width: 40px; height: 40px; top: -20px; left: 10px; }
+    #cloud2::after  { width: 45px; height: 30px; top: -10px; left: 40px; }
+
+    @keyframes floatCloud {
+      from { transform: translateX(-150px); }
+      to   { transform: translateX(600px); }
+    }
+
+    /* Neve caindo */
+    .snowflake {
+      position: absolute;
+      color: white;
+      font-size: 14px;
+      opacity: 0.8;
+      pointer-events: none;
+      z-index: 1;
+      animation: fall linear infinite;
+      text-shadow: 0 0 6px rgba(255,255,255,0.8);
+    }
+
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 0.9; }
+      100% { transform: translateY(650px) rotate(360deg); opacity: 0.3; }
+    }
+
+    /* Chão de gelo */
     #ice {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 80px;
-      background: linear-gradient(#e0f7fa, #b3e5fc);
-      border-top: 4px solid #ffffff;
+      height: 95px;
+      background: linear-gradient(
+        to bottom,
+        rgba(200, 240, 255, 0.95) 0%,
+        #a8d8f0 40%,
+        #7ec8e3 100%
+      );
+      border-top: 3px solid rgba(255,255,255,0.9);
+      box-shadow: 
+        inset 0 8px 20px rgba(255,255,255,0.6),
+        0 -10px 30px rgba(100, 180, 220, 0.3);
+      z-index: 2;
     }
 
+    /* Brilho no gelo */
+    #ice::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.4) 30%,
+        rgba(255,255,255,0.7) 50%,
+        rgba(255,255,255,0.4) 70%,
+        transparent 100%
+      );
+      opacity: 0.6;
+    }
+
+    /* Placar */
     #score {
       position: absolute;
-      top: 16px;
+      top: 18px;
       left: 20px;
-      font-size: 22px;
-      font-weight: bold;
-      color: #01579b;
-      text-shadow: 1px 1px 0 white;
+      font-size: 24px;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(10, 40, 80, 0.45);
+      backdrop-filter: blur(8px);
+      padding: 8px 18px;
+      border-radius: 30px;
+      border: 2px solid rgba(255,255,255,0.3);
       z-index: 10;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
+    /* Pinguim */
     #penguin {
       position: absolute;
-      bottom: 80px;
+      bottom: 95px;
       left: 220px;
-      font-size: 52px;
-      z-index: 5;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+      font-size: 58px;
+      z-index: 6;
+      filter: drop-shadow(0 8px 12px rgba(0,30,60,0.35));
       user-select: none;
       transition: transform 0.08s;
+      animation: idle 2.2s ease-in-out infinite;
     }
 
+    @keyframes idle {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
+    }
+
+    /* Peixes */
     .fish {
       position: absolute;
-      font-size: 32px;
-      z-index: 4;
+      font-size: 34px;
+      z-index: 5;
       user-select: none;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+      animation: swim 1.4s ease-in-out infinite;
     }
 
+    @keyframes swim {
+      0%, 100% { transform: rotate(-6deg); }
+      50%      { transform: rotate(6deg); }
+    }
+
+    /* Obstáculos de gelo */
     .obstacle {
       position: absolute;
-      font-size: 42px;
-      z-index: 4;
+      font-size: 48px;
+      z-index: 5;
       user-select: none;
-      bottom: 80px;
+      bottom: 95px;
+      filter: drop-shadow(0 6px 10px rgba(0,60,100,0.35));
     }
 
+    /* Mensagens (início / game over) */
     #message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255,255,255,0.95);
-      padding: 24px 40px;
-      border-radius: 16px;
-      font-size: 22px;
-      font-weight: bold;
-      color: #01579b;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 32px 40px;
+      border-radius: 24px;
+      font-size: 26px;
+      font-weight: 700;
+      color: #0d47a1;
       text-align: center;
       display: none;
-      z-index: 20;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-      min-width: 260px;
-    }
-
-    #start-btn {
-      margin-top: 14px;
-      padding: 10px 28px;
-      font-size: 18px;
-      background: #0288d1;
-      color: white;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #start-btn:hover {
-      background: #0277bd;
+      z-index: 30;
+      box-shadow: 
+        0 15px 40px rgba(0,40,80,0.25),
+        0 0 0 4px rgba(255,255,255,0.6);
+      min-width: 280px;
+      border: 2px solid rgba(100,180,230,0.4);
     }
 
     .subtitle {
       font-size: 15px;
-      font-weight: normal;
-      margin-top: 6px;
-      color: #0277bd;
+      font-weight: 500;
+      margin-top: 10px;
+      color: #1565c0;
+      line-height: 1.5;
+    }
+
+    #start-btn {
+      margin-top: 20px;
+      padding: 12px 36px;
+      font-size: 18px;
+      background: linear-gradient(135deg, #0288d1, #0277bd);
+      color: white;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(2, 119, 189, 0.45);
+      transition: all 0.2s;
+    }
+
+    #start-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(2, 119, 189, 0.55);
+      background: linear-gradient(135deg, #039be5, #0288d1);
+    }
+
+    #start-btn:active {
+      transform: translateY(0);
     }
   </style>
 </head>
 <body>
 
   <div id="game">
+    <!-- Nuvens -->
+    <div class="cloud" id="cloud1"></div>
+    <div class="cloud" id="cloud2"></div>
+
     <div id="score">Pontos: 0</div>
     <div id="penguin">🐧</div>
     <div id="ice"></div>
+
     <div id="message">
       <div>Jogo do Pinguim</div>
-      <div class="subtitle">Pegue os peixes 🐟<br>Pule os gelos 🧊</div>
+      <div class="subtitle">
+        Pegue os peixes 🐟<br>
+        Pule os blocos de gelo 🧊
+      </div>
       <button id="start-btn">Começar</button>
     </div>
   </div>
@@ -149,18 +288,34 @@
     let animationId;
 
     const gravity = 0.85;
-    const jumpPower = -15;
-    const speed = 7;
+    const jumpPower = -15.5;
+    const speed = 7.5;
 
     const keys = {};
+
+    // Cria flocos de neve
+    function createSnow() {
+      for (let i = 0; i < 35; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'snowflake';
+        flake.textContent = '❄';
+        flake.style.left = Math.random() * 520 + 'px';
+        flake.style.fontSize = (10 + Math.random() * 12) + 'px';
+        flake.style.animationDuration = (4 + Math.random() * 7) + 's';
+        flake.style.animationDelay = (Math.random() * 8) + 's';
+        flake.style.opacity = 0.4 + Math.random() * 0.5;
+        game.appendChild(flake);
+      }
+    }
+    createSnow();
 
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
       if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
         isJumping = true;
         velocityY = jumpPower;
+        penguin.style.animation = 'none'; // para a animação idle no pulo
       }
-      // evita scroll da página
       if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
         e.preventDefault();
       }
@@ -174,8 +329,8 @@
       if (keys['ArrowLeft'] || keys['a']) penguinX -= speed;
       if (keys['ArrowRight'] || keys['d']) penguinX += speed;
 
-      if (penguinX < 0) penguinX = 0;
-      if (penguinX > 440) penguinX = 440;
+      if (penguinX < 5) penguinX = 5;
+      if (penguinX > 450) penguinX = 450;
 
       if (isJumping) {
         velocityY += gravity;
@@ -185,11 +340,12 @@
           penguinY = 0;
           isJumping = false;
           velocityY = 0;
+          penguin.style.animation = 'idle 2.2s ease-in-out infinite';
         }
       }
 
       penguin.style.left = penguinX + 'px';
-      penguin.style.bottom = (80 - penguinY) + 'px';
+      penguin.style.bottom = (95 - penguinY) + 'px';
     }
 
     function createFish() {
@@ -198,12 +354,12 @@
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.textContent = '🐟';
-      fish.style.left = Math.random() * 440 + 'px';
-      fish.style.top = '-40px';
+      fish.style.left = Math.random() * 450 + 'px';
+      fish.style.top = '-50px';
       game.appendChild(fish);
 
-      let fishY = -40;
-      const fallSpeed = 2.2 + Math.random() * 1.8;
+      let fishY = -50;
+      const fallSpeed = 2.3 + Math.random() * 1.7;
 
       function fall() {
         if (!gameRunning) {
@@ -214,14 +370,13 @@
         fishY += fallSpeed;
         fish.style.top = fishY + 'px';
 
-        // colisão com pinguim
         const px = penguinX;
-        const py = 600 - 80 - 52 + penguinY;
+        const py = 620 - 95 - 58 + penguinY;
 
         if (
-          parseFloat(fish.style.left) < px + 48 &&
-          parseFloat(fish.style.left) + 30 > px &&
-          fishY < py + 48 &&
+          parseFloat(fish.style.left) < px + 50 &&
+          parseFloat(fish.style.left) + 32 > px &&
+          fishY < py + 50 &&
           fishY + 30 > py
         ) {
           score += 10;
@@ -230,7 +385,7 @@
           return;
         }
 
-        if (fishY > 520) {
+        if (fishY > 540) {
           fish.remove();
           return;
         }
@@ -247,11 +402,11 @@
       const obs = document.createElement('div');
       obs.className = 'obstacle';
       obs.textContent = '🧊';
-      obs.style.left = '520px';
+      obs.style.left = '540px';
       game.appendChild(obs);
 
-      let obsX = 520;
-      const moveSpeed = 3.5 + Math.random() * 2.5;
+      let obsX = 540;
+      const moveSpeed = 3.8 + Math.random() * 2.8;
 
       function move() {
         if (!gameRunning) {
@@ -262,21 +417,20 @@
         obsX -= moveSpeed;
         obs.style.left = obsX + 'px';
 
-        // colisão com pinguim (só se não estiver pulando alto)
         const px = penguinX;
-        const py = penguinY; // 0 = no chão
+        const py = penguinY;
 
+        // colisão (só se estiver próximo do chão)
         if (
-          obsX < px + 45 &&
-          obsX + 40 > px &&
-          py > -25          // se o pinguim estiver baixo demais
+          obsX < px + 48 &&
+          obsX + 42 > px &&
+          py > -30
         ) {
-          // bateu no gelo!
           gameOver();
           return;
         }
 
-        if (obsX < -50) {
+        if (obsX < -60) {
           obs.remove();
           return;
         }
@@ -295,12 +449,11 @@
 
       message.innerHTML = `
         <div>Game Over!</div>
-        <div class="subtitle">Você fez ${score} pontos</div>
+        <div class="subtitle">Você fez <strong>${score}</strong> pontos</div>
         <button id="start-btn">Jogar de novo</button>
       `;
       message.style.display = 'block';
 
-      // precisa reatribuir o evento porque o botão foi recriado
       document.getElementById('start-btn').addEventListener('click', startGame);
     }
 
@@ -311,7 +464,6 @@
     }
 
     function startGame() {
-      // limpa tudo
       document.querySelectorAll('.fish, .obstacle').forEach(el => el.remove());
 
       score = 0;
@@ -323,8 +475,10 @@
       message.style.display = 'none';
       gameRunning = true;
 
-      fishInterval = setInterval(createFish, 1100);
-      obstacleInterval = setInterval(createObstacle, 1800);
+      penguin.style.animation = 'idle 2.2s ease-in-out infinite';
+
+      fishInterval = setInterval(createFish, 1050);
+      obstacleInterval = setInterval(createObstacle, 1750);
 
       gameLoop();
     }
