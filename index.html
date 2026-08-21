@@ -2,14 +2,10 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Visual 2D</title>
+  <title>Pinguim Runner - 10 Níveis</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: #020810;
@@ -31,13 +27,10 @@
       box-shadow: 0 0 0 6px #1e3a5c, 0 25px 60px rgba(0,0,0,0.7);
     }
 
-    /* Aurora */
     .aurora {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
+      top: 0; left: 0;
+      width: 100%; height: 50%;
       pointer-events: none;
       z-index: 1;
       mix-blend-mode: screen;
@@ -55,7 +48,6 @@
       100% { transform: translateX(30px) scale(1.1); opacity: 1; }
     }
 
-    /* Neve */
     .snow {
       position: absolute;
       background: white;
@@ -69,7 +61,6 @@
       100% { transform: translateY(700px) translateX(30px); opacity: 0.1; }
     }
 
-    /* Chão */
     #ground {
       position: absolute;
       bottom: 0;
@@ -81,29 +72,30 @@
       box-shadow: inset 0 12px 20px rgba(255,255,255,0.4);
     }
 
-    /* HUD */
     #hud {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      right: 16px;
+      top: 14px;
+      left: 14px;
+      right: 14px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       z-index: 20;
       pointer-events: none;
+      gap: 8px;
     }
-    #score, #lives, #hiscore {
+    #score, #lives, #level, #hiscore {
       background: rgba(0,0,0,0.55);
       color: white;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 30px;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       backdrop-filter: blur(6px);
     }
     #lives { color: #ff6b6b; }
+    #level { color: #ffeb3b; }
 
-    /* ===== PINGUIM 2D ===== */
     #penguin {
       position: absolute;
       bottom: 90px;
@@ -111,18 +103,16 @@
       font-size: 52px;
       z-index: 10;
       filter: drop-shadow(0 6px 8px rgba(0,0,0,0.3));
-      transition: transform 0.1s;
       user-select: none;
     }
     #penguin.running {
-      animation: runBob 0.3s ease-in-out infinite;
+      animation: runBob 0.28s ease-in-out infinite;
     }
     @keyframes runBob {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-6px); }
     }
 
-    /* ===== PEIXE 2D (no chão) ===== */
     .fish {
       position: absolute;
       bottom: 95px;
@@ -132,24 +122,24 @@
       user-select: none;
     }
 
-    /* ===== ORCA 2D ===== */
     .orca {
       position: absolute;
       bottom: 90px;
-      font-size: 56px;
+      font-size: 54px;
       z-index: 9;
       filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
       user-select: none;
     }
 
-    /* ===== PLATAFORMA DE GELO 2D ===== */
+    /* Plataformas agora no chão */
     .platform {
       position: absolute;
-      height: 22px;
-      background: linear-gradient(#e0f7ff, #a8d8f0);
-      border-radius: 12px;
+      bottom: 90px;
+      height: 28px;
+      background: linear-gradient(#e0f7ff, #a0d4ec);
+      border-radius: 10px 10px 4px 4px;
       border: 3px solid #ffffff;
-      box-shadow: 0 6px 12px rgba(0,80,120,0.25), inset 0 4px 8px rgba(255,255,255,0.6);
+      box-shadow: 0 4px 10px rgba(0,60,100,0.25), inset 0 3px 6px rgba(255,255,255,0.7);
       z-index: 7;
     }
 
@@ -168,13 +158,29 @@
       100% { transform: translateY(-40px) scale(1.3); opacity: 0; }
     }
 
-    /* Tela de mensagem */
+    #level-up {
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.75);
+      color: #ffeb3b;
+      font-size: 28px;
+      font-weight: 900;
+      padding: 16px 32px;
+      border-radius: 20px;
+      z-index: 25;
+      display: none;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
     #message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255,255,255,0.95);
+      background: rgba(255,255,255,0.96);
       padding: 32px 36px;
       border-radius: 24px;
       text-align: center;
@@ -184,9 +190,9 @@
       min-width: 280px;
     }
     #message h1 {
-      font-size: 28px;
+      font-size: 26px;
       color: #0d47a1;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     #message p {
       font-size: 15px;
@@ -220,9 +226,12 @@
 
     <div id="hud">
       <div id="score">Pontos: 0</div>
+      <div id="level">Nível 1</div>
       <div id="lives">❤️❤️❤️</div>
-      <div id="hiscore">Recorde: 0</div>
+      <div id="hiscore">Rec: 0</div>
     </div>
+
+    <div id="level-up">NÍVEL 2!</div>
 
     <div id="penguin">🐧</div>
     <div id="ground"></div>
@@ -230,9 +239,9 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Pule nas plataformas<br>
-        Pegue os peixes no chão<br>
-        Fuja das orcas!
+        10 Níveis<br>
+        Plataformas no chão<br>
+        Fuja das orcas e pegue peixes!
       </p>
       <button id="start-btn">Começar</button>
     </div>
@@ -277,7 +286,7 @@
         gain.gain.setValueAtTime(0.15, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
         osc.start(now); osc.stop(now + 0.55);
-      } else if (type === 'start') {
+      } else if (type === 'start' || type === 'levelup') {
         osc.type = 'square';
         osc.frequency.setValueAtTime(400, now);
         osc.frequency.setValueAtTime(600, now + 0.1);
@@ -292,13 +301,16 @@
     const penguin = document.getElementById('penguin');
     const scoreEl = document.getElementById('score');
     const livesEl = document.getElementById('lives');
+    const levelEl = document.getElementById('level');
     const hiscoreEl = document.getElementById('hiscore');
     const message = document.getElementById('message');
+    const levelUpEl = document.getElementById('level-up');
     const startBtn = document.getElementById('start-btn');
 
     let score = 0;
     let lives = 3;
-    let highScore = parseInt(localStorage.getItem('pinguim2dHigh') || '0');
+    let level = 1;
+    let highScore = parseInt(localStorage.getItem('pinguimLevelsHigh') || '0');
     let penguinX = 130;
     let penguinY = 0;
     let isJumping = false;
@@ -308,14 +320,14 @@
     let onPlatform = false;
     let fishTimer, orcaTimer, platformTimer;
     let animId;
-    let difficulty = 1;
-    let runSpeed = 3.3;
+    let runSpeed = 3.2;
     let distance = 0;
+    let nextLevelScore = 400;
 
     const gravity = 0.85;
     const jumpPower = -15.5;
 
-    hiscoreEl.textContent = 'Recorde: ' + highScore;
+    hiscoreEl.textContent = 'Rec: ' + highScore;
 
     // Neve
     for (let i = 0; i < 40; i++) {
@@ -356,9 +368,21 @@
     });
 
     function updatePenguin() {
-      penguinX += runSpeed * difficulty * 0.28;
-      distance += runSpeed * difficulty * 0.12;
-      score = Math.floor(distance) + (score % 10);
+      penguinX += runSpeed * 0.3;
+      distance += runSpeed * 0.13;
+      score = Math.floor(distance);
+
+      // Aumenta de nível
+      if (score >= nextLevelScore && level < 10) {
+        level++;
+        nextLevelScore += 450 + level * 50;
+        levelEl.textContent = 'Nível ' + level;
+        showLevelUp();
+        playSound('levelup');
+
+        // Aumenta a dificuldade
+        runSpeed = 3.2 + (level - 1) * 0.45;
+      }
 
       if (keys['ArrowLeft'] || keys['a']) penguinX -= 4;
       if (keys['ArrowRight'] || keys['d']) penguinX += 2.8;
@@ -378,17 +402,15 @@
         }
       }
 
-      // Colisão com plataformas
+      // Colisão com plataformas (agora no chão)
       onPlatform = false;
       document.querySelectorAll('.platform').forEach(plat => {
         const platX = parseFloat(plat.style.left);
-        const platBottom = parseFloat(plat.style.bottom);
-        const platHeight = 22;
+        const platW = parseFloat(plat.style.width);
 
-        if (penguinX + 45 > platX && penguinX < platX + parseFloat(plat.style.width) &&
-            penguinY + 5 >= (platBottom - 90) - 8 && penguinY <= (platBottom - 90) + 10 &&
-            velocityY >= 0) {
-          penguinY = platBottom - 90 - 2;
+        if (penguinX + 48 > platX && penguinX < platX + platW &&
+            penguinY > -5 && penguinY < 20 && velocityY >= 0) {
+          penguinY = 0;
           velocityY = 0;
           isJumping = false;
           onPlatform = true;
@@ -406,6 +428,14 @@
       }
 
       scoreEl.textContent = 'Pontos: ' + Math.floor(score);
+    }
+
+    function showLevelUp() {
+      levelUpEl.textContent = 'NÍVEL ' + level + '!';
+      levelUpEl.style.display = 'block';
+      setTimeout(() => {
+        levelUpEl.style.display = 'none';
+      }, 1400);
     }
 
     function showPopup(x, y, txt) {
@@ -427,17 +457,17 @@
       game.appendChild(fish);
 
       let x = 500;
-      const spd = (3.6 + Math.random() * 1.4) * difficulty;
+      const spd = (3.5 + Math.random() * 1.5) * (1 + level * 0.08);
 
       function move() {
         if (!gameRunning) { fish.remove(); return; }
         x -= spd;
         fish.style.left = x + 'px';
 
-        if (penguinY < 12 && x < penguinX + 50 && x + 30 > penguinX) {
-          score += 15;
+        if (penguinY < 15 && x < penguinX + 50 && x + 32 > penguinX) {
+          score += 20;
           playSound('collect');
-          showPopup(penguinX + 10, 480, '+15');
+          showPopup(penguinX + 10, 470, '+20');
           fish.remove();
           return;
         }
@@ -456,14 +486,14 @@
       game.appendChild(orca);
 
       let x = 520;
-      const spd = (4.5 + Math.random() * 1.8) * difficulty;
+      const spd = (4.3 + Math.random() * 1.7) * (1 + level * 0.1);
 
       function move() {
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = x + 'px';
 
-        if (!invincible && x < penguinX + 55 && x + 55 > penguinX && penguinY > -25) {
+        if (!invincible && x < penguinX + 55 && x + 55 > penguinX && penguinY > -20) {
           hit();
         }
         if (x < -80) { orca.remove(); return; }
@@ -476,18 +506,16 @@
       if (!gameRunning) return;
       const plat = document.createElement('div');
       plat.className = 'platform';
-      const width = 90 + Math.random() * 50;
+      const width = 80 + Math.random() * 70;
       plat.style.width = width + 'px';
       plat.style.left = '500px';
-
-      const heights = [50, 90, 130, 170];
-      const h = heights[Math.floor(Math.random() * heights.length)];
-      plat.style.bottom = (90 + h) + 'px';
+      // Plataforma no chão
+      plat.style.bottom = '90px';
 
       game.appendChild(plat);
 
       let x = 500;
-      const spd = (3.7 + Math.random() * 1.3) * difficulty;
+      const spd = (3.6 + Math.random() * 1.2) * (1 + level * 0.08);
 
       function move() {
         if (!gameRunning) { plat.remove(); return; }
@@ -523,13 +551,17 @@
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguim2dHigh', highScore);
-        hiscoreEl.textContent = 'Recorde: ' + highScore;
+        localStorage.setItem('pinguimLevelsHigh', highScore);
+        hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
       message.innerHTML = `
         <h1>Game Over</h1>
-        <p>Pontos: <strong>${Math.floor(score)}</strong><br>Recorde: ${highScore}</p>
+        <p>
+          Pontos: <strong>${Math.floor(score)}</strong><br>
+          Nível alcançado: <strong>${level}</strong><br>
+          Recorde: ${highScore}
+        </p>
         <button id="start-btn">Jogar de Novo</button>
       `;
       message.style.display = 'block';
@@ -539,8 +571,6 @@
     function loop() {
       if (!gameRunning) return;
       updatePenguin();
-      difficulty = 1 + Math.floor(distance / 450) * 0.13;
-      runSpeed = 3.3 + (difficulty - 1) * 0.55;
       animId = requestAnimationFrame(loop);
     }
 
@@ -549,11 +579,13 @@
       score = 0;
       distance = 0;
       lives = 3;
-      difficulty = 1;
-      runSpeed = 3.3;
+      level = 1;
+      nextLevelScore = 400;
+      runSpeed = 3.2;
       invincible = false;
       onPlatform = false;
       scoreEl.textContent = 'Pontos: 0';
+      levelEl.textContent = 'Nível 1';
       updateLives();
       penguinX = 130;
       penguinY = 0;
@@ -564,9 +596,9 @@
       penguin.classList.add('running');
       playSound('start');
 
-      fishTimer = setInterval(createFish, 1100);
-      orcaTimer = setInterval(createOrca, 2200);
-      platformTimer = setInterval(createPlatform, 1400);
+      fishTimer = setInterval(createFish, 1200);
+      orcaTimer = setInterval(createOrca, 2100);
+      platformTimer = setInterval(createPlatform, 1600);
 
       loop();
     }
