@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Plataformas</title>
+  <title>Pinguim Runner - Pinguim Melhorado</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
@@ -126,35 +126,40 @@
     }
     #lives { color: #ff6b6b; }
 
-    /* ===== PINGUIM MELHORADO ===== */
+    /* ========== PINGUIM BEM MELHORADO ========== */
     #penguin {
       position: absolute;
       bottom: 100px;
       left: 140px;
-      width: 4px; height: 4px;
+      width: 4px;
+      height: 4px;
       z-index: 12;
       transform-origin: center bottom;
     }
     #penguin .sprite {
-      width: 4px; height: 4px;
+      width: 4px;
+      height: 4px;
       background: transparent;
+      /* Novo pinguim mais fofo e detalhado */
       box-shadow:
+        /* topo da cabeça */
+        12px 0 #0a0a0a, 16px 0 #0a0a0a, 20px 0 #0a0a0a,
         /* cabeça */
-        12px 0 #0a0a0a, 16px 0 #0a0a0a,
-        8px 4px #0a0a0a, 12px 4px #0a0a0a, 16px 4px #0a0a0a, 20px 4px #0a0a0a,
-        4px 8px #0a0a0a, 8px 8px #ffffff, 12px 8px #ffffff, 16px 8px #ffffff, 20px 8px #ffffff, 24px 8px #0a0a0a,
-        /* olhos + bico */
-        4px 12px #0a0a0a, 8px 12px #ffffff, 12px 12px #111111, 16px 12px #ff9900, 20px 12px #ffffff, 24px 12px #0a0a0a,
-        4px 16px #0a0a0a, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #ffffff, 20px 16px #ffffff, 24px 16px #0a0a0a,
-        /* peito */
-        4px 20px #0a0a0a, 8px 20px #ffffff, 12px 20px #ffffff, 16px 20px #ffffff, 20px 20px #ffffff, 24px 20px #0a0a0a,
-        /* corpo */
-        4px 24px #0a0a0a, 8px 24px #0a0a0a, 12px 24px #0a0a0a, 16px 24px #0a0a0a, 20px 24px #0a0a0a, 24px 24px #0a0a0a,
-        4px 28px #0a0a0a, 8px 28px #0a0a0a, 12px 28px #0a0a0a, 16px 28px #0a0a0a, 20px 28px #0a0a0a, 24px 28px #0a0a0a,
-        8px 32px #0a0a0a, 12px 32px #0a0a0a, 16px 32px #0a0a0a, 20px 32px #0a0a0a,
+        8px 4px #0a0a0a, 12px 4px #0a0a0a, 16px 4px #0a0a0a, 20px 4px #0a0a0a, 24px 4px #0a0a0a,
+        4px 8px #0a0a0a, 8px 8px #ffffff, 12px 8px #ffffff, 16px 8px #ffffff, 20px 8px #ffffff, 24px 8px #ffffff, 28px 8px #0a0a0a,
+        /* olhos e bico */
+        4px 12px #0a0a0a, 8px 12px #ffffff, 12px 12px #111111, 16px 12px #ff9900, 20px 12px #111111, 24px 12px #ffffff, 28px 12px #0a0a0a,
+        4px 16px #0a0a0a, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #ffffff, 20px 16px #ffffff, 24px 16px #ffffff, 28px 16px #0a0a0a,
+        /* peito branco */
+        4px 20px #0a0a0a, 8px 20px #ffffff, 12px 20px #ffffff, 16px 20px #ffffff, 20px 20px #ffffff, 24px 20px #ffffff, 28px 20px #0a0a0a,
+        4px 24px #0a0a0a, 8px 24px #ffffff, 12px 24px #ffffff, 16px 24px #ffffff, 20px 24px #ffffff, 24px 24px #ffffff, 28px 24px #0a0a0a,
+        /* corpo preto */
+        4px 28px #0a0a0a, 8px 28px #0a0a0a, 12px 28px #0a0a0a, 16px 28px #0a0a0a, 20px 28px #0a0a0a, 24px 28px #0a0a0a, 28px 28px #0a0a0a,
+        8px 32px #0a0a0a, 12px 32px #0a0a0a, 16px 32px #0a0a0a, 20px 32px #0a0a0a, 24px 32px #0a0a0a,
         /* pés */
-        8px 36px #ff9900, 20px 36px #ff9900;
+        8px 36px #ff9900, 12px 36px #ff9900, 20px 36px #ff9900, 24px 36px #ff9900;
     }
+
     #penguin.running .sprite {
       animation: runBob 0.18s steps(2) infinite;
     }
@@ -163,7 +168,7 @@
       50% { transform: translateY(-5px); }
     }
 
-    /* ===== PEIXE MELHORADO ===== */
+    /* Peixe */
     .fish {
       position: absolute;
       width: 4px; height: 4px;
@@ -180,7 +185,7 @@
         20px 4px #ff8c00, 24px 8px #ff8c00, 20px 12px #ff8c00;
     }
 
-    /* ===== ORCA MELHORADA ===== */
+    /* Orca */
     .orca {
       position: absolute;
       bottom: 100px;
@@ -191,21 +196,18 @@
       width: 4px; height: 4px;
       background: transparent;
       box-shadow:
-        /* nadadeira */
         32px 0 #050505, 36px 0 #050505,
         28px 4px #050505, 32px 4px #050505, 36px 4px #050505, 40px 4px #050505,
-        /* corpo */
         8px 8px #050505, 12px 8px #050505, 16px 8px #050505, 20px 8px #050505, 24px 8px #050505, 28px 8px #050505, 32px 8px #050505, 36px 8px #050505, 40px 8px #050505, 44px 8px #050505, 48px 8px #050505,
         4px 12px #050505, 8px 12px #050505, 12px 12px #f0f0f0, 16px 12px #f0f0f0, 20px 12px #050505, 24px 12px #050505, 28px 12px #050505, 32px 12px #050505, 36px 12px #050505, 40px 12px #050505, 44px 12px #050505, 48px 12px #050505, 52px 12px #050505,
         0px 16px #050505, 4px 16px #050505, 8px 16px #050505, 12px 16px #f0f0f0, 16px 16px #f0f0f0, 20px 16px #050505, 24px 16px #050505, 28px 16px #050505, 32px 16px #050505, 36px 16px #050505, 40px 16px #050505, 44px 16px #050505, 48px 16px #050505, 52px 16px #050505,
         4px 20px #050505, 8px 20px #050505, 12px 20px #050505, 16px 20px #050505, 20px 20px #050505, 24px 20px #050505, 28px 20px #050505, 32px 20px #050505, 36px 20px #050505, 40px 20px #050505, 44px 20px #050505, 48px 20px #050505,
         8px 24px #050505, 12px 24px #050505, 16px 24px #050505, 20px 24px #050505, 24px 24px #050505, 28px 24px #050505, 32px 24px #050505, 36px 24px #050505, 40px 24px #050505, 44px 24px #050505,
-        /* cauda */
         52px 12px #050505, 56px 8px #050505, 56px 16px #050505, 60px 12px #050505,
         52px 20px #050505, 56px 24px #050505;
     }
 
-    /* ===== PLATAFORMA DE GELO ===== */
+    /* Plataforma de gelo */
     .platform {
       position: absolute;
       width: 4px; height: 4px;
@@ -215,7 +217,6 @@
       width: 4px; height: 4px;
       background: transparent;
       box-shadow:
-        /* plataforma de gelo */
         0px 0 #d0f0ff, 4px 0 #d0f0ff, 8px 0 #d0f0ff, 12px 0 #d0f0ff, 16px 0 #d0f0ff, 20px 0 #d0f0ff, 24px 0 #d0f0ff, 28px 0 #d0f0ff, 32px 0 #d0f0ff, 36px 0 #d0f0ff, 40px 0 #d0f0ff, 44px 0 #d0f0ff, 48px 0 #d0f0ff, 52px 0 #d0f0ff,
         0px 4px #a8d8f0, 4px 4px #e0f8ff, 8px 4px #e0f8ff, 12px 4px #e0f8ff, 16px 4px #e0f8ff, 20px 4px #e0f8ff, 24px 4px #e0f8ff, 28px 4px #e0f8ff, 32px 4px #e0f8ff, 36px 4px #e0f8ff, 40px 4px #e0f8ff, 44px 4px #e0f8ff, 48px 4px #e0f8ff, 52px 4px #a8d8f0,
         0px 8px #88c0e0, 4px 8px #a8d8f0, 8px 8px #a8d8f0, 12px 8px #a8d8f0, 16px 8px #a8d8f0, 20px 8px #a8d8f0, 24px 8px #a8d8f0, 28px 8px #a8d8f0, 32px 8px #a8d8f0, 36px 8px #a8d8f0, 40px 8px #a8d8f0, 44px 8px #a8d8f0, 48px 8px #a8d8f0, 52px 8px #88c0e0;
@@ -385,7 +386,6 @@
 
     hiscoreEl.textContent = 'REC ' + highScore;
 
-    // Neve
     for (let i = 0; i < 32; i++) {
       const s = document.createElement('div');
       s.className = 'snow';
@@ -423,7 +423,6 @@
     function snap(v) { return Math.round(v / 2) * 2; }
 
     function updatePenguin() {
-      // movimento automático
       penguinX += runSpeed * difficulty * 0.3;
       distance += runSpeed * difficulty * 0.12;
       score = Math.floor(distance) + (score % 10);
@@ -434,7 +433,6 @@
       if (penguinX < 50) penguinX = 50;
       if (penguinX > 350) penguinX = 350;
 
-      // física
       if (isJumping || !onPlatform) {
         velocityY += gravity;
         penguinY += velocityY;
@@ -447,14 +445,12 @@
         }
       }
 
-      // colisão com plataformas
       onPlatform = false;
       document.querySelectorAll('.platform').forEach(plat => {
         const platX = parseFloat(plat.style.left);
-        const platY = parseFloat(plat.dataset.y); // altura da plataforma
+        const platY = parseFloat(plat.dataset.y);
 
-        // verifica se está em cima da plataforma
-        if (penguinX + 40 > platX && penguinX < platX + 56 &&
+        if (penguinX + 44 > platX && penguinX < platX + 56 &&
             penguinY + 4 >= platY - 8 && penguinY <= platY + 6 &&
             velocityY >= 0) {
           penguinY = platY - 2;
@@ -506,10 +502,10 @@
         fish.style.top = snap(y) + 'px';
 
         const px = penguinX;
-        const py = 608 - 100 - 38 + penguinY;
+        const py = 608 - 100 - 40 + penguinY;
 
-        if (parseFloat(fish.style.left) < px + 44 && parseFloat(fish.style.left) + 28 > px &&
-            y < py + 38 && y + 20 > py) {
+        if (parseFloat(fish.style.left) < px + 46 && parseFloat(fish.style.left) + 28 > px &&
+            y < py + 40 && y + 20 > py) {
           score += 15;
           playSound('collect');
           showPopup(px + 8, py - 16, '+15');
@@ -554,7 +550,6 @@
       plat.innerHTML = '<div class="sprite"></div>';
       plat.style.left = '540px';
 
-      // alturas variadas (quanto maior o número, mais alta a plataforma)
       const heights = [40, 70, 100, 130, 160];
       const h = heights[Math.floor(Math.random() * heights.length)];
       plat.dataset.y = h;
