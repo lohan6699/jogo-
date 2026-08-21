@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Estilo Banana Kong</title>
+  <title>Pinguim Runner - Plataformas</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
@@ -106,14 +106,6 @@
       z-index: 4;
       box-shadow: inset 0 10px 0 rgba(255,255,255,0.45), 0 -8px 20px rgba(100,180,220,0.3);
     }
-    #ground::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 30%;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.5) 70%, transparent 100%);
-      opacity: 0.6;
-    }
 
     #hud {
       position: absolute;
@@ -134,29 +126,34 @@
     }
     #lives { color: #ff6b6b; }
 
-    /* Pinguim */
+    /* ===== PINGUIM MELHORADO ===== */
     #penguin {
       position: absolute;
       bottom: 100px;
       left: 140px;
       width: 4px; height: 4px;
-      z-index: 10;
+      z-index: 12;
       transform-origin: center bottom;
     }
     #penguin .sprite {
       width: 4px; height: 4px;
       background: transparent;
       box-shadow:
-        12px 0 #0d0d0d, 16px 0 #0d0d0d,
-        8px 4px #0d0d0d, 12px 4px #0d0d0d, 16px 4px #0d0d0d, 20px 4px #0d0d0d,
-        4px 8px #0d0d0d, 8px 8px #f5f5f5, 12px 8px #f5f5f5, 16px 8px #f5f5f5, 20px 8px #f5f5f5, 24px 8px #0d0d0d,
-        4px 12px #0d0d0d, 8px 12px #f5f5f5, 12px 12px #111, 16px 12px #ff9500, 20px 12px #f5f5f5, 24px 12px #0d0d0d,
-        4px 16px #0d0d0d, 8px 16px #f5f5f5, 12px 16px #f5f5f5, 16px 16px #f5f5f5, 20px 16px #f5f5f5, 24px 16px #0d0d0d,
-        4px 20px #0d0d0d, 8px 20px #f5f5f5, 12px 20px #f5f5f5, 16px 20px #f5f5f5, 20px 20px #f5f5f5, 24px 20px #0d0d0d,
-        4px 24px #0d0d0d, 8px 24px #0d0d0d, 12px 24px #0d0d0d, 16px 24px #0d0d0d, 20px 24px #0d0d0d, 24px 24px #0d0d0d,
-        4px 28px #0d0d0d, 8px 28px #0d0d0d, 12px 28px #0d0d0d, 16px 28px #0d0d0d, 20px 28px #0d0d0d, 24px 28px #0d0d0d,
-        8px 32px #0d0d0d, 12px 32px #0d0d0d, 16px 32px #0d0d0d, 20px 32px #0d0d0d,
-        8px 36px #ff9500, 20px 36px #ff9500;
+        /* cabeça */
+        12px 0 #0a0a0a, 16px 0 #0a0a0a,
+        8px 4px #0a0a0a, 12px 4px #0a0a0a, 16px 4px #0a0a0a, 20px 4px #0a0a0a,
+        4px 8px #0a0a0a, 8px 8px #ffffff, 12px 8px #ffffff, 16px 8px #ffffff, 20px 8px #ffffff, 24px 8px #0a0a0a,
+        /* olhos + bico */
+        4px 12px #0a0a0a, 8px 12px #ffffff, 12px 12px #111111, 16px 12px #ff9900, 20px 12px #ffffff, 24px 12px #0a0a0a,
+        4px 16px #0a0a0a, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #ffffff, 20px 16px #ffffff, 24px 16px #0a0a0a,
+        /* peito */
+        4px 20px #0a0a0a, 8px 20px #ffffff, 12px 20px #ffffff, 16px 20px #ffffff, 20px 20px #ffffff, 24px 20px #0a0a0a,
+        /* corpo */
+        4px 24px #0a0a0a, 8px 24px #0a0a0a, 12px 24px #0a0a0a, 16px 24px #0a0a0a, 20px 24px #0a0a0a, 24px 24px #0a0a0a,
+        4px 28px #0a0a0a, 8px 28px #0a0a0a, 12px 28px #0a0a0a, 16px 28px #0a0a0a, 20px 28px #0a0a0a, 24px 28px #0a0a0a,
+        8px 32px #0a0a0a, 12px 32px #0a0a0a, 16px 32px #0a0a0a, 20px 32px #0a0a0a,
+        /* pés */
+        8px 36px #ff9900, 20px 36px #ff9900;
     }
     #penguin.running .sprite {
       animation: runBob 0.18s steps(2) infinite;
@@ -166,7 +163,7 @@
       50% { transform: translateY(-5px); }
     }
 
-    /* Peixe */
+    /* ===== PEIXE MELHORADO ===== */
     .fish {
       position: absolute;
       width: 4px; height: 4px;
@@ -176,51 +173,52 @@
       width: 4px; height: 4px;
       background: transparent;
       box-shadow:
-        4px 4px #2a9fff, 8px 4px #2a9fff, 12px 4px #2a9fff, 16px 4px #2a9fff,
-        0px 8px #2a9fff, 4px 8px #7ad0ff, 8px 8px #7ad0ff, 12px 8px #7ad0ff, 16px 8px #2a9fff, 20px 8px #2a9fff,
-        4px 12px #2a9fff, 8px 12px #2a9fff, 12px 12px #2a9fff, 16px 12px #2a9fff,
-        20px 4px #ff9a3c, 24px 8px #ff9a3c, 20px 12px #ff9a3c,
-        8px 8px #ffffff;
+        4px 0 #1e90ff, 8px 0 #1e90ff, 12px 0 #1e90ff,
+        0px 4px #1e90ff, 4px 4px #7ec8ff, 8px 4px #7ec8ff, 12px 4px #7ec8ff, 16px 4px #1e90ff,
+        0px 8px #1e90ff, 4px 8px #7ec8ff, 8px 8px #ffffff, 12px 8px #7ec8ff, 16px 8px #1e90ff, 20px 8px #1e90ff,
+        4px 12px #1e90ff, 8px 12px #1e90ff, 12px 12px #1e90ff, 16px 12px #1e90ff,
+        20px 4px #ff8c00, 24px 8px #ff8c00, 20px 12px #ff8c00;
     }
 
-    /* Orca */
+    /* ===== ORCA MELHORADA ===== */
     .orca {
       position: absolute;
       bottom: 100px;
       width: 4px; height: 4px;
-      z-index: 8;
+      z-index: 9;
     }
     .orca .sprite {
       width: 4px; height: 4px;
       background: transparent;
       box-shadow:
-        28px 0 #0a0a0a, 32px 0 #0a0a0a,
-        24px 4px #0a0a0a, 28px 4px #0a0a0a, 32px 4px #0a0a0a, 36px 4px #0a0a0a,
-        8px 8px #0a0a0a, 12px 8px #0a0a0a, 16px 8px #0a0a0a, 20px 8px #0a0a0a, 24px 8px #0a0a0a, 28px 8px #0a0a0a, 32px 8px #0a0a0a, 36px 8px #0a0a0a, 40px 8px #0a0a0a, 44px 8px #0a0a0a,
-        4px 12px #0a0a0a, 8px 12px #0a0a0a, 12px 12px #f0f0f0, 16px 12px #f0f0f0, 20px 12px #0a0a0a, 24px 12px #0a0a0a, 28px 12px #0a0a0a, 32px 12px #0a0a0a, 36px 12px #0a0a0a, 40px 12px #0a0a0a, 44px 12px #0a0a0a, 48px 12px #0a0a0a,
-        0px 16px #0a0a0a, 4px 16px #0a0a0a, 8px 16px #0a0a0a, 12px 16px #f0f0f0, 16px 16px #f0f0f0, 20px 16px #0a0a0a, 24px 16px #0a0a0a, 28px 16px #0a0a0a, 32px 16px #0a0a0a, 36px 16px #0a0a0a, 40px 16px #0a0a0a, 44px 16px #0a0a0a, 48px 16px #0a0a0a,
-        4px 20px #0a0a0a, 8px 20px #0a0a0a, 12px 20px #0a0a0a, 16px 20px #0a0a0a, 20px 20px #0a0a0a, 24px 20px #0a0a0a, 28px 20px #0a0a0a, 32px 20px #0a0a0a, 36px 20px #0a0a0a, 40px 20px #0a0a0a, 44px 20px #0a0a0a,
-        8px 24px #0a0a0a, 12px 24px #0a0a0a, 16px 24px #0a0a0a, 20px 24px #0a0a0a, 24px 24px #0a0a0a, 28px 24px #0a0a0a, 32px 24px #0a0a0a, 36px 24px #0a0a0a, 40px 24px #0a0a0a,
-        48px 12px #0a0a0a, 52px 8px #0a0a0a, 52px 16px #0a0a0a, 56px 12px #0a0a0a,
-        48px 20px #0a0a0a, 52px 24px #0a0a0a;
+        /* nadadeira */
+        32px 0 #050505, 36px 0 #050505,
+        28px 4px #050505, 32px 4px #050505, 36px 4px #050505, 40px 4px #050505,
+        /* corpo */
+        8px 8px #050505, 12px 8px #050505, 16px 8px #050505, 20px 8px #050505, 24px 8px #050505, 28px 8px #050505, 32px 8px #050505, 36px 8px #050505, 40px 8px #050505, 44px 8px #050505, 48px 8px #050505,
+        4px 12px #050505, 8px 12px #050505, 12px 12px #f0f0f0, 16px 12px #f0f0f0, 20px 12px #050505, 24px 12px #050505, 28px 12px #050505, 32px 12px #050505, 36px 12px #050505, 40px 12px #050505, 44px 12px #050505, 48px 12px #050505, 52px 12px #050505,
+        0px 16px #050505, 4px 16px #050505, 8px 16px #050505, 12px 16px #f0f0f0, 16px 16px #f0f0f0, 20px 16px #050505, 24px 16px #050505, 28px 16px #050505, 32px 16px #050505, 36px 16px #050505, 40px 16px #050505, 44px 16px #050505, 48px 16px #050505, 52px 16px #050505,
+        4px 20px #050505, 8px 20px #050505, 12px 20px #050505, 16px 20px #050505, 20px 20px #050505, 24px 20px #050505, 28px 20px #050505, 32px 20px #050505, 36px 20px #050505, 40px 20px #050505, 44px 20px #050505, 48px 20px #050505,
+        8px 24px #050505, 12px 24px #050505, 16px 24px #050505, 20px 24px #050505, 24px 24px #050505, 28px 24px #050505, 32px 24px #050505, 36px 24px #050505, 40px 24px #050505, 44px 24px #050505,
+        /* cauda */
+        52px 12px #050505, 56px 8px #050505, 56px 16px #050505, 60px 12px #050505,
+        52px 20px #050505, 56px 24px #050505;
     }
 
-    /* Gelo */
-    .ice {
+    /* ===== PLATAFORMA DE GELO ===== */
+    .platform {
       position: absolute;
-      bottom: 100px;
       width: 4px; height: 4px;
-      z-index: 8;
+      z-index: 7;
     }
-    .ice .sprite {
+    .platform .sprite {
       width: 4px; height: 4px;
       background: transparent;
       box-shadow:
-        0px 4px #b0e8ff, 4px 4px #b0e8ff, 8px 4px #b0e8ff, 12px 4px #b0e8ff, 16px 4px #b0e8ff, 20px 4px #b0e8ff, 24px 4px #b0e8ff,
-        0px 8px #90d0f0, 4px 8px #d0f4ff, 8px 8px #d0f4ff, 12px 8px #d0f4ff, 16px 8px #d0f4ff, 20px 8px #d0f4ff, 24px 8px #90d0f0,
-        0px 12px #90d0f0, 4px 12px #b0e8ff, 8px 12px #b0e8ff, 12px 12px #b0e8ff, 16px 12px #b0e8ff, 20px 12px #b0e8ff, 24px 12px #90d0f0,
-        0px 16px #70b8d8, 4px 16px #90d0f0, 8px 16px #90d0f0, 12px 16px #90d0f0, 16px 16px #90d0f0, 20px 16px #90d0f0, 24px 16px #70b8d8,
-        4px 20px #70b8d8, 8px 20px #70b8d8, 12px 20px #70b8d8, 16px 20px #70b8d8, 20px 20px #70b8d8;
+        /* plataforma de gelo */
+        0px 0 #d0f0ff, 4px 0 #d0f0ff, 8px 0 #d0f0ff, 12px 0 #d0f0ff, 16px 0 #d0f0ff, 20px 0 #d0f0ff, 24px 0 #d0f0ff, 28px 0 #d0f0ff, 32px 0 #d0f0ff, 36px 0 #d0f0ff, 40px 0 #d0f0ff, 44px 0 #d0f0ff, 48px 0 #d0f0ff, 52px 0 #d0f0ff,
+        0px 4px #a8d8f0, 4px 4px #e0f8ff, 8px 4px #e0f8ff, 12px 4px #e0f8ff, 16px 4px #e0f8ff, 20px 4px #e0f8ff, 24px 4px #e0f8ff, 28px 4px #e0f8ff, 32px 4px #e0f8ff, 36px 4px #e0f8ff, 40px 4px #e0f8ff, 44px 4px #e0f8ff, 48px 4px #e0f8ff, 52px 4px #a8d8f0,
+        0px 8px #88c0e0, 4px 8px #a8d8f0, 8px 8px #a8d8f0, 12px 8px #a8d8f0, 16px 8px #a8d8f0, 20px 8px #a8d8f0, 24px 8px #a8d8f0, 28px 8px #a8d8f0, 32px 8px #a8d8f0, 36px 8px #a8d8f0, 40px 8px #a8d8f0, 44px 8px #a8d8f0, 48px 8px #a8d8f0, 52px 8px #88c0e0;
     }
 
     .popup {
@@ -300,8 +298,8 @@
     <div id="message">
       <div>PINGUIM<br>RUNNER</div>
       <div class="subtitle">
-        Estilo Banana Kong<br>
-        Corra • Pule • Pegue peixes<br>
+        Pule nas plataformas de gelo<br>
+        Fuja das orcas • Pegue peixes<br>
         3 vidas
       </div>
       <button id="start-btn">COMEÇAR</button>
@@ -309,68 +307,55 @@
   </div>
 
   <script>
-    // ========== SONS (Web Audio API) ==========
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
-
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.connect(gain);
       gain.connect(audioCtx.destination);
-
       const now = audioCtx.currentTime;
 
       if (type === 'jump') {
         osc.type = 'square';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(600, now + 0.12);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-        osc.start(now);
-        osc.stop(now + 0.15);
-      }
-      else if (type === 'collect') {
+        osc.frequency.setValueAtTime(280, now);
+        osc.frequency.exponentialRampToValueAtTime(550, now + 0.11);
+        gain.gain.setValueAtTime(0.14, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+        osc.start(now); osc.stop(now + 0.14);
+      } else if (type === 'collect') {
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(800, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.08);
-        gain.gain.setValueAtTime(0.12, now);
+        osc.frequency.setValueAtTime(700, now);
+        osc.frequency.exponentialRampToValueAtTime(1100, now + 0.09);
+        gain.gain.setValueAtTime(0.13, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-        osc.start(now);
-        osc.stop(now + 0.12);
-      }
-      else if (type === 'hit') {
+        osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'hit') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(60, now + 0.25);
-        gain.gain.setValueAtTime(0.18, now);
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.28);
+        gain.gain.setValueAtTime(0.16, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now);
-        osc.stop(now + 0.3);
-      }
-      else if (type === 'gameover') {
+        osc.start(now); osc.stop(now + 0.3);
+      } else if (type === 'gameover') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.exponentialRampToValueAtTime(100, now + 0.6);
-        gain.gain.setValueAtTime(0.2, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
-        osc.start(now);
-        osc.stop(now + 0.7);
-      }
-      else if (type === 'start') {
+        osc.frequency.setValueAtTime(380, now);
+        osc.frequency.exponentialRampToValueAtTime(90, now + 0.55);
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc.start(now); osc.stop(now + 0.6);
+      } else if (type === 'start') {
         osc.type = 'square';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.setValueAtTime(600, now + 0.1);
-        osc.frequency.setValueAtTime(800, now + 0.2);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-        osc.start(now);
-        osc.stop(now + 0.35);
+        osc.frequency.setValueAtTime(350, now);
+        osc.frequency.setValueAtTime(520, now + 0.08);
+        osc.frequency.setValueAtTime(750, now + 0.16);
+        gain.gain.setValueAtTime(0.11, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
       }
     }
 
-    // ========== JOGO ==========
     const game = document.getElementById('game');
     const penguin = document.getElementById('penguin');
     const scoreEl = document.getElementById('score');
@@ -381,25 +366,27 @@
 
     let score = 0;
     let lives = 3;
-    let highScore = parseInt(localStorage.getItem('pinguimKongHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguimPlatformHigh') || '0');
     let penguinX = 140;
     let penguinY = 0;
     let isJumping = false;
     let velocityY = 0;
     let gameRunning = false;
     let invincible = false;
-    let fishTimer, orcaTimer, iceTimer;
+    let onPlatform = false;
+    let fishTimer, orcaTimer, platformTimer;
     let animId;
     let difficulty = 1;
-    let runSpeed = 3.4;
+    let runSpeed = 3.2;
     let distance = 0;
 
-    const gravity = 0.78;      // mais flutuante (estilo Banana Kong)
-    const jumpPower = -14.5;
+    const gravity = 0.82;
+    const jumpPower = -15.2;
 
     hiscoreEl.textContent = 'REC ' + highScore;
 
-    for (let i = 0; i < 35; i++) {
+    // Neve
+    for (let i = 0; i < 32; i++) {
       const s = document.createElement('div');
       s.className = 'snow';
       s.style.left = Math.floor(Math.random() * 128) * 4 + 'px';
@@ -414,6 +401,7 @@
       keys[e.key] = true;
       if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
         isJumping = true;
+        onPlatform = false;
         velocityY = jumpPower;
         penguin.classList.remove('running');
         playSound('jump');
@@ -422,10 +410,10 @@
     });
     document.addEventListener('keyup', e => keys[e.key] = false);
 
-    // clique / toque também pula (mobile friendly)
     game.addEventListener('click', () => {
       if (!isJumping && gameRunning) {
         isJumping = true;
+        onPlatform = false;
         velocityY = jumpPower;
         penguin.classList.remove('running');
         playSound('jump');
@@ -435,30 +423,47 @@
     function snap(v) { return Math.round(v / 2) * 2; }
 
     function updatePenguin() {
-      // corrida automática forte
-      penguinX += runSpeed * difficulty * 0.35;
-      distance += runSpeed * difficulty * 0.15;
-      score = Math.floor(distance) + (score % 10); // pontuação mistura distância + peixes
+      // movimento automático
+      penguinX += runSpeed * difficulty * 0.3;
+      distance += runSpeed * difficulty * 0.12;
+      score = Math.floor(distance) + (score % 10);
 
-      // ajuste fino
-      if (keys['ArrowLeft'] || keys['a']) penguinX -= 4;
-      if (keys['ArrowRight'] || keys['d']) penguinX += 2.8;
+      if (keys['ArrowLeft'] || keys['a']) penguinX -= 3.8;
+      if (keys['ArrowRight'] || keys['d']) penguinX += 2.6;
 
-      if (penguinX < 60) penguinX = 60;
-      if (penguinX > 340) penguinX = 340;
+      if (penguinX < 50) penguinX = 50;
+      if (penguinX > 350) penguinX = 350;
 
-      if (isJumping) {
+      // física
+      if (isJumping || !onPlatform) {
         velocityY += gravity;
         penguinY += velocityY;
-        if (penguinY >= 0) {
+
+        if (penguinY >= 0 && !onPlatform) {
           penguinY = 0;
           isJumping = false;
           velocityY = 0;
           penguin.classList.add('running');
         }
-      } else {
-        penguin.classList.add('running');
       }
+
+      // colisão com plataformas
+      onPlatform = false;
+      document.querySelectorAll('.platform').forEach(plat => {
+        const platX = parseFloat(plat.style.left);
+        const platY = parseFloat(plat.dataset.y); // altura da plataforma
+
+        // verifica se está em cima da plataforma
+        if (penguinX + 40 > platX && penguinX < platX + 56 &&
+            penguinY + 4 >= platY - 8 && penguinY <= platY + 6 &&
+            velocityY >= 0) {
+          penguinY = platY - 2;
+          velocityY = 0;
+          isJumping = false;
+          onPlatform = true;
+          penguin.classList.add('running');
+        }
+      });
 
       penguin.style.left = snap(penguinX) + 'px';
       penguin.style.bottom = (100 - snap(penguinY)) + 'px';
@@ -488,12 +493,12 @@
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.innerHTML = '<div class="sprite"></div>';
-      fish.style.left = snap(80 + Math.random() * 340) + 'px';
+      fish.style.left = snap(70 + Math.random() * 350) + 'px';
       fish.style.top = '-40px';
       game.appendChild(fish);
 
       let y = -40;
-      const spd = 2.3 + Math.random() * 1.3;
+      const spd = 2.2 + Math.random() * 1.3;
 
       function fall() {
         if (!gameRunning) { fish.remove(); return; }
@@ -503,10 +508,11 @@
         const px = penguinX;
         const py = 608 - 100 - 38 + penguinY;
 
-        if (parseFloat(fish.style.left) < px + 44 && parseFloat(fish.style.left) + 28 > px && y < py + 38 && y + 20 > py) {
+        if (parseFloat(fish.style.left) < px + 44 && parseFloat(fish.style.left) + 28 > px &&
+            y < py + 38 && y + 20 > py) {
           score += 15;
           playSound('collect');
-          showPopup(px + 10, py - 14, '+15');
+          showPopup(px + 8, py - 16, '+15');
           fish.remove();
           return;
         }
@@ -525,42 +531,45 @@
       game.appendChild(orca);
 
       let x = 540;
-      const spd = (4.8 + Math.random() * 1.8) * difficulty;
+      const spd = (4.6 + Math.random() * 1.8) * difficulty;
 
       function move() {
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = snap(x) + 'px';
 
-        if (!invincible && x < penguinX + 54 && x + 58 > penguinX && penguinY > -28) {
+        if (!invincible && x < penguinX + 56 && x + 62 > penguinX && penguinY > -30) {
           hit();
         }
-        if (x < -100) { orca.remove(); return; }
+        if (x < -110) { orca.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
     }
 
-    function createIce() {
+    function createPlatform() {
       if (!gameRunning) return;
-      const ice = document.createElement('div');
-      ice.className = 'ice';
-      ice.innerHTML = '<div class="sprite"></div>';
-      ice.style.left = '540px';
-      game.appendChild(ice);
+      const plat = document.createElement('div');
+      plat.className = 'platform';
+      plat.innerHTML = '<div class="sprite"></div>';
+      plat.style.left = '540px';
+
+      // alturas variadas (quanto maior o número, mais alta a plataforma)
+      const heights = [40, 70, 100, 130, 160];
+      const h = heights[Math.floor(Math.random() * heights.length)];
+      plat.dataset.y = h;
+      plat.style.bottom = (100 + h) + 'px';
+
+      game.appendChild(plat);
 
       let x = 540;
-      const spd = (4.2 + Math.random() * 1.5) * difficulty;
+      const spd = (3.8 + Math.random() * 1.2) * difficulty;
 
       function move() {
-        if (!gameRunning) { ice.remove(); return; }
+        if (!gameRunning) { plat.remove(); return; }
         x -= spd;
-        ice.style.left = snap(x) + 'px';
-
-        if (!invincible && x < penguinX + 48 && x + 32 > penguinX && penguinY > -24) {
-          hit();
-        }
-        if (x < -70) { ice.remove(); return; }
+        plat.style.left = snap(x) + 'px';
+        if (x < -80) { plat.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -583,14 +592,14 @@
       gameRunning = false;
       clearInterval(fishTimer);
       clearInterval(orcaTimer);
-      clearInterval(iceTimer);
+      clearInterval(platformTimer);
       cancelAnimationFrame(animId);
       penguin.classList.remove('running');
       playSound('gameover');
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguimKongHigh', highScore);
+        localStorage.setItem('pinguimPlatformHigh', highScore);
         hiscoreEl.textContent = 'REC ' + highScore;
       }
 
@@ -609,19 +618,20 @@
     function loop() {
       if (!gameRunning) return;
       updatePenguin();
-      difficulty = 1 + Math.floor(distance / 400) * 0.12;
-      runSpeed = 3.4 + (difficulty - 1) * 0.7;
+      difficulty = 1 + Math.floor(distance / 450) * 0.13;
+      runSpeed = 3.2 + (difficulty - 1) * 0.6;
       animId = requestAnimationFrame(loop);
     }
 
     function startGame() {
-      document.querySelectorAll('.fish, .orca, .ice, .popup').forEach(el => el.remove());
+      document.querySelectorAll('.fish, .orca, .platform, .popup').forEach(el => el.remove());
       score = 0;
       distance = 0;
       lives = 3;
       difficulty = 1;
-      runSpeed = 3.4;
+      runSpeed = 3.2;
       invincible = false;
+      onPlatform = false;
       scoreEl.textContent = 'PONTOS 0';
       updateLives();
       penguinX = 140;
@@ -633,9 +643,9 @@
       penguin.classList.add('running');
       playSound('start');
 
-      fishTimer = setInterval(createFish, 1000);
-      orcaTimer = setInterval(createOrca, 2400);
-      iceTimer  = setInterval(createIce, 1400);
+      fishTimer = setInterval(createFish, 1050);
+      orcaTimer = setInterval(createOrca, 2300);
+      platformTimer = setInterval(createPlatform, 1300);
 
       loop();
     }
