@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Pixel Art</title>
+  <title>Pinguim Runner - Visual Melhorado</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
@@ -13,7 +13,7 @@
     }
 
     body {
-      background: #050508;
+      background: #030308;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,115 +25,191 @@
     #game {
       width: 512px;
       height: 608px;
-      background: #0c0c1c;
-      border: 8px solid #ffffff;
+      background: #0a0a18;
+      border: 6px solid #e0f0ff;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 4px #222, 0 0 0 12px #444;
+      box-shadow: 
+        0 0 0 4px #1a1a2e,
+        0 0 0 10px #333355,
+        0 20px 60px rgba(0,0,0,0.8);
     }
 
+    /* Céu com faixas mais suaves */
     #sky {
       position: absolute;
-      inset: 0 0 96px 0;
-      background: repeating-linear-gradient(
+      inset: 0 0 100px 0;
+      background: linear-gradient(
         to bottom,
-        #0a0a18 0 8px,
-        #101028 8px 16px,
-        #16163a 16px 24px,
-        #1c1c4a 24px 32px
+        #060612 0%,
+        #0c0c22 20%,
+        #12123a 40%,
+        #1a1a4a 60%,
+        #1e2a5a 80%,
+        #243a6a 100%
       );
       z-index: 0;
     }
 
+    /* Aurora bem mais bonita */
     .aurora {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 260px;
+      top: 0;
+      left: -10%;
+      width: 120%;
+      height: 55%;
       pointer-events: none;
       z-index: 1;
-      opacity: 0.7;
+      mix-blend-mode: screen;
     }
     .aurora1 {
-      background: repeating-linear-gradient(90deg, transparent 0 16px, #00ff99 16px 32px, transparent 32px 48px, #00ccff 48px 64px);
-      animation: aurora 10s steps(8) infinite;
+      background: 
+        radial-gradient(ellipse 100% 60% at 30% 40%, rgba(0,255,170,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 50% at 70% 30%, rgba(0,200,255,0.25) 0%, transparent 70%);
+      filter: blur(12px);
+      animation: aurora1 12s ease-in-out infinite alternate;
+      opacity: 0.85;
     }
     .aurora2 {
-      background: repeating-linear-gradient(95deg, transparent 0 24px, #aa66ff 24px 40px, transparent 40px 64px);
-      animation: aurora 14s steps(6) infinite reverse;
-      opacity: 0.55;
+      background: 
+        radial-gradient(ellipse 90% 55% at 50% 35%, rgba(160,80,255,0.3) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 40% at 20% 50%, rgba(0,255,200,0.2) 0%, transparent 70%);
+      filter: blur(16px);
+      animation: aurora2 16s ease-in-out infinite alternate;
+      opacity: 0.7;
     }
-    @keyframes aurora {
-      0%   { transform: translateX(-40px); }
-      100% { transform: translateX(40px); }
+    .aurora3 {
+      background: radial-gradient(ellipse 120% 40% at 60% 20%, rgba(0,255,140,0.2) 0%, transparent 70%);
+      filter: blur(20px);
+      animation: aurora3 10s ease-in-out infinite alternate;
+      opacity: 0.6;
+    }
+    @keyframes aurora1 {
+      0%   { transform: translateX(-5%) scaleY(1) skewX(-3deg); }
+      100% { transform: translateX(8%) scaleY(1.15) skewX(4deg); }
+    }
+    @keyframes aurora2 {
+      0%   { transform: translateX(6%) scaleY(1.1) skewX(4deg); }
+      100% { transform: translateX(-7%) scaleY(0.95) skewX(-3deg); }
+    }
+    @keyframes aurora3 {
+      0%   { transform: translateX(-4%) scaleY(0.9); }
+      100% { transform: translateX(5%) scaleY(1.2); }
     }
 
+    /* Nuvens melhores */
     .cloud {
       position: absolute;
-      width: 8px; height: 8px;
-      background: #c8c8e0;
+      background: #b8c0e0;
       z-index: 2;
+      opacity: 0.7;
     }
     #cloud1 {
-      top: 48px; left: 40px;
-      box-shadow: 8px 0 #c8c8e0,16px 0 #c8c8e0,24px 0 #c8c8e0,32px 0 #c8c8e0,4px -8px #c8c8e0,12px -8px #c8c8e0,20px -8px #c8c8e0,28px -8px #c8c8e0,12px -16px #c8c8e0,20px -16px #c8c8e0;
-      animation: cloud 16s steps(12) infinite;
+      width: 90px; height: 22px;
+      top: 50px; left: 20px;
+      border-radius: 20px;
+      box-shadow: 
+        20px -12px 0 #b8c0e0,
+        50px -8px 0 #b8c0e0,
+        70px 0 0 #b8c0e0;
+      animation: cloud 20s linear infinite;
     }
     #cloud2 {
-      top: 100px; left: 300px;
-      box-shadow: 8px 0 #c8c8e0,16px 0 #c8c8e0,24px 0 #c8c8e0,4px -8px #c8c8e0,12px -8px #c8c8e0,20px -8px #c8c8e0,12px -16px #c8c8e0;
-      animation: cloud 22s steps(14) infinite;
-      animation-delay: -6s;
+      width: 70px; height: 18px;
+      top: 110px; left: 280px;
+      border-radius: 18px;
+      box-shadow: 
+        16px -10px 0 #b8c0e0,
+        40px -6px 0 #b8c0e0;
+      animation: cloud 26s linear infinite;
+      animation-delay: -8s;
     }
     @keyframes cloud {
-      from { transform: translateX(-80px); }
-      to   { transform: translateX(520px); }
+      from { transform: translateX(-120px); }
+      to   { transform: translateX(550px); }
     }
 
+    /* Neve */
     .snow {
       position: absolute;
-      width: 4px; height: 4px;
-      background: #e0e0ff;
+      width: 3px; height: 3px;
+      background: #e8f0ff;
+      border-radius: 1px;
       z-index: 3;
       pointer-events: none;
       animation: snow linear infinite;
+      box-shadow: 0 0 4px #fff;
     }
     @keyframes snow {
-      0%   { transform: translateY(-10px); opacity: 1; }
-      100% { transform: translateY(620px); opacity: 0.2; }
+      0%   { transform: translateY(-20px); opacity: 0.9; }
+      100% { transform: translateY(630px); opacity: 0.15; }
     }
 
+    /* Chão de gelo bem melhor */
     #ground {
       position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 96px;
-      background: repeating-linear-gradient(90deg, #5a9ab8 0 16px, #4a8aa8 16px 32px);
-      border-top: 4px solid #a0d0e8;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100px;
+      background: linear-gradient(
+        to bottom,
+        #c8e8f8 0%,
+        #a0d0e8 30%,
+        #78b0d0 70%,
+        #5890b0 100%
+      );
+      border-top: 4px solid #e0f4ff;
       z-index: 4;
-      box-shadow: inset 0 12px 0 #78b0c8;
+      box-shadow: 
+        inset 0 10px 0 rgba(255,255,255,0.45),
+        0 -8px 20px rgba(100,180,220,0.3);
+    }
+    #ground::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255,255,255,0.5) 30%, 
+        rgba(255,255,255,0.7) 50%, 
+        rgba(255,255,255,0.5) 70%, 
+        transparent 100%);
+      opacity: 0.6;
     }
 
+    /* HUD */
     #hud {
       position: absolute;
-      top: 12px; left: 12px; right: 12px;
+      top: 14px;
+      left: 14px;
+      right: 14px;
       display: flex;
       justify-content: space-between;
       z-index: 20;
       pointer-events: none;
     }
     #score, #lives, #hiscore {
-      font-size: 11px;
+      font-size: 12px;
       color: #fff;
-      background: #000;
-      padding: 6px 10px;
+      background: rgba(0,0,0,0.75);
+      padding: 7px 12px;
       border: 3px solid #fff;
+      border-radius: 2px;
+      text-shadow: 2px 2px 0 #000;
     }
-    #lives { color: #ff5555; }
+    #lives { color: #ff6b6b; }
 
-    /* ===== PINGUIM ===== */
+    /* ========== SPRITES MELHORADOS ========== */
+
+    /* Pinguim */
     #penguin {
       position: absolute;
-      bottom: 96px;
-      left: 160px;
+      bottom: 100px;
+      left: 150px;
       width: 4px;
       height: 4px;
       z-index: 10;
@@ -144,27 +220,30 @@
       height: 4px;
       background: transparent;
       box-shadow:
-        8px 0 #1a1a1a, 12px 0 #1a1a1a, 16px 0 #1a1a1a,
-        4px 4px #1a1a1a, 8px 4px #ffffff, 12px 4px #ffffff, 16px 4px #ffffff, 20px 4px #1a1a1a,
-        4px 8px #1a1a1a, 8px 8px #ffffff, 12px 8px #1a1a1a, 16px 8px #ffffff, 20px 8px #1a1a1a,
-        4px 12px #1a1a1a, 8px 12px #ffffff, 12px 12px #ff9900, 16px 12px #ffffff, 20px 12px #1a1a1a,
-        4px 16px #1a1a1a, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #ffffff, 20px 16px #1a1a1a,
-        4px 20px #1a1a1a, 8px 20px #1a1a1a, 12px 20px #1a1a1a, 16px 20px #1a1a1a, 20px 20px #1a1a1a,
-        4px 24px #1a1a1a, 8px 24px #1a1a1a, 12px 24px #1a1a1a, 16px 24px #1a1a1a, 20px 24px #1a1a1a,
-        8px 28px #ff9900, 16px 28px #ff9900;
+        /* cabeça */
+        8px 0 #111, 12px 0 #111, 16px 0 #111,
+        4px 4px #111, 8px 4px #f0f0f0, 12px 4px #f0f0f0, 16px 4px #f0f0f0, 20px 4px #111,
+        4px 8px #111, 8px 8px #f0f0f0, 12px 8px #111, 16px 8px #f0f0f0, 20px 8px #111,
+        /* bico e olhos */
+        4px 12px #111, 8px 12px #f0f0f0, 12px 12px #ff9900, 16px 12px #f0f0f0, 20px 12px #111,
+        4px 16px #111, 8px 16px #f0f0f0, 12px 16px #f0f0f0, 16px 16px #f0f0f0, 20px 16px #111,
+        /* corpo */
+        4px 20px #111, 8px 20px #111, 12px 20px #111, 16px 20px #111, 20px 20px #111,
+        4px 24px #111, 8px 24px #111, 12px 24px #111, 16px 24px #111, 20px 24px #111,
+        4px 28px #111, 8px 28px #111, 12px 28px #111, 16px 28px #111, 20px 28px #111,
+        /* pés */
+        8px 32px #ff9900, 16px 32px #ff9900;
     }
 
-    /* Animação de corrida (sobe e desce levemente) */
     #penguin.running .sprite {
-      animation: runBob 0.25s steps(2) infinite;
+      animation: runBob 0.22s steps(2) infinite;
     }
     @keyframes runBob {
-      0%   { transform: translateY(0); }
-      50%  { transform: translateY(-3px); }
-      100% { transform: translateY(0); }
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-4px); }
     }
 
-    /* ===== PEIXE ===== */
+    /* Peixe */
     .fish {
       position: absolute;
       width: 4px;
@@ -176,17 +255,17 @@
       height: 4px;
       background: transparent;
       box-shadow:
-        4px 4px #3399ff, 8px 4px #3399ff, 12px 4px #3399ff, 16px 4px #3399ff,
-        0px 8px #3399ff, 4px 8px #66ccff, 8px 8px #66ccff, 12px 8px #66ccff, 16px 8px #3399ff, 20px 8px #3399ff,
-        4px 12px #3399ff, 8px 12px #3399ff, 12px 12px #3399ff, 16px 12px #3399ff,
-        20px 4px #ff9933, 24px 8px #ff9933, 20px 12px #ff9933,
+        4px 4px #2a9fff, 8px 4px #2a9fff, 12px 4px #2a9fff, 16px 4px #2a9fff,
+        0px 8px #2a9fff, 4px 8px #7ad0ff, 8px 8px #7ad0ff, 12px 8px #7ad0ff, 16px 8px #2a9fff, 20px 8px #2a9fff,
+        4px 12px #2a9fff, 8px 12px #2a9fff, 12px 12px #2a9fff, 16px 12px #2a9fff,
+        20px 4px #ff9a3c, 24px 8px #ff9a3c, 20px 12px #ff9a3c,
         8px 8px #ffffff;
     }
 
-    /* ===== ORCA ===== */
+    /* Orca */
     .orca {
       position: absolute;
-      bottom: 96px;
+      bottom: 100px;
       width: 4px;
       height: 4px;
       z-index: 8;
@@ -196,19 +275,19 @@
       height: 4px;
       background: transparent;
       box-shadow:
-        20px 0 #111, 24px 0 #111,
-        16px 4px #111, 20px 4px #111, 24px 4px #111, 28px 4px #111,
-        4px 8px #111, 8px 8px #111, 12px 8px #111, 16px 8px #111, 20px 8px #111, 24px 8px #111, 28px 8px #111, 32px 8px #111, 36px 8px #111,
-        0px 12px #111, 4px 12px #111, 8px 12px #fff, 12px 12px #fff, 16px 12px #111, 20px 12px #111, 24px 12px #111, 28px 12px #111, 32px 12px #111, 36px 12px #111, 40px 12px #111,
-        0px 16px #111, 4px 16px #111, 8px 16px #fff, 12px 16px #fff, 16px 16px #111, 20px 16px #111, 24px 16px #111, 28px 16px #111, 32px 16px #111, 36px 16px #111,
-        4px 20px #111, 8px 20px #111, 12px 20px #111, 16px 20px #111, 20px 20px #111, 24px 20px #111, 28px 20px #111, 32px 20px #111,
-        36px 16px #111, 40px 12px #111, 40px 20px #111, 44px 16px #111;
+        24px 0 #0a0a0a, 28px 0 #0a0a0a,
+        20px 4px #0a0a0a, 24px 4px #0a0a0a, 28px 4px #0a0a0a, 32px 4px #0a0a0a,
+        4px 8px #0a0a0a, 8px 8px #0a0a0a, 12px 8px #0a0a0a, 16px 8px #0a0a0a, 20px 8px #0a0a0a, 24px 8px #0a0a0a, 28px 8px #0a0a0a, 32px 8px #0a0a0a, 36px 8px #0a0a0a, 40px 8px #0a0a0a,
+        0px 12px #0a0a0a, 4px 12px #0a0a0a, 8px 12px #f0f0f0, 12px 12px #f0f0f0, 16px 12px #0a0a0a, 20px 12px #0a0a0a, 24px 12px #0a0a0a, 28px 12px #0a0a0a, 32px 12px #0a0a0a, 36px 12px #0a0a0a, 40px 12px #0a0a0a, 44px 12px #0a0a0a,
+        0px 16px #0a0a0a, 4px 16px #0a0a0a, 8px 16px #f0f0f0, 12px 16px #f0f0f0, 16px 16px #0a0a0a, 20px 16px #0a0a0a, 24px 16px #0a0a0a, 28px 16px #0a0a0a, 32px 16px #0a0a0a, 36px 16px #0a0a0a, 40px 16px #0a0a0a,
+        4px 20px #0a0a0a, 8px 20px #0a0a0a, 12px 20px #0a0a0a, 16px 20px #0a0a0a, 20px 20px #0a0a0a, 24px 20px #0a0a0a, 28px 20px #0a0a0a, 32px 20px #0a0a0a, 36px 20px #0a0a0a,
+        40px 12px #0a0a0a, 44px 8px #0a0a0a, 44px 16px #0a0a0a, 48px 12px #0a0a0a;
     }
 
-    /* ===== OBSTÁCULO DE GELO ===== */
+    /* Gelo (obstáculo) */
     .ice {
       position: absolute;
-      bottom: 96px;
+      bottom: 100px;
       width: 4px;
       height: 4px;
       z-index: 8;
@@ -218,62 +297,65 @@
       height: 4px;
       background: transparent;
       box-shadow:
-        /* bloco de gelo */
-        0px 8px #a0e0ff, 4px 8px #a0e0ff, 8px 8px #a0e0ff, 12px 8px #a0e0ff, 16px 8px #a0e0ff, 20px 8px #a0e0ff,
-        0px 12px #80d0f0, 4px 12px #c0f0ff, 8px 12px #c0f0ff, 12px 12px #c0f0ff, 16px 12px #c0f0ff, 20px 12px #80d0f0,
-        0px 16px #80d0f0, 4px 16px #a0e0ff, 8px 16px #a0e0ff, 12px 16px #a0e0ff, 16px 16px #a0e0ff, 20px 16px #80d0f0,
-        0px 20px #60b0d0, 4px 20px #80d0f0, 8px 20px #80d0f0, 12px 20px #80d0f0, 16px 20px #80d0f0, 20px 20px #60b0d0,
-        4px 24px #60b0d0, 8px 24px #60b0d0, 12px 24px #60b0d0, 16px 24px #60b0d0;
+        0px 4px #b0e8ff, 4px 4px #b0e8ff, 8px 4px #b0e8ff, 12px 4px #b0e8ff, 16px 4px #b0e8ff, 20px 4px #b0e8ff, 24px 4px #b0e8ff,
+        0px 8px #90d0f0, 4px 8px #d0f4ff, 8px 8px #d0f4ff, 12px 8px #d0f4ff, 16px 8px #d0f4ff, 20px 8px #d0f4ff, 24px 8px #90d0f0,
+        0px 12px #90d0f0, 4px 12px #b0e8ff, 8px 12px #b0e8ff, 12px 12px #b0e8ff, 16px 12px #b0e8ff, 20px 12px #b0e8ff, 24px 12px #90d0f0,
+        0px 16px #70b8d8, 4px 16px #90d0f0, 8px 16px #90d0f0, 12px 16px #90d0f0, 16px 16px #90d0f0, 20px 16px #90d0f0, 24px 16px #70b8d8,
+        4px 20px #70b8d8, 8px 20px #70b8d8, 12px 20px #70b8d8, 16px 20px #70b8d8, 20px 20px #70b8d8;
     }
 
     .popup {
       position: absolute;
-      font-size: 11px;
-      color: #ffff00;
+      font-size: 12px;
+      color: #ffff66;
       z-index: 15;
       pointer-events: none;
-      animation: popup 0.6s steps(4) forwards;
+      animation: popup 0.7s steps(5) forwards;
+      text-shadow: 1px 1px 0 #000;
     }
     @keyframes popup {
-      0%   { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-28px); opacity: 0; }
+      0%   { transform: translateY(0) scale(1); opacity: 1; }
+      100% { transform: translateY(-32px) scale(1.2); opacity: 0; }
     }
 
+    /* Telas de mensagem */
     #message {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      background: #000;
-      padding: 24px 20px;
+      background: rgba(0,0,0,0.92);
+      padding: 28px 26px;
       border: 4px solid #fff;
-      font-size: 12px;
+      font-size: 13px;
       color: #fff;
       text-align: center;
       display: none;
       z-index: 30;
       line-height: 1.8;
-      min-width: 280px;
-      box-shadow: 6px 6px 0 #333;
+      min-width: 300px;
+      box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
     }
     .subtitle {
-      font-size: 9px;
-      margin-top: 12px;
-      color: #88ccff;
+      font-size: 10px;
+      margin-top: 14px;
+      color: #99ddff;
       line-height: 2;
     }
     #start-btn {
-      margin-top: 16px;
-      padding: 10px 16px;
-      font-size: 11px;
+      margin-top: 18px;
+      padding: 12px 22px;
+      font-size: 12px;
       font-family: 'Press Start 2P', cursive;
-      background: #2288cc;
+      background: linear-gradient(#2a9fff, #1a7acc);
       color: #fff;
       border: 3px solid #fff;
       cursor: pointer;
       box-shadow: 4px 4px 0 #000;
+      transition: 0.1s;
     }
     #start-btn:hover {
-      background: #33aaff;
+      background: linear-gradient(#4ab0ff, #2a9fff);
       transform: translate(-2px, -2px);
       box-shadow: 6px 6px 0 #000;
     }
@@ -285,6 +367,7 @@
     <div id="sky"></div>
     <div class="aurora aurora1"></div>
     <div class="aurora aurora2"></div>
+    <div class="aurora aurora3"></div>
 
     <div class="cloud" id="cloud1"></div>
     <div class="cloud" id="cloud2"></div>
@@ -301,9 +384,9 @@
     <div id="message">
       <div>PINGUIM<br>RUNNER</div>
       <div class="subtitle">
-        CORRA PARA FRENTE<br>
-        PULE OS GELOS E ORCAS<br>
-        3 VIDAS
+        CORRA • PULE • SOBREVIVA<br>
+        Fuja das orcas e dos gelos<br>
+        3 vidas
       </div>
       <button id="start-btn">COMEÇAR</button>
     </div>
@@ -321,7 +404,7 @@
     let score = 0;
     let lives = 3;
     let highScore = parseInt(localStorage.getItem('pinguimRunnerHigh') || '0');
-    let penguinX = 160;
+    let penguinX = 150;
     let penguinY = 0;
     let isJumping = false;
     let velocityY = 0;
@@ -330,20 +413,21 @@
     let fishTimer, orcaTimer, iceTimer;
     let animId;
     let difficulty = 1;
-    let runSpeed = 2.8; // velocidade automática para frente
+    let runSpeed = 3.0;
 
-    const gravity = 0.9;
-    const jumpPower = -15.8;
+    const gravity = 0.92;
+    const jumpPower = -16;
 
     hiscoreEl.textContent = 'REC ' + highScore;
 
     // Neve
-    for (let i = 0; i < 28; i++) {
+    for (let i = 0; i < 35; i++) {
       const s = document.createElement('div');
       s.className = 'snow';
-      s.style.left = Math.floor(Math.random() * 64) * 8 + 'px';
-      s.style.animationDuration = (3.5 + Math.random() * 5) + 's';
-      s.style.animationDelay = (Math.random() * 6) + 's';
+      s.style.left = Math.floor(Math.random() * 128) * 4 + 'px';
+      s.style.animationDuration = (4 + Math.random() * 6) + 's';
+      s.style.animationDelay = (Math.random() * 8) + 's';
+      s.style.opacity = 0.4 + Math.random() * 0.5;
       game.appendChild(s);
     }
 
@@ -359,21 +443,16 @@
     });
     document.addEventListener('keyup', e => keys[e.key] = false);
 
-    function snap(v) {
-      return Math.round(v / 4) * 4;
-    }
+    function snap(v) { return Math.round(v / 2) * 2; }
 
     function updatePenguin() {
-      // corrida automática para a frente
       penguinX += runSpeed * difficulty;
 
-      // ajuste manual leve
-      if (keys['ArrowLeft'] || keys['a']) penguinX -= 3.5;
-      if (keys['ArrowRight'] || keys['d']) penguinX += 2.2;
+      if (keys['ArrowLeft'] || keys['a']) penguinX -= 3.8;
+      if (keys['ArrowRight'] || keys['d']) penguinX += 2.5;
 
-      // limites (mantém o pinguim na tela)
-      if (penguinX < 40) penguinX = 40;
-      if (penguinX > 380) penguinX = 380;
+      if (penguinX < 50) penguinX = 50;
+      if (penguinX > 360) penguinX = 360;
 
       if (isJumping) {
         velocityY += gravity;
@@ -389,11 +468,11 @@
       }
 
       penguin.style.left = snap(penguinX) + 'px';
-      penguin.style.bottom = (96 - snap(penguinY)) + 'px';
-      penguin.style.transform = 'scaleX(1)'; // sempre olhando para a frente
+      penguin.style.bottom = (100 - snap(penguinY)) + 'px';
+      penguin.style.transform = 'scaleX(1)';
 
       if (invincible) {
-        penguin.style.opacity = (Math.floor(Date.now() / 100) % 2) ? '0.35' : '1';
+        penguin.style.opacity = (Math.floor(Date.now() / 80) % 2) ? '0.3' : '1';
       } else {
         penguin.style.opacity = '1';
       }
@@ -406,7 +485,7 @@
       p.style.left = snap(x) + 'px';
       p.style.top = snap(y) + 'px';
       game.appendChild(p);
-      setTimeout(() => p.remove(), 600);
+      setTimeout(() => p.remove(), 700);
     }
 
     function createFish() {
@@ -414,12 +493,12 @@
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.innerHTML = '<div class="sprite"></div>';
-      fish.style.left = snap(Math.random() * 420) + 'px';
+      fish.style.left = snap(60 + Math.random() * 380) + 'px';
       fish.style.top = '-40px';
       game.appendChild(fish);
 
       let y = -40;
-      const spd = 2.1 + Math.random() * 1.3;
+      const spd = 2.2 + Math.random() * 1.4;
 
       function fall() {
         if (!gameRunning) { fish.remove(); return; }
@@ -427,18 +506,18 @@
         fish.style.top = snap(y) + 'px';
 
         const px = penguinX;
-        const py = 608 - 96 - 32 + penguinY;
+        const py = 608 - 100 - 36 + penguinY;
 
-        if (parseFloat(fish.style.left) < px + 40 &&
+        if (parseFloat(fish.style.left) < px + 42 &&
             parseFloat(fish.style.left) + 28 > px &&
-            y < py + 32 && y + 20 > py) {
+            y < py + 36 && y + 20 > py) {
           score += 10;
           scoreEl.textContent = 'PONTOS ' + score;
-          showPopup(px + 8, py - 8, '+10');
+          showPopup(px + 10, py - 12, '+10');
           fish.remove();
           return;
         }
-        if (y > 520) { fish.remove(); return; }
+        if (y > 530) { fish.remove(); return; }
         requestAnimationFrame(fall);
       }
       requestAnimationFrame(fall);
@@ -449,26 +528,21 @@
       const orca = document.createElement('div');
       orca.className = 'orca';
       orca.innerHTML = '<div class="sprite"></div>';
-      orca.style.left = '520px';
+      orca.style.left = '530px';
       game.appendChild(orca);
 
-      let x = 520;
-      const spd = (4.2 + Math.random() * 2.2) * difficulty;
+      let x = 530;
+      const spd = (4.4 + Math.random() * 2.0) * difficulty;
 
       function move() {
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = snap(x) + 'px';
 
-        if (!invincible &&
-            x < penguinX + 48 &&
-            x + 52 > penguinX &&
-            penguinY > -24) {
+        if (!invincible && x < penguinX + 50 && x + 54 > penguinX && penguinY > -26) {
           hit();
-          return;
         }
-
-        if (x < -70) { orca.remove(); return; }
+        if (x < -80) { orca.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -479,27 +553,21 @@
       const ice = document.createElement('div');
       ice.className = 'ice';
       ice.innerHTML = '<div class="sprite"></div>';
-      ice.style.left = '520px';
+      ice.style.left = '530px';
       game.appendChild(ice);
 
-      let x = 520;
-      const spd = (3.8 + Math.random() * 1.8) * difficulty;
+      let x = 530;
+      const spd = (3.9 + Math.random() * 1.7) * difficulty;
 
       function move() {
         if (!gameRunning) { ice.remove(); return; }
         x -= spd;
         ice.style.left = snap(x) + 'px';
 
-        // colisão com obstáculo de gelo (precisa pular)
-        if (!invincible &&
-            x < penguinX + 44 &&
-            x + 28 > penguinX &&
-            penguinY > -20) {
+        if (!invincible && x < penguinX + 46 && x + 30 > penguinX && penguinY > -22) {
           hit();
-          return;
         }
-
-        if (x < -50) { ice.remove(); return; }
+        if (x < -60) { ice.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -509,11 +577,8 @@
       lives--;
       updateLives();
       invincible = true;
-      setTimeout(() => invincible = false, 1500);
-
-      if (lives <= 0) {
-        gameOver();
-      }
+      setTimeout(() => invincible = false, 1600);
+      if (lives <= 0) gameOver();
     }
 
     function updateLives() {
@@ -540,7 +605,7 @@
           PONTOS ${score}<br>
           RECORDE ${highScore}
         </div>
-        <button id="start-btn">DE NOVO</button>
+        <button id="start-btn">JOGAR DE NOVO</button>
       `;
       message.style.display = 'block';
       document.getElementById('start-btn').addEventListener('click', startGame);
@@ -549,33 +614,31 @@
     function loop() {
       if (!gameRunning) return;
       updatePenguin();
-      difficulty = 1 + Math.floor(score / 60) * 0.15;
-      runSpeed = 2.8 + (difficulty - 1) * 0.6;
+      difficulty = 1 + Math.floor(score / 55) * 0.14;
+      runSpeed = 3.0 + (difficulty - 1) * 0.55;
       animId = requestAnimationFrame(loop);
     }
 
     function startGame() {
       document.querySelectorAll('.fish, .orca, .ice, .popup').forEach(el => el.remove());
-
       score = 0;
       lives = 3;
       difficulty = 1;
-      runSpeed = 2.8;
+      runSpeed = 3.0;
       invincible = false;
       scoreEl.textContent = 'PONTOS 0';
       updateLives();
-      penguinX = 160;
+      penguinX = 150;
       penguinY = 0;
       isJumping = false;
       velocityY = 0;
-      penguin.style.transform = 'scaleX(1)';
       message.style.display = 'none';
       gameRunning = true;
       penguin.classList.add('running');
 
-      fishTimer = setInterval(createFish, 1200);
-      orcaTimer = setInterval(createOrca, 2200);
-      iceTimer  = setInterval(createIce, 1600);
+      fishTimer = setInterval(createFish, 1100);
+      orcaTimer = setInterval(createOrca, 2100);
+      iceTimer  = setInterval(createIce, 1500);
 
       loop();
     }
