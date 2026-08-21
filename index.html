@@ -2,13 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - 10 Níveis</title>
+  <title>Pinguim Runner - Visual 3D + Personagens 2D</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #020810;
+      background: #01050c;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,160 +19,207 @@
 
     #game {
       width: 480px;
-      height: 640px;
-      background: linear-gradient(#0a1428 0%, #122540 40%, #1a3a5c 70%, #2a5a7a 100%);
-      border-radius: 20px;
+      height: 680px;
+      background: linear-gradient(to bottom, #050d1c 0%, #0c1a32 30%, #132b4a 60%, #1c3d5e 100%);
+      border-radius: 24px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 6px #1e3a5c, 0 25px 60px rgba(0,0,0,0.7);
+      box-shadow: 
+        0 0 0 5px #1a3050,
+        0 0 0 10px #0d1f35,
+        0 30px 80px rgba(0,0,0,0.8),
+        inset 0 0 120px rgba(0,40,80,0.3);
     }
 
+    /* Aurora 3D */
     .aurora {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 50%;
+      width: 100%; height: 55%;
       pointer-events: none;
       z-index: 1;
       mix-blend-mode: screen;
     }
     .aurora1 {
-      background: radial-gradient(ellipse at 30% 40%, rgba(0,255,180,0.25) 0%, transparent 60%);
-      animation: auroraMove 14s ease-in-out infinite alternate;
+      background: radial-gradient(ellipse 120% 70% at 25% 35%, rgba(0,255,190,0.3) 0%, transparent 65%);
+      filter: blur(8px);
+      animation: aurora1 13s ease-in-out infinite alternate;
     }
     .aurora2 {
-      background: radial-gradient(ellipse at 70% 30%, rgba(140,80,255,0.2) 0%, transparent 60%);
-      animation: auroraMove 18s ease-in-out infinite alternate-reverse;
+      background: radial-gradient(ellipse 100% 60% at 75% 25%, rgba(150,70,255,0.25) 0%, transparent 65%);
+      filter: blur(12px);
+      animation: aurora2 17s ease-in-out infinite alternate-reverse;
     }
-    @keyframes auroraMove {
-      0% { transform: translateX(-20px) scale(1); opacity: 0.7; }
-      100% { transform: translateX(30px) scale(1.1); opacity: 1; }
+    .aurora3 {
+      background: radial-gradient(ellipse 80% 40% at 50% 15%, rgba(0,200,255,0.15) 0%, transparent 70%);
+      filter: blur(15px);
+      animation: aurora3 11s ease-in-out infinite alternate;
+    }
+    @keyframes aurora1 {
+      0% { transform: translateX(-15px) scaleY(1); opacity: 0.7; }
+      100% { transform: translateX(25px) scaleY(1.15); opacity: 1; }
+    }
+    @keyframes aurora2 {
+      0% { transform: translateX(20px) scaleY(1.1); opacity: 0.6; }
+      100% { transform: translateX(-20px) scaleY(0.95); opacity: 0.9; }
+    }
+    @keyframes aurora3 {
+      0% { transform: scale(1); opacity: 0.5; }
+      100% { transform: scale(1.2); opacity: 0.8; }
     }
 
+    /* Neve */
     .snow {
       position: absolute;
       background: white;
       border-radius: 50%;
       z-index: 2;
       pointer-events: none;
-      box-shadow: 0 0 6px white;
+      box-shadow: 0 0 8px rgba(255,255,255,0.9);
     }
     @keyframes snowFall {
-      0% { transform: translateY(-20px) translateX(0); opacity: 0.9; }
-      100% { transform: translateY(700px) translateX(30px); opacity: 0.1; }
+      0% { transform: translateY(-30px) translateX(0); opacity: 0.95; }
+      100% { transform: translateY(720px) translateX(40px); opacity: 0.1; }
     }
 
+    /* Chão com efeito 3D */
     #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 90px;
-      background: linear-gradient(#c8eaf8, #8ec8e0);
-      border-top: 4px solid #e0f4ff;
+      height: 110px;
+      background: linear-gradient(to bottom, #d0f0ff 0%, #a8d8f0 40%, #78b8d8 100%);
+      border-top: 5px solid #e8f8ff;
       z-index: 3;
-      box-shadow: inset 0 12px 20px rgba(255,255,255,0.4);
+      box-shadow: 
+        inset 0 15px 30px rgba(255,255,255,0.5),
+        0 -15px 40px rgba(100,180,220,0.25);
+      transform: perspective(400px) rotateX(8deg);
+      transform-origin: bottom;
+    }
+    #ground::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      opacity: 0.6;
     }
 
+    /* HUD */
     #hud {
       position: absolute;
-      top: 14px;
+      top: 16px;
       left: 14px;
       right: 14px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       z-index: 20;
       pointer-events: none;
-      gap: 8px;
+      gap: 6px;
     }
     #score, #lives, #level, #hiscore {
-      background: rgba(0,0,0,0.55);
+      background: rgba(0,10,30,0.7);
       color: white;
-      padding: 7px 12px;
-      border-radius: 30px;
+      padding: 8px 13px;
+      border-radius: 40px;
       font-size: 14px;
       font-weight: 800;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     #lives { color: #ff6b6b; }
     #level { color: #ffeb3b; }
 
+    /* ===== PERSONAGENS 2D MELHORADOS ===== */
     #penguin {
       position: absolute;
-      bottom: 90px;
+      bottom: 105px;
       left: 130px;
-      font-size: 52px;
-      z-index: 10;
-      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.3));
+      font-size: 58px;
+      z-index: 12;
+      filter: drop-shadow(0 8px 12px rgba(0,20,40,0.45));
       user-select: none;
+      transition: filter 0.2s;
     }
     #penguin.running {
       animation: runBob 0.28s ease-in-out infinite;
     }
     @keyframes runBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.03); }
     }
 
     .fish {
       position: absolute;
-      bottom: 95px;
-      font-size: 32px;
+      bottom: 108px;
+      font-size: 34px;
       z-index: 8;
-      filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25));
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
       user-select: none;
+      animation: fishFloat 1.4s ease-in-out infinite;
+    }
+    @keyframes fishFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
 
     .orca {
       position: absolute;
-      bottom: 90px;
-      font-size: 54px;
+      bottom: 100px;
+      font-size: 62px;
       z-index: 9;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+      filter: drop-shadow(0 10px 16px rgba(0,10,30,0.5));
       user-select: none;
     }
 
-    /* Plataformas agora no chão */
+    /* Plataformas no chão com visual 3D */
     .platform {
       position: absolute;
-      bottom: 90px;
-      height: 28px;
-      background: linear-gradient(#e0f7ff, #a0d4ec);
-      border-radius: 10px 10px 4px 4px;
+      bottom: 105px;
+      height: 26px;
+      background: linear-gradient(to bottom, #e8f8ff, #b0e0f5);
+      border-radius: 12px 12px 6px 6px;
       border: 3px solid #ffffff;
-      box-shadow: 0 4px 10px rgba(0,60,100,0.25), inset 0 3px 6px rgba(255,255,255,0.7);
+      box-shadow: 
+        0 8px 16px rgba(0,60,100,0.3),
+        inset 0 4px 10px rgba(255,255,255,0.7),
+        0 2px 0 #7ab8d8;
       z-index: 7;
     }
 
     .popup {
       position: absolute;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 900;
       color: #ffeb3b;
       z-index: 15;
       pointer-events: none;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      text-shadow: 0 3px 6px rgba(0,0,0,0.6);
       animation: popup 0.7s forwards;
     }
     @keyframes popup {
       0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-40px) scale(1.3); opacity: 0; }
+      100% { transform: translateY(-45px) scale(1.4); opacity: 0; }
     }
 
     #level-up {
       position: absolute;
-      top: 45%;
+      top: 42%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.8);
       color: #ffeb3b;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 900;
-      padding: 16px 32px;
-      border-radius: 20px;
+      padding: 18px 36px;
+      border-radius: 24px;
       z-index: 25;
       display: none;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+      border: 2px solid rgba(255,235,59,0.3);
     }
 
     #message {
@@ -180,41 +227,41 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255,255,255,0.96);
-      padding: 32px 36px;
-      border-radius: 24px;
+      background: rgba(255,255,255,0.97);
+      padding: 36px 40px;
+      border-radius: 28px;
       text-align: center;
       z-index: 30;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
       display: none;
-      min-width: 280px;
+      min-width: 300px;
     }
     #message h1 {
-      font-size: 26px;
+      font-size: 28px;
       color: #0d47a1;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     #message p {
-      font-size: 15px;
+      font-size: 16px;
       color: #1565c0;
       line-height: 1.6;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     #start-btn {
-      background: linear-gradient(135deg, #2196f3, #1976d2);
+      background: linear-gradient(135deg, #2196f3, #1565c0);
       color: white;
       border: none;
-      padding: 14px 36px;
+      padding: 15px 42px;
       border-radius: 50px;
       font-size: 18px;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(33,150,243,0.4);
+      box-shadow: 0 10px 25px rgba(33,150,243,0.45);
       transition: 0.2s;
     }
     #start-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 25px rgba(33,150,243,0.5);
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(33,150,243,0.55);
     }
   </style>
 </head>
@@ -223,6 +270,7 @@
   <div id="game">
     <div class="aurora aurora1"></div>
     <div class="aurora aurora2"></div>
+    <div class="aurora aurora3"></div>
 
     <div id="hud">
       <div id="score">Pontos: 0</div>
@@ -239,9 +287,9 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        10 Níveis<br>
-        Plataformas no chão<br>
-        Fuja das orcas e pegue peixes!
+        Visual 3D + Personagens 2D<br>
+        10 Níveis • Plataformas no chão<br>
+        Fuja das orcas!
       </p>
       <button id="start-btn">Começar</button>
     </div>
@@ -310,7 +358,7 @@
     let score = 0;
     let lives = 3;
     let level = 1;
-    let highScore = parseInt(localStorage.getItem('pinguimLevelsHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguim3dHigh') || '0');
     let penguinX = 130;
     let penguinY = 0;
     let isJumping = false;
@@ -320,26 +368,26 @@
     let onPlatform = false;
     let fishTimer, orcaTimer, platformTimer;
     let animId;
-    let runSpeed = 3.2;
+    let runSpeed = 3.3;
     let distance = 0;
-    let nextLevelScore = 400;
+    let nextLevelScore = 420;
 
-    const gravity = 0.85;
-    const jumpPower = -15.5;
+    const gravity = 0.88;
+    const jumpPower = -15.8;
 
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
     // Neve
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 45; i++) {
       const flake = document.createElement('div');
       flake.className = 'snow';
-      const size = 2 + Math.random() * 4;
+      const size = 2 + Math.random() * 4.5;
       flake.style.width = size + 'px';
       flake.style.height = size + 'px';
       flake.style.left = Math.random() * 480 + 'px';
-      flake.style.animation = `snowFall ${5 + Math.random() * 6}s linear infinite`;
-      flake.style.animationDelay = Math.random() * 8 + 's';
-      flake.style.opacity = 0.5 + Math.random() * 0.5;
+      flake.style.animation = `snowFall ${5 + Math.random() * 7}s linear infinite`;
+      flake.style.animationDelay = Math.random() * 9 + 's';
+      flake.style.opacity = 0.45 + Math.random() * 0.55;
       game.appendChild(flake);
     }
 
@@ -368,24 +416,21 @@
     });
 
     function updatePenguin() {
-      penguinX += runSpeed * 0.3;
-      distance += runSpeed * 0.13;
+      penguinX += runSpeed * 0.32;
+      distance += runSpeed * 0.14;
       score = Math.floor(distance);
 
-      // Aumenta de nível
       if (score >= nextLevelScore && level < 10) {
         level++;
-        nextLevelScore += 450 + level * 50;
+        nextLevelScore += 480 + level * 60;
         levelEl.textContent = 'Nível ' + level;
         showLevelUp();
         playSound('levelup');
-
-        // Aumenta a dificuldade
-        runSpeed = 3.2 + (level - 1) * 0.45;
+        runSpeed = 3.3 + (level - 1) * 0.48;
       }
 
-      if (keys['ArrowLeft'] || keys['a']) penguinX -= 4;
-      if (keys['ArrowRight'] || keys['d']) penguinX += 2.8;
+      if (keys['ArrowLeft'] || keys['a']) penguinX -= 4.2;
+      if (keys['ArrowRight'] || keys['d']) penguinX += 3;
 
       if (penguinX < 40) penguinX = 40;
       if (penguinX > 340) penguinX = 340;
@@ -402,14 +447,13 @@
         }
       }
 
-      // Colisão com plataformas (agora no chão)
       onPlatform = false;
       document.querySelectorAll('.platform').forEach(plat => {
         const platX = parseFloat(plat.style.left);
         const platW = parseFloat(plat.style.width);
 
-        if (penguinX + 48 > platX && penguinX < platX + platW &&
-            penguinY > -5 && penguinY < 20 && velocityY >= 0) {
+        if (penguinX + 50 > platX && penguinX < platX + platW &&
+            penguinY > -8 && penguinY < 22 && velocityY >= 0) {
           penguinY = 0;
           velocityY = 0;
           isJumping = false;
@@ -419,7 +463,7 @@
       });
 
       penguin.style.left = penguinX + 'px';
-      penguin.style.bottom = (90 - penguinY) + 'px';
+      penguin.style.bottom = (105 - penguinY) + 'px';
 
       if (invincible) {
         penguin.style.opacity = (Math.floor(Date.now() / 80) % 2) ? '0.35' : '1';
@@ -433,9 +477,7 @@
     function showLevelUp() {
       levelUpEl.textContent = 'NÍVEL ' + level + '!';
       levelUpEl.style.display = 'block';
-      setTimeout(() => {
-        levelUpEl.style.display = 'none';
-      }, 1400);
+      setTimeout(() => levelUpEl.style.display = 'none', 1500);
     }
 
     function showPopup(x, y, txt) {
@@ -453,21 +495,21 @@
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.textContent = '🐟';
-      fish.style.left = '500px';
+      fish.style.left = '510px';
       game.appendChild(fish);
 
-      let x = 500;
-      const spd = (3.5 + Math.random() * 1.5) * (1 + level * 0.08);
+      let x = 510;
+      const spd = (3.6 + Math.random() * 1.5) * (1 + level * 0.09);
 
       function move() {
         if (!gameRunning) { fish.remove(); return; }
         x -= spd;
         fish.style.left = x + 'px';
 
-        if (penguinY < 15 && x < penguinX + 50 && x + 32 > penguinX) {
+        if (penguinY < 18 && x < penguinX + 52 && x + 34 > penguinX) {
           score += 20;
           playSound('collect');
-          showPopup(penguinX + 10, 470, '+20');
+          showPopup(penguinX + 10, 460, '+20');
           fish.remove();
           return;
         }
@@ -482,21 +524,21 @@
       const orca = document.createElement('div');
       orca.className = 'orca';
       orca.textContent = '🐋';
-      orca.style.left = '520px';
+      orca.style.left = '530px';
       game.appendChild(orca);
 
-      let x = 520;
-      const spd = (4.3 + Math.random() * 1.7) * (1 + level * 0.1);
+      let x = 530;
+      const spd = (4.5 + Math.random() * 1.8) * (1 + level * 0.11);
 
       function move() {
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = x + 'px';
 
-        if (!invincible && x < penguinX + 55 && x + 55 > penguinX && penguinY > -20) {
+        if (!invincible && x < penguinX + 58 && x + 58 > penguinX && penguinY > -25) {
           hit();
         }
-        if (x < -80) { orca.remove(); return; }
+        if (x < -90) { orca.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -506,22 +548,20 @@
       if (!gameRunning) return;
       const plat = document.createElement('div');
       plat.className = 'platform';
-      const width = 80 + Math.random() * 70;
+      const width = 85 + Math.random() * 75;
       plat.style.width = width + 'px';
-      plat.style.left = '500px';
-      // Plataforma no chão
-      plat.style.bottom = '90px';
-
+      plat.style.left = '510px';
+      plat.style.bottom = '105px';
       game.appendChild(plat);
 
-      let x = 500;
-      const spd = (3.6 + Math.random() * 1.2) * (1 + level * 0.08);
+      let x = 510;
+      const spd = (3.7 + Math.random() * 1.3) * (1 + level * 0.09);
 
       function move() {
         if (!gameRunning) { plat.remove(); return; }
         x -= spd;
         plat.style.left = x + 'px';
-        if (x < -120) { plat.remove(); return; }
+        if (x < -130) { plat.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -551,7 +591,7 @@
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguimLevelsHigh', highScore);
+        localStorage.setItem('pinguim3dHigh', highScore);
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
@@ -559,7 +599,7 @@
         <h1>Game Over</h1>
         <p>
           Pontos: <strong>${Math.floor(score)}</strong><br>
-          Nível alcançado: <strong>${level}</strong><br>
+          Nível: <strong>${level}</strong><br>
           Recorde: ${highScore}
         </p>
         <button id="start-btn">Jogar de Novo</button>
@@ -580,8 +620,8 @@
       distance = 0;
       lives = 3;
       level = 1;
-      nextLevelScore = 400;
-      runSpeed = 3.2;
+      nextLevelScore = 420;
+      runSpeed = 3.3;
       invincible = false;
       onPlatform = false;
       scoreEl.textContent = 'Pontos: 0';
@@ -596,9 +636,9 @@
       penguin.classList.add('running');
       playSound('start');
 
-      fishTimer = setInterval(createFish, 1200);
-      orcaTimer = setInterval(createOrca, 2100);
-      platformTimer = setInterval(createPlatform, 1600);
+      fishTimer = setInterval(createFish, 1150);
+      orcaTimer = setInterval(createOrca, 2050);
+      platformTimer = setInterval(createPlatform, 1550);
 
       loop();
     }
