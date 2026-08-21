@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim vs Orca - Pixel</title>
+  <title>Pinguim vs Orca - Pixel Art</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
@@ -10,10 +10,11 @@
       padding: 0;
       box-sizing: border-box;
       image-rendering: pixelated;
+      image-rendering: crisp-edges;
     }
 
     body {
-      background: #080810;
+      background: #050508;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,96 +26,135 @@
     #game {
       width: 512px;
       height: 608px;
-      background: linear-gradient(
-        to bottom,
-        #0a0a18 0%,
-        #12122a 20%,
-        #1a2a48 45%,
-        #1e3a58 70%,
-        #2a5a78 100%
-      );
-      border: 6px solid #fff;
+      background: #0c0c1c;
+      border: 8px solid #ffffff;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 4px #222, 0 0 0 8px #444;
+      box-shadow: 
+        0 0 0 4px #222222,
+        0 0 0 12px #444444;
     }
 
-    /* Aurora */
+    /* Céu em faixas pixel */
+    #sky {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 420px;
+      background: repeating-linear-gradient(
+        to bottom,
+        #0a0a18 0px,
+        #0a0a18 8px,
+        #101028 8px,
+        #101028 16px,
+        #16163a 16px,
+        #16163a 24px,
+        #1c1c4a 24px,
+        #1c1c4a 32px,
+        #22225a 32px,
+        #22225a 40px
+      );
+      z-index: 0;
+    }
+
+    /* Aurora pixel (blocos) */
     .aurora {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 42%;
+      height: 280px;
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.75;
-    }
-    .aurora1 {
-      background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(0,255,150,0.28) 18px 38px);
-      animation: a1 9s steps(6) infinite;
-    }
-    .aurora2 {
-      background: repeating-linear-gradient(100deg, transparent 0 28px, rgba(120,80,255,0.3) 28px 52px);
-      animation: a2 12s steps(5) infinite;
+      z-index: 1;
       opacity: 0.7;
     }
-    .aurora3 {
-      background: repeating-linear-gradient(80deg, transparent 0 22px, rgba(0,200,255,0.22) 22px 42px);
-      animation: a3 8s steps(7) infinite;
-      opacity: 0.55;
+    .aurora1 {
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0 16px,
+        #00ff99 16px 32px,
+        transparent 32px 48px,
+        #00ccff 48px 64px
+      );
+      animation: auroraMove 10s steps(8) infinite;
     }
-    @keyframes a1 { 0%{transform:translateX(-25px)} 100%{transform:translateX(30px)} }
-    @keyframes a2 { 0%{transform:translateX(20px)} 100%{transform:translateX(-35px)} }
-    @keyframes a3 { 0%{transform:translateX(-15px)} 100%{transform:translateX(20px)} }
+    .aurora2 {
+      background: repeating-linear-gradient(
+        95deg,
+        transparent 0 24px,
+        #aa66ff 24px 40px,
+        transparent 40px 64px
+      );
+      animation: auroraMove 14s steps(6) infinite reverse;
+      opacity: 0.6;
+    }
+    @keyframes auroraMove {
+      0%   { transform: translateX(-40px); }
+      100% { transform: translateX(40px); }
+    }
 
-    /* Nuvens */
+    /* Nuvens pixel (feitas com box-shadow) */
     .cloud {
       position: absolute;
-      background: #b0b0c8;
-      z-index: 1;
+      width: 8px;
+      height: 8px;
+      background: #c8c8e0;
+      z-index: 2;
     }
     #cloud1 {
-      width: 70px; height: 20px; top: 48px; left: 30px;
-      box-shadow: 14px -10px 0 #b0b0c8, 36px -6px 0 #b0b0c8, 50px 0 0 #b0b0c8;
-      animation: cloud 18s steps(9) infinite;
+      top: 48px;
+      left: 40px;
+      box-shadow:
+        8px 0 #c8c8e0, 16px 0 #c8c8e0, 24px 0 #c8c8e0, 32px 0 #c8c8e0,
+        4px -8px #c8c8e0, 12px -8px #c8c8e0, 20px -8px #c8c8e0, 28px -8px #c8c8e0,
+        12px -16px #c8c8e0, 20px -16px #c8c8e0;
+      animation: cloudMove 16s steps(12) infinite;
     }
     #cloud2 {
-      width: 55px; height: 16px; top: 95px; left: 290px;
-      box-shadow: 12px -8px 0 #b0b0c8, 28px -4px 0 #b0b0c8;
-      animation: cloud 24s steps(11) infinite;
-      animation-delay: -7s;
+      top: 100px;
+      left: 300px;
+      box-shadow:
+        8px 0 #c8c8e0, 16px 0 #c8c8e0, 24px 0 #c8c8e0,
+        4px -8px #c8c8e0, 12px -8px #c8c8e0, 20px -8px #c8c8e0,
+        12px -16px #c8c8e0;
+      animation: cloudMove 22s steps(14) infinite;
+      animation-delay: -6s;
     }
-    @keyframes cloud {
-      from { transform: translateX(-90px); }
+    @keyframes cloudMove {
+      from { transform: translateX(-80px); }
       to   { transform: translateX(520px); }
     }
 
-    /* Neve */
+    /* Neve pixel */
     .snow {
       position: absolute;
-      color: #d0d0ff;
-      font-size: 11px;
-      z-index: 2;
+      width: 4px;
+      height: 4px;
+      background: #e0e0ff;
+      z-index: 3;
       pointer-events: none;
-      animation: fall linear infinite;
-      font-family: monospace;
+      animation: snowFall linear infinite;
     }
-    @keyframes fall {
-      0%   { transform: translateY(-20px); opacity: 1; }
+    @keyframes snowFall {
+      0%   { transform: translateY(-10px); opacity: 1; }
       100% { transform: translateY(620px); opacity: 0.2; }
     }
 
-    /* Chão */
+    /* Chão pixel */
     #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 84px;
-      background: #68a8c8;
-      border-top: 4px solid #c0e0f0;
-      z-index: 3;
-      box-shadow: inset 0 8px 0 #88c0d8;
+      height: 96px;
+      background: repeating-linear-gradient(
+        90deg,
+        #5a9ab8 0 16px,
+        #4a8aa8 16px 32px
+      );
+      border-top: 4px solid #a0d0e8;
+      z-index: 4;
+      box-shadow: inset 0 12px 0 #78b0c8;
     }
 
     /* HUD */
@@ -125,112 +165,114 @@
       right: 12px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       z-index: 20;
       pointer-events: none;
     }
     #score, #lives, #hiscore {
-      font-size: 12px;
-      color: #fff;
-      background: #000;
+      font-size: 11px;
+      color: #ffffff;
+      background: #000000;
       padding: 6px 10px;
-      border: 3px solid #fff;
+      border: 3px solid #ffffff;
+      text-shadow: none;
     }
-    #lives {
-      color: #ff6b6b;
-    }
+    #lives { color: #ff5555; }
 
-    /* Pinguim */
+    /* Pinguim (emoji forçado a pixel) */
     #penguin {
       position: absolute;
-      bottom: 84px;
+      bottom: 96px;
       left: 200px;
-      font-size: 48px;
-      z-index: 6;
+      font-size: 42px;
+      z-index: 10;
       user-select: none;
-      transition: transform 0.08s;
-      filter: contrast(1.1);
+      transform-origin: center bottom;
+      filter: contrast(1.2) saturate(1.1);
     }
 
     /* Peixes e Orcas */
     .fish, .orca {
       position: absolute;
-      z-index: 5;
+      z-index: 8;
       user-select: none;
+      filter: contrast(1.15);
     }
-    .fish { font-size: 26px; }
-    .orca { font-size: 48px; bottom: 84px; }
+    .fish { font-size: 24px; }
+    .orca { 
+      font-size: 44px; 
+      bottom: 96px;
+    }
 
-    /* Popup de pontos */
+    /* Popup */
     .popup {
       position: absolute;
-      font-size: 12px;
-      color: #ffe066;
+      font-size: 11px;
+      color: #ffff00;
       z-index: 15;
       pointer-events: none;
-      animation: pop 0.7s forwards;
+      animation: popup 0.6s steps(4) forwards;
     }
-    @keyframes pop {
+    @keyframes popup {
       0%   { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-30px); opacity: 0; }
+      100% { transform: translateY(-28px); opacity: 0; }
     }
 
-    /* Tela de mensagem */
+    /* Mensagem */
     #message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #000;
-      padding: 28px 24px;
-      border: 4px solid #fff;
-      font-size: 13px;
-      color: #fff;
+      background: #000000;
+      padding: 24px 20px;
+      border: 4px solid #ffffff;
+      font-size: 12px;
+      color: #ffffff;
       text-align: center;
       display: none;
       z-index: 30;
-      line-height: 1.7;
-      min-width: 300px;
-      box-shadow: 6px 6px 0 #333;
+      line-height: 1.8;
+      min-width: 280px;
+      box-shadow: 6px 6px 0 #333333;
     }
     .subtitle {
-      font-size: 10px;
+      font-size: 9px;
       margin-top: 12px;
-      color: #80c0ff;
-      line-height: 1.9;
+      color: #88ccff;
+      line-height: 2;
     }
     #start-btn {
-      margin-top: 18px;
-      padding: 12px 18px;
-      font-size: 12px;
+      margin-top: 16px;
+      padding: 10px 16px;
+      font-size: 11px;
       font-family: 'Press Start 2P', cursive;
-      background: #2080d0;
-      color: #fff;
-      border: 3px solid #fff;
+      background: #2288cc;
+      color: #ffffff;
+      border: 3px solid #ffffff;
       cursor: pointer;
-      box-shadow: 4px 4px 0 #000;
+      box-shadow: 4px 4px 0 #000000;
     }
     #start-btn:hover {
-      background: #40a0f0;
+      background: #33aaff;
       transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0 #000;
+      box-shadow: 6px 6px 0 #000000;
     }
   </style>
 </head>
 <body>
 
   <div id="game">
+    <div id="sky"></div>
     <div class="aurora aurora1"></div>
     <div class="aurora aurora2"></div>
-    <div class="aurora aurora3"></div>
 
     <div class="cloud" id="cloud1"></div>
     <div class="cloud" id="cloud2"></div>
 
     <div id="hud">
-      <div id="score">PONTOS: 0</div>
-      <div id="lives">❤️❤️❤️</div>
-      <div id="hiscore">RECORDE: 0</div>
+      <div id="score">PONTOS 0</div>
+      <div id="lives">♥♥♥</div>
+      <div id="hiscore">REC 0</div>
     </div>
 
     <div id="penguin">🐧</div>
@@ -239,9 +281,9 @@
     <div id="message">
       <div>PINGUIM<br>VS ORCA</div>
       <div class="subtitle">
-        FUJA DAS ORCAS 🐋<br>
-        PEGUE OS PEIXES 🐟<br>
-        VOCÊ TEM 3 VIDAS
+        FUJA DAS ORCAS<br>
+        PEGUE OS PEIXES<br>
+        3 VIDAS
       </div>
       <button id="start-btn">COMEÇAR</button>
     </div>
@@ -258,37 +300,34 @@
 
     let score = 0;
     let lives = 3;
-    let highScore = localStorage.getItem('pinguimHighScore') || 0;
+    let highScore = parseInt(localStorage.getItem('pinguimPixelHigh') || '0');
     let penguinX = 200;
     let penguinY = 0;
     let isJumping = false;
     let velocityY = 0;
     let gameRunning = false;
     let invincible = false;
-    let fishInterval, orcaInterval;
-    let animationId;
+    let fishTimer, orcaTimer;
+    let animId;
     let difficulty = 1;
 
-    const gravity = 0.88;
-    const jumpPower = -15.8;
-    const baseSpeed = 6.2;
+    const gravity = 0.9;
+    const jumpPower = -15.5;
+    const moveSpeed = 5.5;
 
-    hiscoreEl.textContent = 'RECORDE: ' + highScore;
+    hiscoreEl.textContent = 'REC ' + highScore;
 
-    const keys = {};
-
-    // Neve
-    for (let i = 0; i < 26; i++) {
+    // Neve pixel
+    for (let i = 0; i < 30; i++) {
       const s = document.createElement('div');
       s.className = 'snow';
-      s.textContent = '•';
-      s.style.left = Math.random() * 512 + 'px';
-      s.style.fontSize = (8 + Math.random() * 9) + 'px';
-      s.style.animationDuration = (4 + Math.random() * 6) + 's';
-      s.style.animationDelay = (Math.random() * 7) + 's';
+      s.style.left = Math.floor(Math.random() * 64) * 8 + 'px';
+      s.style.animationDuration = (3.5 + Math.random() * 5) + 's';
+      s.style.animationDelay = (Math.random() * 6) + 's';
       game.appendChild(s);
     }
 
+    const keys = {};
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
       if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
@@ -299,21 +338,21 @@
     });
     document.addEventListener('keyup', e => keys[e.key] = false);
 
+    function snap(v) {
+      return Math.round(v / 4) * 4; // movimento em grid de 4px
+    }
+
     function updatePenguin() {
-      let moving = false;
       if (keys['ArrowLeft'] || keys['a']) {
-        penguinX -= baseSpeed;
+        penguinX -= moveSpeed;
         penguin.style.transform = 'scaleX(-1)';
-        moving = true;
       }
       if (keys['ArrowRight'] || keys['d']) {
-        penguinX += baseSpeed;
+        penguinX += moveSpeed;
         penguin.style.transform = 'scaleX(1)';
-        moving = true;
       }
 
-      if (penguinX < 4) penguinX = 4;
-      if (penguinX > 448) penguinX = 448;
+      penguinX = Math.max(4, Math.min(448, penguinX));
 
       if (isJumping) {
         velocityY += gravity;
@@ -325,25 +364,25 @@
         }
       }
 
-      penguin.style.left = Math.round(penguinX / 2) * 2 + 'px';
-      penguin.style.bottom = (84 - Math.round(penguinY / 2) * 2) + 'px';
+      penguin.style.left = snap(penguinX) + 'px';
+      penguin.style.bottom = (96 - snap(penguinY)) + 'px';
 
-      // piscar quando invencível
+      // efeito de piscar quando toma dano
       if (invincible) {
-        penguin.style.opacity = penguin.style.opacity === '0.4' ? '1' : '0.4';
+        penguin.style.opacity = (Math.floor(Date.now() / 100) % 2) ? '0.35' : '1';
       } else {
         penguin.style.opacity = '1';
       }
     }
 
-    function showPopup(x, y, text) {
+    function showPopup(x, y, txt) {
       const p = document.createElement('div');
       p.className = 'popup';
-      p.textContent = text;
-      p.style.left = x + 'px';
-      p.style.top = y + 'px';
+      p.textContent = txt;
+      p.style.left = snap(x) + 'px';
+      p.style.top = snap(y) + 'px';
       game.appendChild(p);
-      setTimeout(() => p.remove(), 700);
+      setTimeout(() => p.remove(), 600);
     }
 
     function createFish() {
@@ -351,31 +390,31 @@
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.textContent = '🐟';
-      fish.style.left = Math.floor(Math.random() * 22) * 20 + 'px';
-      fish.style.top = '-40px';
+      fish.style.left = snap(Math.random() * 440) + 'px';
+      fish.style.top = '-32px';
       game.appendChild(fish);
 
-      let y = -40;
-      const speed = 2.1 + Math.random() * 1.5;
+      let y = -32;
+      const spd = 2 + Math.random() * 1.4;
 
       function fall() {
         if (!gameRunning) { fish.remove(); return; }
-        y += speed;
-        fish.style.top = Math.round(y / 2) * 2 + 'px';
+        y += spd;
+        fish.style.top = snap(y) + 'px';
 
         const px = penguinX;
-        const py = 608 - 84 - 48 + penguinY;
+        const py = 608 - 96 - 42 + penguinY;
 
-        if (parseFloat(fish.style.left) < px + 48 &&
-            parseFloat(fish.style.left) + 26 > px &&
-            y < py + 48 && y + 26 > py) {
+        if (parseFloat(fish.style.left) < px + 44 &&
+            parseFloat(fish.style.left) + 24 > px &&
+            y < py + 42 && y + 24 > py) {
           score += 10;
-          scoreEl.textContent = 'PONTOS: ' + score;
-          showPopup(px + 10, py - 10, '+10');
+          scoreEl.textContent = 'PONTOS ' + score;
+          showPopup(px + 8, py - 8, '+10');
           fish.remove();
           return;
         }
-        if (y > 530) { fish.remove(); return; }
+        if (y > 520) { fish.remove(); return; }
         requestAnimationFrame(fall);
       }
       requestAnimationFrame(fall);
@@ -386,26 +425,25 @@
       const orca = document.createElement('div');
       orca.className = 'orca';
       orca.textContent = '🐋';
-      orca.style.left = '530px';
+      orca.style.left = '520px';
       game.appendChild(orca);
 
-      let x = 530;
-      const speed = (3.8 + Math.random() * 2.2) * difficulty;
+      let x = 520;
+      const spd = (3.6 + Math.random() * 2.0) * difficulty;
 
       function move() {
         if (!gameRunning) { orca.remove(); return; }
-        x -= speed;
-        orca.style.left = Math.round(x / 2) * 2 + 'px';
+        x -= spd;
+        orca.style.left = snap(x) + 'px';
 
         if (!invincible &&
-            x < penguinX + 50 &&
-            x + 48 > penguinX &&
-            penguinY > -28) {
-          // bateu
+            x < penguinX + 46 &&
+            x + 46 > penguinX &&
+            penguinY > -26) {
           lives--;
           updateLives();
           invincible = true;
-          setTimeout(() => invincible = false, 1500);
+          setTimeout(() => invincible = false, 1600);
 
           if (lives <= 0) {
             gameOver();
@@ -420,39 +458,38 @@
     }
 
     function updateLives() {
-      livesEl.textContent = '❤️'.repeat(lives) + '🖤'.repeat(3 - lives);
+      livesEl.textContent = '♥'.repeat(lives) + '♡'.repeat(3 - lives);
     }
 
     function gameOver() {
       gameRunning = false;
-      clearInterval(fishInterval);
-      clearInterval(orcaInterval);
-      cancelAnimationFrame(animationId);
+      clearInterval(fishTimer);
+      clearInterval(orcaTimer);
+      cancelAnimationFrame(animId);
 
       if (score > highScore) {
         highScore = score;
-        localStorage.setItem('pinguimHighScore', highScore);
-        hiscoreEl.textContent = 'RECORDE: ' + highScore;
+        localStorage.setItem('pinguimPixelHigh', highScore);
+        hiscoreEl.textContent = 'REC ' + highScore;
       }
 
       message.innerHTML = `
-        <div>A ORCA<br>PEGOU VOCÊ!</div>
+        <div>GAME OVER</div>
         <div class="subtitle">
-          PONTOS: <strong>${score}</strong><br>
-          RECORDE: ${highScore}
+          PONTOS ${score}<br>
+          RECORDE ${highScore}
         </div>
-        <button id="start-btn">TENTAR DE NOVO</button>
+        <button id="start-btn">DE NOVO</button>
       `;
       message.style.display = 'block';
       document.getElementById('start-btn').addEventListener('click', startGame);
     }
 
-    function gameLoop() {
+    function loop() {
       if (!gameRunning) return;
       updatePenguin();
-      // aumenta dificuldade aos poucos
-      difficulty = 1 + Math.floor(score / 80) * 0.15;
-      animationId = requestAnimationFrame(gameLoop);
+      difficulty = 1 + Math.floor(score / 70) * 0.18;
+      animId = requestAnimationFrame(loop);
     }
 
     function startGame() {
@@ -462,7 +499,7 @@
       lives = 3;
       difficulty = 1;
       invincible = false;
-      scoreEl.textContent = 'PONTOS: 0';
+      scoreEl.textContent = 'PONTOS 0';
       updateLives();
       penguinX = 200;
       penguinY = 0;
@@ -472,10 +509,10 @@
       message.style.display = 'none';
       gameRunning = true;
 
-      fishInterval = setInterval(createFish, 1100);
-      orcaInterval = setInterval(createOrca, 1550);
+      fishTimer = setInterval(createFish, 1150);
+      orcaTimer = setInterval(createOrca, 1500);
 
-      gameLoop();
+      loop();
     }
 
     startBtn.addEventListener('click', startGame);
