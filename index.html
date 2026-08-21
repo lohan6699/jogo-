@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Visual 3D + Personagens 2D</title>
+  <title>Pinguim Runner - Animações + Plataformas Mario</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,11 +27,9 @@
       box-shadow: 
         0 0 0 5px #1a3050,
         0 0 0 10px #0d1f35,
-        0 30px 80px rgba(0,0,0,0.8),
-        inset 0 0 120px rgba(0,40,80,0.3);
+        0 30px 80px rgba(0,0,0,0.8);
     }
 
-    /* Aurora 3D */
     .aurora {
       position: absolute;
       top: 0; left: 0;
@@ -41,19 +39,14 @@
       mix-blend-mode: screen;
     }
     .aurora1 {
-      background: radial-gradient(ellipse 120% 70% at 25% 35%, rgba(0,255,190,0.3) 0%, transparent 65%);
+      background: radial-gradient(ellipse 120% 70% at 25% 35%, rgba(0,255,190,0.28) 0%, transparent 65%);
       filter: blur(8px);
       animation: aurora1 13s ease-in-out infinite alternate;
     }
     .aurora2 {
-      background: radial-gradient(ellipse 100% 60% at 75% 25%, rgba(150,70,255,0.25) 0%, transparent 65%);
+      background: radial-gradient(ellipse 100% 60% at 75% 25%, rgba(150,70,255,0.22) 0%, transparent 65%);
       filter: blur(12px);
       animation: aurora2 17s ease-in-out infinite alternate-reverse;
-    }
-    .aurora3 {
-      background: radial-gradient(ellipse 80% 40% at 50% 15%, rgba(0,200,255,0.15) 0%, transparent 70%);
-      filter: blur(15px);
-      animation: aurora3 11s ease-in-out infinite alternate;
     }
     @keyframes aurora1 {
       0% { transform: translateX(-15px) scaleY(1); opacity: 0.7; }
@@ -63,12 +56,7 @@
       0% { transform: translateX(20px) scaleY(1.1); opacity: 0.6; }
       100% { transform: translateX(-20px) scaleY(0.95); opacity: 0.9; }
     }
-    @keyframes aurora3 {
-      0% { transform: scale(1); opacity: 0.5; }
-      100% { transform: scale(1.2); opacity: 0.8; }
-    }
 
-    /* Neve */
     .snow {
       position: absolute;
       background: white;
@@ -82,7 +70,6 @@
       100% { transform: translateY(720px) translateX(40px); opacity: 0.1; }
     }
 
-    /* Chão com efeito 3D */
     #ground {
       position: absolute;
       bottom: 0;
@@ -91,22 +78,9 @@
       background: linear-gradient(to bottom, #d0f0ff 0%, #a8d8f0 40%, #78b8d8 100%);
       border-top: 5px solid #e8f8ff;
       z-index: 3;
-      box-shadow: 
-        inset 0 15px 30px rgba(255,255,255,0.5),
-        0 -15px 40px rgba(100,180,220,0.25);
-      transform: perspective(400px) rotateX(8deg);
-      transform-origin: bottom;
-    }
-    #ground::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 40%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-      opacity: 0.6;
+      box-shadow: inset 0 15px 30px rgba(255,255,255,0.5);
     }
 
-    /* HUD */
     #hud {
       position: absolute;
       top: 16px;
@@ -127,12 +101,11 @@
       font-weight: 800;
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     #lives { color: #ff6b6b; }
     #level { color: #ffeb3b; }
 
-    /* ===== PERSONAGENS 2D MELHORADOS ===== */
+    /* ===== PINGUIM COM ANIMAÇÃO DE CORRIDA ===== */
     #penguin {
       position: absolute;
       bottom: 105px;
@@ -141,16 +114,20 @@
       z-index: 12;
       filter: drop-shadow(0 8px 12px rgba(0,20,40,0.45));
       user-select: none;
-      transition: filter 0.2s;
+      transform-origin: center bottom;
     }
     #penguin.running {
-      animation: runBob 0.28s ease-in-out infinite;
+      animation: penguinRun 0.25s ease-in-out infinite;
     }
-    @keyframes runBob {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-8px) scale(1.03); }
+    @keyframes penguinRun {
+      0%   { transform: translateY(0) rotate(-3deg) scaleX(1); }
+      25%  { transform: translateY(-7px) rotate(0deg) scaleX(1.05); }
+      50%  { transform: translateY(0) rotate(3deg) scaleX(1); }
+      75%  { transform: translateY(-5px) rotate(0deg) scaleX(0.97); }
+      100% { transform: translateY(0) rotate(-3deg) scaleX(1); }
     }
 
+    /* ===== PEIXE ===== */
     .fish {
       position: absolute;
       bottom: 108px;
@@ -158,13 +135,14 @@
       z-index: 8;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
       user-select: none;
-      animation: fishFloat 1.4s ease-in-out infinite;
+      animation: fishSwim 0.8s ease-in-out infinite;
     }
-    @keyframes fishFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+    @keyframes fishSwim {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-5px) rotate(4deg); }
     }
 
+    /* ===== ORCA COM ANIMAÇÃO ===== */
     .orca {
       position: absolute;
       bottom: 100px;
@@ -172,21 +150,32 @@
       z-index: 9;
       filter: drop-shadow(0 10px 16px rgba(0,10,30,0.5));
       user-select: none;
+      animation: orcaSwim 0.7s ease-in-out infinite;
+    }
+    @keyframes orcaSwim {
+      0%   { transform: translateY(0) rotate(-2deg) scaleX(1); }
+      50%  { transform: translateY(-8px) rotate(2deg) scaleX(1.04); }
+      100% { transform: translateY(0) rotate(-2deg) scaleX(1); }
     }
 
-    /* Plataformas no chão com visual 3D */
+    /* ===== PLATAFORMAS ESTILO MARIO ===== */
     .platform {
       position: absolute;
       bottom: 105px;
-      height: 26px;
-      background: linear-gradient(to bottom, #e8f8ff, #b0e0f5);
-      border-radius: 12px 12px 6px 6px;
-      border: 3px solid #ffffff;
+      height: 32px;
+      background: linear-gradient(to bottom, #e8d4a8 0%, #c4a dig 40%, #a67c52 100%);
+      border-radius: 4px;
+      border: 3px solid #5c3a1e;
       box-shadow: 
-        0 8px 16px rgba(0,60,100,0.3),
-        inset 0 4px 10px rgba(255,255,255,0.7),
-        0 2px 0 #7ab8d8;
+        inset 0 4px 0 #f5e6c8,
+        inset 0 -4px 0 #8b5a2b,
+        0 6px 0 #3d2314,
+        0 8px 12px rgba(0,0,0,0.35);
       z-index: 7;
+      /* textura de tijolo simples */
+      background-image: 
+        linear-gradient(to bottom, #e8d4a8 0%, #c4a dig 40%, #a67c52 100%),
+        repeating-linear-gradient(90deg, transparent 0 28px, rgba(0,0,0,0.12) 28px 30px);
     }
 
     .popup {
@@ -209,7 +198,7 @@
       top: 42%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.82);
       color: #ffeb3b;
       font-size: 32px;
       font-weight: 900;
@@ -219,7 +208,6 @@
       display: none;
       text-align: center;
       box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      border: 2px solid rgba(255,235,59,0.3);
     }
 
     #message {
@@ -270,7 +258,6 @@
   <div id="game">
     <div class="aurora aurora1"></div>
     <div class="aurora aurora2"></div>
-    <div class="aurora aurora3"></div>
 
     <div id="hud">
       <div id="score">Pontos: 0</div>
@@ -287,9 +274,9 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Visual 3D + Personagens 2D<br>
-        10 Níveis • Plataformas no chão<br>
-        Fuja das orcas!
+        Animações de corrida + natação<br>
+        Plataformas estilo Mario<br>
+        10 Níveis
       </p>
       <button id="start-btn">Começar</button>
     </div>
@@ -358,7 +345,7 @@
     let score = 0;
     let lives = 3;
     let level = 1;
-    let highScore = parseInt(localStorage.getItem('pinguim3dHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguimMarioHigh') || '0');
     let penguinX = 130;
     let penguinY = 0;
     let isJumping = false;
@@ -453,7 +440,7 @@
         const platW = parseFloat(plat.style.width);
 
         if (penguinX + 50 > platX && penguinX < platX + platW &&
-            penguinY > -8 && penguinY < 22 && velocityY >= 0) {
+            penguinY > -8 && penguinY < 25 && velocityY >= 0) {
           penguinY = 0;
           velocityY = 0;
           isJumping = false;
@@ -548,7 +535,7 @@
       if (!gameRunning) return;
       const plat = document.createElement('div');
       plat.className = 'platform';
-      const width = 85 + Math.random() * 75;
+      const width = 90 + Math.random() * 80;
       plat.style.width = width + 'px';
       plat.style.left = '510px';
       plat.style.bottom = '105px';
@@ -561,7 +548,7 @@
         if (!gameRunning) { plat.remove(); return; }
         x -= spd;
         plat.style.left = x + 'px';
-        if (x < -130) { plat.remove(); return; }
+        if (x < -140) { plat.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -591,7 +578,7 @@
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguim3dHigh', highScore);
+        localStorage.setItem('pinguimMarioHigh', highScore);
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
