@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Fusca do Pinguim - Fuja da Orca!</title>
+  <title>Pinguim vs Orca - Pixel</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
@@ -13,7 +13,7 @@
     }
 
     body {
-      background: #0a0a12;
+      background: #080810;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -27,20 +27,19 @@
       height: 608px;
       background: linear-gradient(
         to bottom,
-        #0b0b1a 0%,
-        #12122b 22%,
-        #1a2a4a 45%,
-        #1e3a5a 65%,
-        #2a5a7a 85%,
-        #3a7a9a 100%
+        #0a0a18 0%,
+        #12122a 20%,
+        #1a2a48 45%,
+        #1e3a58 70%,
+        #2a5a78 100%
       );
-      border: 6px solid #ffffff;
+      border: 6px solid #fff;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 4px #222, 0 0 0 8px #555;
+      box-shadow: 0 0 0 4px #222, 0 0 0 8px #444;
     }
 
-    /* Aurora Pixel */
+    /* Aurora */
     .aurora {
       position: absolute;
       top: 0;
@@ -49,90 +48,50 @@
       height: 42%;
       pointer-events: none;
       z-index: 0;
-      opacity: 0.8;
+      opacity: 0.75;
     }
-
     .aurora1 {
-      background: repeating-linear-gradient(
-        90deg,
-        transparent 0px,
-        transparent 18px,
-        rgba(0, 255, 150, 0.28) 18px,
-        rgba(0, 255, 150, 0.28) 38px
-      );
-      animation: aurora1 9s steps(6) infinite;
+      background: repeating-linear-gradient(90deg, transparent 0 18px, rgba(0,255,150,0.28) 18px 38px);
+      animation: a1 9s steps(6) infinite;
     }
-
     .aurora2 {
-      background: repeating-linear-gradient(
-        100deg,
-        transparent 0px,
-        transparent 28px,
-        rgba(120, 80, 255, 0.3) 28px,
-        rgba(120, 80, 255, 0.3) 52px
-      );
-      animation: aurora2 12s steps(5) infinite;
+      background: repeating-linear-gradient(100deg, transparent 0 28px, rgba(120,80,255,0.3) 28px 52px);
+      animation: a2 12s steps(5) infinite;
       opacity: 0.7;
     }
-
     .aurora3 {
-      background: repeating-linear-gradient(
-        80deg,
-        transparent 0px,
-        transparent 22px,
-        rgba(0, 200, 255, 0.22) 22px,
-        rgba(0, 200, 255, 0.22) 42px
-      );
-      animation: aurora3 8s steps(7) infinite;
-      opacity: 0.6;
+      background: repeating-linear-gradient(80deg, transparent 0 22px, rgba(0,200,255,0.22) 22px 42px);
+      animation: a3 8s steps(7) infinite;
+      opacity: 0.55;
     }
-
-    @keyframes aurora1 {
-      0%   { transform: translateX(-25px); }
-      100% { transform: translateX(30px); }
-    }
-    @keyframes aurora2 {
-      0%   { transform: translateX(20px); }
-      100% { transform: translateX(-35px); }
-    }
-    @keyframes aurora3 {
-      0%   { transform: translateX(-15px); }
-      100% { transform: translateX(20px); }
-    }
+    @keyframes a1 { 0%{transform:translateX(-25px)} 100%{transform:translateX(30px)} }
+    @keyframes a2 { 0%{transform:translateX(20px)} 100%{transform:translateX(-35px)} }
+    @keyframes a3 { 0%{transform:translateX(-15px)} 100%{transform:translateX(20px)} }
 
     /* Nuvens */
     .cloud {
       position: absolute;
-      background: #b8b8d0;
+      background: #b0b0c8;
       z-index: 1;
     }
-
     #cloud1 {
-      width: 70px;
-      height: 20px;
-      top: 50px;
-      left: 30px;
-      box-shadow: 14px -10px 0 #b8b8d0, 36px -6px 0 #b8b8d0, 50px 0 0 #b8b8d0;
-      animation: floatCloud 18s steps(9) infinite;
+      width: 70px; height: 20px; top: 48px; left: 30px;
+      box-shadow: 14px -10px 0 #b0b0c8, 36px -6px 0 #b0b0c8, 50px 0 0 #b0b0c8;
+      animation: cloud 18s steps(9) infinite;
     }
-
     #cloud2 {
-      width: 55px;
-      height: 16px;
-      top: 95px;
-      left: 290px;
-      box-shadow: 12px -8px 0 #b8b8d0, 28px -4px 0 #b8b8d0;
-      animation: floatCloud 24s steps(11) infinite;
+      width: 55px; height: 16px; top: 95px; left: 290px;
+      box-shadow: 12px -8px 0 #b0b0c8, 28px -4px 0 #b0b0c8;
+      animation: cloud 24s steps(11) infinite;
       animation-delay: -7s;
     }
-
-    @keyframes floatCloud {
+    @keyframes cloud {
       from { transform: translateX(-90px); }
       to   { transform: translateX(520px); }
     }
 
     /* Neve */
-    .snowflake {
+    .snow {
       position: absolute;
       color: #d0d0ff;
       font-size: 11px;
@@ -141,113 +100,120 @@
       animation: fall linear infinite;
       font-family: monospace;
     }
-
     @keyframes fall {
       0%   { transform: translateY(-20px); opacity: 1; }
-      100% { transform: translateY(620px); opacity: 0.25; }
+      100% { transform: translateY(620px); opacity: 0.2; }
     }
 
-    /* Chão (gelo/água) */
-    #ice {
+    /* Chão */
+    #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
       height: 84px;
-      background: #70b0d0;
+      background: #68a8c8;
       border-top: 4px solid #c0e0f0;
       z-index: 3;
-      box-shadow: inset 0 8px 0 #90c8e0;
+      box-shadow: inset 0 8px 0 #88c0d8;
     }
 
-    /* Placar */
-    #score {
+    /* HUD */
+    #hud {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      font-size: 13px;
-      color: #ffffff;
-      background: #000000;
-      padding: 8px 12px;
-      border: 3px solid #ffffff;
-      z-index: 10;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      pointer-events: none;
+    }
+    #score, #lives, #hiscore {
+      font-size: 12px;
+      color: #fff;
+      background: #000;
+      padding: 6px 10px;
+      border: 3px solid #fff;
+    }
+    #lives {
+      color: #ff6b6b;
     }
 
-    /* Fusca do Pinguim */
-    #fusca {
+    /* Pinguim */
+    #penguin {
       position: absolute;
       bottom: 84px;
       left: 200px;
-      font-size: 42px;
+      font-size: 48px;
       z-index: 6;
       user-select: none;
-      line-height: 1;
-      filter: contrast(1.15);
+      transition: transform 0.08s;
+      filter: contrast(1.1);
     }
 
-    /* Peixes */
-    .fish {
+    /* Peixes e Orcas */
+    .fish, .orca {
       position: absolute;
-      font-size: 26px;
       z-index: 5;
       user-select: none;
     }
+    .fish { font-size: 26px; }
+    .orca { font-size: 48px; bottom: 84px; }
 
-    /* Orcas */
-    .orca {
+    /* Popup de pontos */
+    .popup {
       position: absolute;
-      font-size: 48px;
-      z-index: 5;
-      user-select: none;
-      bottom: 84px;
+      font-size: 12px;
+      color: #ffe066;
+      z-index: 15;
+      pointer-events: none;
+      animation: pop 0.7s forwards;
+    }
+    @keyframes pop {
+      0%   { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-30px); opacity: 0; }
     }
 
-    /* Mensagens */
+    /* Tela de mensagem */
     #message {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #000000;
-      padding: 26px 22px;
-      border: 4px solid #ffffff;
+      background: #000;
+      padding: 28px 24px;
+      border: 4px solid #fff;
       font-size: 13px;
-      color: #ffffff;
+      color: #fff;
       text-align: center;
       display: none;
       z-index: 30;
       line-height: 1.7;
-      min-width: 290px;
+      min-width: 300px;
       box-shadow: 6px 6px 0 #333;
     }
-
     .subtitle {
       font-size: 10px;
       margin-top: 12px;
       color: #80c0ff;
       line-height: 1.9;
     }
-
     #start-btn {
       margin-top: 18px;
       padding: 12px 18px;
       font-size: 12px;
       font-family: 'Press Start 2P', cursive;
-      background: #e8a020;
-      color: #000000;
-      border: 3px solid #ffffff;
+      background: #2080d0;
+      color: #fff;
+      border: 3px solid #fff;
       cursor: pointer;
       box-shadow: 4px 4px 0 #000;
     }
-
     #start-btn:hover {
-      background: #ffc040;
+      background: #40a0f0;
       transform: translate(-2px, -2px);
       box-shadow: 6px 6px 0 #000;
-    }
-
-    #start-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 #000;
     }
   </style>
 </head>
@@ -261,16 +227,21 @@
     <div class="cloud" id="cloud1"></div>
     <div class="cloud" id="cloud2"></div>
 
-    <div id="score">PONTOS: 0</div>
-    <div id="fusca">🐧🚗</div>
-    <div id="ice"></div>
+    <div id="hud">
+      <div id="score">PONTOS: 0</div>
+      <div id="lives">❤️❤️❤️</div>
+      <div id="hiscore">RECORDE: 0</div>
+    </div>
+
+    <div id="penguin">🐧</div>
+    <div id="ground"></div>
 
     <div id="message">
-      <div>FUSCA DO<br>PINGUIM</div>
+      <div>PINGUIM<br>VS ORCA</div>
       <div class="subtitle">
-        DIRIJA O FUSCA<br>
         FUJA DAS ORCAS 🐋<br>
-        PEGUE OS PEIXES 🐟
+        PEGUE OS PEIXES 🐟<br>
+        VOCÊ TEM 3 VIDAS
       </div>
       <button id="start-btn">COMEÇAR</button>
     </div>
@@ -278,39 +249,45 @@
 
   <script>
     const game = document.getElementById('game');
-    const fusca = document.getElementById('fusca');
+    const penguin = document.getElementById('penguin');
     const scoreEl = document.getElementById('score');
+    const livesEl = document.getElementById('lives');
+    const hiscoreEl = document.getElementById('hiscore');
     const message = document.getElementById('message');
     const startBtn = document.getElementById('start-btn');
 
     let score = 0;
-    let fuscaX = 200;
-    let fuscaY = 0;
+    let lives = 3;
+    let highScore = localStorage.getItem('pinguimHighScore') || 0;
+    let penguinX = 200;
+    let penguinY = 0;
     let isJumping = false;
     let velocityY = 0;
     let gameRunning = false;
+    let invincible = false;
     let fishInterval, orcaInterval;
     let animationId;
+    let difficulty = 1;
 
-    const gravity = 0.9;
-    const jumpPower = -15.5;
-    const speed = 6.5;
+    const gravity = 0.88;
+    const jumpPower = -15.8;
+    const baseSpeed = 6.2;
+
+    hiscoreEl.textContent = 'RECORDE: ' + highScore;
 
     const keys = {};
 
-    function createSnow() {
-      for (let i = 0; i < 26; i++) {
-        const flake = document.createElement('div');
-        flake.className = 'snowflake';
-        flake.textContent = '•';
-        flake.style.left = Math.random() * 512 + 'px';
-        flake.style.fontSize = (8 + Math.random() * 9) + 'px';
-        flake.style.animationDuration = (4 + Math.random() * 6) + 's';
-        flake.style.animationDelay = (Math.random() * 7) + 's';
-        game.appendChild(flake);
-      }
+    // Neve
+    for (let i = 0; i < 26; i++) {
+      const s = document.createElement('div');
+      s.className = 'snow';
+      s.textContent = '•';
+      s.style.left = Math.random() * 512 + 'px';
+      s.style.fontSize = (8 + Math.random() * 9) + 'px';
+      s.style.animationDuration = (4 + Math.random() * 6) + 's';
+      s.style.animationDelay = (Math.random() * 7) + 's';
+      game.appendChild(s);
     }
-    createSnow();
 
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
@@ -318,40 +295,59 @@
         isJumping = true;
         velocityY = jumpPower;
       }
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) {
-        e.preventDefault();
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+    });
+    document.addEventListener('keyup', e => keys[e.key] = false);
+
+    function updatePenguin() {
+      let moving = false;
+      if (keys['ArrowLeft'] || keys['a']) {
+        penguinX -= baseSpeed;
+        penguin.style.transform = 'scaleX(-1)';
+        moving = true;
       }
-    });
+      if (keys['ArrowRight'] || keys['d']) {
+        penguinX += baseSpeed;
+        penguin.style.transform = 'scaleX(1)';
+        moving = true;
+      }
 
-    document.addEventListener('keyup', e => {
-      keys[e.key] = false;
-    });
-
-    function updateFusca() {
-      if (keys['ArrowLeft'] || keys['a']) fuscaX -= speed;
-      if (keys['ArrowRight'] || keys['d']) fuscaX += speed;
-
-      if (fuscaX < 4) fuscaX = 4;
-      if (fuscaX > 420) fuscaX = 420;
+      if (penguinX < 4) penguinX = 4;
+      if (penguinX > 448) penguinX = 448;
 
       if (isJumping) {
         velocityY += gravity;
-        fuscaY += velocityY;
-
-        if (fuscaY >= 0) {
-          fuscaY = 0;
+        penguinY += velocityY;
+        if (penguinY >= 0) {
+          penguinY = 0;
           isJumping = false;
           velocityY = 0;
         }
       }
 
-      fusca.style.left = Math.round(fuscaX / 2) * 2 + 'px';
-      fusca.style.bottom = (84 - Math.round(fuscaY / 2) * 2) + 'px';
+      penguin.style.left = Math.round(penguinX / 2) * 2 + 'px';
+      penguin.style.bottom = (84 - Math.round(penguinY / 2) * 2) + 'px';
+
+      // piscar quando invencível
+      if (invincible) {
+        penguin.style.opacity = penguin.style.opacity === '0.4' ? '1' : '0.4';
+      } else {
+        penguin.style.opacity = '1';
+      }
+    }
+
+    function showPopup(x, y, text) {
+      const p = document.createElement('div');
+      p.className = 'popup';
+      p.textContent = text;
+      p.style.left = x + 'px';
+      p.style.top = y + 'px';
+      game.appendChild(p);
+      setTimeout(() => p.remove(), 700);
     }
 
     function createFish() {
       if (!gameRunning) return;
-
       const fish = document.createElement('div');
       fish.className = 'fish';
       fish.textContent = '🐟';
@@ -359,87 +355,72 @@
       fish.style.top = '-40px';
       game.appendChild(fish);
 
-      let fishY = -40;
-      const fallSpeed = 2.1 + Math.random() * 1.6;
+      let y = -40;
+      const speed = 2.1 + Math.random() * 1.5;
 
       function fall() {
-        if (!gameRunning) {
-          fish.remove();
-          return;
-        }
+        if (!gameRunning) { fish.remove(); return; }
+        y += speed;
+        fish.style.top = Math.round(y / 2) * 2 + 'px';
 
-        fishY += fallSpeed;
-        fish.style.top = Math.round(fishY / 2) * 2 + 'px';
+        const px = penguinX;
+        const py = 608 - 84 - 48 + penguinY;
 
-        const px = fuscaX;
-        const py = 608 - 84 - 42 + fuscaY;
-
-        if (
-          parseFloat(fish.style.left) < px + 55 &&
-          parseFloat(fish.style.left) + 26 > px &&
-          fishY < py + 42 &&
-          fishY + 26 > py
-        ) {
+        if (parseFloat(fish.style.left) < px + 48 &&
+            parseFloat(fish.style.left) + 26 > px &&
+            y < py + 48 && y + 26 > py) {
           score += 10;
           scoreEl.textContent = 'PONTOS: ' + score;
+          showPopup(px + 10, py - 10, '+10');
           fish.remove();
           return;
         }
-
-        if (fishY > 530) {
-          fish.remove();
-          return;
-        }
-
+        if (y > 530) { fish.remove(); return; }
         requestAnimationFrame(fall);
       }
-
       requestAnimationFrame(fall);
     }
 
     function createOrca() {
       if (!gameRunning) return;
-
       const orca = document.createElement('div');
       orca.className = 'orca';
       orca.textContent = '🐋';
       orca.style.left = '530px';
       game.appendChild(orca);
 
-      let orcaX = 530;
-      const moveSpeed = 4 + Math.random() * 2.8;
+      let x = 530;
+      const speed = (3.8 + Math.random() * 2.2) * difficulty;
 
       function move() {
-        if (!gameRunning) {
-          orca.remove();
-          return;
+        if (!gameRunning) { orca.remove(); return; }
+        x -= speed;
+        orca.style.left = Math.round(x / 2) * 2 + 'px';
+
+        if (!invincible &&
+            x < penguinX + 50 &&
+            x + 48 > penguinX &&
+            penguinY > -28) {
+          // bateu
+          lives--;
+          updateLives();
+          invincible = true;
+          setTimeout(() => invincible = false, 1500);
+
+          if (lives <= 0) {
+            gameOver();
+            return;
+          }
         }
 
-        orcaX -= moveSpeed;
-        orca.style.left = Math.round(orcaX / 2) * 2 + 'px';
-
-        const px = fuscaX;
-        const py = fuscaY;
-
-        // Colisão com a orca
-        if (
-          orcaX < px + 58 &&
-          orcaX + 48 > px &&
-          py > -30
-        ) {
-          gameOver();
-          return;
-        }
-
-        if (orcaX < -60) {
-          orca.remove();
-          return;
-        }
-
+        if (x < -60) { orca.remove(); return; }
         requestAnimationFrame(move);
       }
-
       requestAnimationFrame(move);
+    }
+
+    function updateLives() {
+      livesEl.textContent = '❤️'.repeat(lives) + '🖤'.repeat(3 - lives);
     }
 
     function gameOver() {
@@ -448,36 +429,51 @@
       clearInterval(orcaInterval);
       cancelAnimationFrame(animationId);
 
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('pinguimHighScore', highScore);
+        hiscoreEl.textContent = 'RECORDE: ' + highScore;
+      }
+
       message.innerHTML = `
         <div>A ORCA<br>PEGOU VOCÊ!</div>
-        <div class="subtitle">PONTOS: <strong>${score}</strong></div>
+        <div class="subtitle">
+          PONTOS: <strong>${score}</strong><br>
+          RECORDE: ${highScore}
+        </div>
         <button id="start-btn">TENTAR DE NOVO</button>
       `;
       message.style.display = 'block';
-
       document.getElementById('start-btn').addEventListener('click', startGame);
     }
 
     function gameLoop() {
       if (!gameRunning) return;
-      updateFusca();
+      updatePenguin();
+      // aumenta dificuldade aos poucos
+      difficulty = 1 + Math.floor(score / 80) * 0.15;
       animationId = requestAnimationFrame(gameLoop);
     }
 
     function startGame() {
-      document.querySelectorAll('.fish, .orca').forEach(el => el.remove());
+      document.querySelectorAll('.fish, .orca, .popup').forEach(el => el.remove());
 
       score = 0;
+      lives = 3;
+      difficulty = 1;
+      invincible = false;
       scoreEl.textContent = 'PONTOS: 0';
-      fuscaX = 200;
-      fuscaY = 0;
+      updateLives();
+      penguinX = 200;
+      penguinY = 0;
       isJumping = false;
       velocityY = 0;
+      penguin.style.transform = 'scaleX(1)';
       message.style.display = 'none';
       gameRunning = true;
 
-      fishInterval = setInterval(createFish, 1150);
-      orcaInterval = setInterval(createOrca, 1600);
+      fishInterval = setInterval(createFish, 1100);
+      orcaInterval = setInterval(createOrca, 1550);
 
       gameLoop();
     }
