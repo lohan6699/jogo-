@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Animações + Plataformas Mario</title>
+  <title>Pinguim Runner - Física de Pulo Realista</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -24,10 +24,7 @@
       border-radius: 24px;
       position: relative;
       overflow: hidden;
-      box-shadow: 
-        0 0 0 5px #1a3050,
-        0 0 0 10px #0d1f35,
-        0 30px 80px rgba(0,0,0,0.8);
+      box-shadow: 0 0 0 5px #1a3050, 0 0 0 10px #0d1f35, 0 30px 80px rgba(0,0,0,0.8);
     }
 
     .aurora {
@@ -105,7 +102,6 @@
     #lives { color: #ff6b6b; }
     #level { color: #ffeb3b; }
 
-    /* ===== PINGUIM COM ANIMAÇÃO DE CORRIDA ===== */
     #penguin {
       position: absolute;
       bottom: 105px;
@@ -120,14 +116,13 @@
       animation: penguinRun 0.25s ease-in-out infinite;
     }
     @keyframes penguinRun {
-      0%   { transform: translateY(0) rotate(-3deg) scaleX(1); }
-      25%  { transform: translateY(-7px) rotate(0deg) scaleX(1.05); }
-      50%  { transform: translateY(0) rotate(3deg) scaleX(1); }
-      75%  { transform: translateY(-5px) rotate(0deg) scaleX(0.97); }
-      100% { transform: translateY(0) rotate(-3deg) scaleX(1); }
+      0%   { transform: translateY(0) rotate(-3deg); }
+      25%  { transform: translateY(-7px) rotate(0deg); }
+      50%  { transform: translateY(0) rotate(3deg); }
+      75%  { transform: translateY(-5px) rotate(0deg); }
+      100% { transform: translateY(0) rotate(-3deg); }
     }
 
-    /* ===== PEIXE ===== */
     .fish {
       position: absolute;
       bottom: 108px;
@@ -142,7 +137,6 @@
       50% { transform: translateY(-5px) rotate(4deg); }
     }
 
-    /* ===== ORCA COM ANIMAÇÃO ===== */
     .orca {
       position: absolute;
       bottom: 100px;
@@ -153,12 +147,11 @@
       animation: orcaSwim 0.7s ease-in-out infinite;
     }
     @keyframes orcaSwim {
-      0%   { transform: translateY(0) rotate(-2deg) scaleX(1); }
-      50%  { transform: translateY(-8px) rotate(2deg) scaleX(1.04); }
-      100% { transform: translateY(0) rotate(-2deg) scaleX(1); }
+      0%   { transform: translateY(0) rotate(-2deg); }
+      50%  { transform: translateY(-8px) rotate(2deg); }
+      100% { transform: translateY(0) rotate(-2deg); }
     }
 
-    /* ===== PLATAFORMAS ESTILO MARIO ===== */
     .platform {
       position: absolute;
       bottom: 105px;
@@ -172,10 +165,6 @@
         0 6px 0 #3d2314,
         0 8px 12px rgba(0,0,0,0.35);
       z-index: 7;
-      /* textura de tijolo simples */
-      background-image: 
-        linear-gradient(to bottom, #e8d4a8 0%, #c4a dig 40%, #a67c52 100%),
-        repeating-linear-gradient(90deg, transparent 0 28px, rgba(0,0,0,0.12) 28px 30px);
     }
 
     .popup {
@@ -207,7 +196,6 @@
       z-index: 25;
       display: none;
       text-align: center;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
     }
 
     #message {
@@ -274,8 +262,8 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Animações de corrida + natação<br>
-        Plataformas estilo Mario<br>
+        Física de pulo realista<br>
+        Segure o pulo para ir mais alto<br>
         10 Níveis
       </p>
       <button id="start-btn">Começar</button>
@@ -345,22 +333,30 @@
     let score = 0;
     let lives = 3;
     let level = 1;
-    let highScore = parseInt(localStorage.getItem('pinguimMarioHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguimPhysicsHigh') || '0');
     let penguinX = 130;
     let penguinY = 0;
-    let isJumping = false;
     let velocityY = 0;
     let gameRunning = false;
     let invincible = false;
-    let onPlatform = false;
+    let onGround = true;
+
+    // === Física de pulo realista ===
+    let jumpHeld = false;
+    let coyoteTime = 0;        // tempo que ainda pode pular depois de sair do chão
+    let jumpBuffer = 0;        // buffer de input de pulo
+    const COYOTE_MAX = 8;      // frames de coyote time
+    const BUFFER_MAX = 10;     // frames de jump buffer
+    const JUMP_FORCE = -15.5;
+    const GRAVITY_UP = 0.55;   // gravidade enquanto sobe (mais leve)
+    const GRAVITY_DOWN = 1.15; // gravidade enquanto cai (mais pesada)
+    const MAX_FALL = 18;
+
     let fishTimer, orcaTimer, platformTimer;
     let animId;
     let runSpeed = 3.3;
     let distance = 0;
     let nextLevelScore = 420;
-
-    const gravity = 0.88;
-    const jumpPower = -15.8;
 
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
@@ -379,30 +375,49 @@
     }
 
     const keys = {};
+
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
-      if ((e.key === 'ArrowUp' || e.key === ' ') && !isJumping && gameRunning) {
-        isJumping = true;
-        onPlatform = false;
-        velocityY = jumpPower;
-        penguin.classList.remove('running');
-        playSound('jump');
+
+      if ((e.key === 'ArrowUp' || e.key === ' ') && gameRunning) {
+        jumpBuffer = BUFFER_MAX; // ativa o buffer
+        jumpHeld = true;
       }
       if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
     });
-    document.addEventListener('keyup', e => keys[e.key] = false);
 
-    game.addEventListener('click', () => {
-      if (!isJumping && gameRunning) {
-        isJumping = true;
-        onPlatform = false;
-        velocityY = jumpPower;
-        penguin.classList.remove('running');
-        playSound('jump');
+    document.addEventListener('keyup', e => {
+      keys[e.key] = false;
+      if (e.key === 'ArrowUp' || e.key === ' ') {
+        jumpHeld = false;
       }
     });
 
+    game.addEventListener('mousedown', () => {
+      if (gameRunning) {
+        jumpBuffer = BUFFER_MAX;
+        jumpHeld = true;
+      }
+    });
+    game.addEventListener('mouseup', () => {
+      jumpHeld = false;
+    });
+
+    function tryJump() {
+      if ((onGround || coyoteTime > 0) && jumpBuffer > 0) {
+        velocityY = JUMP_FORCE;
+        onGround = false;
+        coyoteTime = 0;
+        jumpBuffer = 0;
+        penguin.classList.remove('running');
+        playSound('jump');
+        return true;
+      }
+      return false;
+    }
+
     function updatePenguin() {
+      // Movimento horizontal
       penguinX += runSpeed * 0.32;
       distance += runSpeed * 0.14;
       score = Math.floor(distance);
@@ -422,29 +437,56 @@
       if (penguinX < 40) penguinX = 40;
       if (penguinX > 340) penguinX = 340;
 
-      if (isJumping || !onPlatform) {
-        velocityY += gravity;
-        penguinY += velocityY;
+      // === Física de pulo realista ===
+      if (jumpBuffer > 0) jumpBuffer--;
+      if (coyoteTime > 0) coyoteTime--;
 
-        if (penguinY >= 0 && !onPlatform) {
-          penguinY = 0;
-          isJumping = false;
-          velocityY = 0;
-          penguin.classList.add('running');
+      // Tenta pular se tiver buffer
+      tryJump();
+
+      // Aplica gravidade diferente subindo/descendo
+      if (velocityY < 0) {
+        // Subindo
+        if (!jumpHeld) {
+          // Soltou o botão → corta o pulo (pulo variável)
+          velocityY += GRAVITY_UP * 2.8;
+        } else {
+          velocityY += GRAVITY_UP;
         }
+      } else {
+        // Caindo
+        velocityY += GRAVITY_DOWN;
       }
 
-      onPlatform = false;
+      // Limita velocidade de queda
+      if (velocityY > MAX_FALL) velocityY = MAX_FALL;
+
+      penguinY += velocityY;
+
+      // Colisão com o chão
+      if (penguinY >= 0) {
+        penguinY = 0;
+        velocityY = 0;
+        if (!onGround) {
+          onGround = true;
+          penguin.classList.add('running');
+        }
+        coyoteTime = COYOTE_MAX;
+      } else {
+        onGround = false;
+      }
+
+      // Colisão com plataformas
       document.querySelectorAll('.platform').forEach(plat => {
         const platX = parseFloat(plat.style.left);
         const platW = parseFloat(plat.style.width);
 
         if (penguinX + 50 > platX && penguinX < platX + platW &&
-            penguinY > -8 && penguinY < 25 && velocityY >= 0) {
+            penguinY > -10 && penguinY < 28 && velocityY >= 0) {
           penguinY = 0;
           velocityY = 0;
-          isJumping = false;
-          onPlatform = true;
+          onGround = true;
+          coyoteTime = COYOTE_MAX;
           penguin.classList.add('running');
         }
       });
@@ -578,7 +620,7 @@
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguimMarioHigh', highScore);
+        localStorage.setItem('pinguimPhysicsHigh', highScore);
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
@@ -610,14 +652,16 @@
       nextLevelScore = 420;
       runSpeed = 3.3;
       invincible = false;
-      onPlatform = false;
+      onGround = true;
+      velocityY = 0;
+      coyoteTime = 0;
+      jumpBuffer = 0;
+      jumpHeld = false;
       scoreEl.textContent = 'Pontos: 0';
       levelEl.textContent = 'Nível 1';
       updateLives();
       penguinX = 130;
       penguinY = 0;
-      isJumping = false;
-      velocityY = 0;
       message.style.display = 'none';
       gameRunning = true;
       penguin.classList.add('running');
