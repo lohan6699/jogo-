@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Pinguim Melhorado</title>
+  <title>Pinguim Runner - Neve Animada</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; image-rendering: pixelated; }
@@ -85,17 +85,34 @@
     }
     @keyframes cloud { from{transform:translateX(-120px)} to{transform:translateX(550px)} }
 
+    /* ========== NEVE MELHORADA ========== */
     .snow {
       position: absolute;
-      width: 3px; height: 3px;
-      background: #e8f0ff;
-      border-radius: 1px;
+      background: #e8f4ff;
+      border-radius: 50%;
       z-index: 3;
       pointer-events: none;
-      animation: snow linear infinite;
-      box-shadow: 0 0 4px #fff;
+      box-shadow: 0 0 6px rgba(255,255,255,0.8);
     }
-    @keyframes snow { 0%{transform:translateY(-20px);opacity:0.9} 100%{transform:translateY(630px);opacity:0.15} }
+
+    /* Diferentes animações de neve */
+    @keyframes snowFall1 {
+      0%   { transform: translateY(-20px) translateX(0); opacity: 0.9; }
+      100% { transform: translateY(650px) translateX(40px); opacity: 0.1; }
+    }
+    @keyframes snowFall2 {
+      0%   { transform: translateY(-20px) translateX(0); opacity: 0.8; }
+      100% { transform: translateY(650px) translateX(-50px); opacity: 0.15; }
+    }
+    @keyframes snowFall3 {
+      0%   { transform: translateY(-20px) translateX(0) rotate(0deg); opacity: 0.95; }
+      100% { transform: translateY(650px) translateX(25px) rotate(180deg); opacity: 0.1; }
+    }
+    @keyframes snowFall4 {
+      0%   { transform: translateY(-20px) translateX(0); opacity: 0.7; }
+      50%  { transform: translateY(320px) translateX(-30px); }
+      100% { transform: translateY(650px) translateX(20px); opacity: 0.1; }
+    }
 
     #ground {
       position: absolute;
@@ -126,7 +143,7 @@
     }
     #lives { color: #ff6b6b; }
 
-    /* ========== PINGUIM BEM MELHORADO ========== */
+    /* Pinguim */
     #penguin {
       position: absolute;
       bottom: 100px;
@@ -140,26 +157,18 @@
       width: 4px;
       height: 4px;
       background: transparent;
-      /* Novo pinguim mais fofo e detalhado */
       box-shadow:
-        /* topo da cabeça */
         12px 0 #0a0a0a, 16px 0 #0a0a0a, 20px 0 #0a0a0a,
-        /* cabeça */
         8px 4px #0a0a0a, 12px 4px #0a0a0a, 16px 4px #0a0a0a, 20px 4px #0a0a0a, 24px 4px #0a0a0a,
         4px 8px #0a0a0a, 8px 8px #ffffff, 12px 8px #ffffff, 16px 8px #ffffff, 20px 8px #ffffff, 24px 8px #ffffff, 28px 8px #0a0a0a,
-        /* olhos e bico */
         4px 12px #0a0a0a, 8px 12px #ffffff, 12px 12px #111111, 16px 12px #ff9900, 20px 12px #111111, 24px 12px #ffffff, 28px 12px #0a0a0a,
         4px 16px #0a0a0a, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #ffffff, 20px 16px #ffffff, 24px 16px #ffffff, 28px 16px #0a0a0a,
-        /* peito branco */
         4px 20px #0a0a0a, 8px 20px #ffffff, 12px 20px #ffffff, 16px 20px #ffffff, 20px 20px #ffffff, 24px 20px #ffffff, 28px 20px #0a0a0a,
         4px 24px #0a0a0a, 8px 24px #ffffff, 12px 24px #ffffff, 16px 24px #ffffff, 20px 24px #ffffff, 24px 24px #ffffff, 28px 24px #0a0a0a,
-        /* corpo preto */
         4px 28px #0a0a0a, 8px 28px #0a0a0a, 12px 28px #0a0a0a, 16px 28px #0a0a0a, 20px 28px #0a0a0a, 24px 28px #0a0a0a, 28px 28px #0a0a0a,
         8px 32px #0a0a0a, 12px 32px #0a0a0a, 16px 32px #0a0a0a, 20px 32px #0a0a0a, 24px 32px #0a0a0a,
-        /* pés */
         8px 36px #ff9900, 12px 36px #ff9900, 20px 36px #ff9900, 24px 36px #ff9900;
     }
-
     #penguin.running .sprite {
       animation: runBob 0.18s steps(2) infinite;
     }
@@ -207,7 +216,7 @@
         52px 20px #050505, 56px 24px #050505;
     }
 
-    /* Plataforma de gelo */
+    /* Plataforma */
     .platform {
       position: absolute;
       width: 4px; height: 4px;
@@ -386,15 +395,42 @@
 
     hiscoreEl.textContent = 'REC ' + highScore;
 
-    for (let i = 0; i < 32; i++) {
-      const s = document.createElement('div');
-      s.className = 'snow';
-      s.style.left = Math.floor(Math.random() * 128) * 4 + 'px';
-      s.style.animationDuration = (4 + Math.random() * 6) + 's';
-      s.style.animationDelay = (Math.random() * 8) + 's';
-      s.style.opacity = 0.4 + Math.random() * 0.5;
-      game.appendChild(s);
+    // ========== NEVE ANIMADA MELHORADA ==========
+    function createSnow() {
+      // Remove neve antiga se existir
+      document.querySelectorAll('.snow').forEach(s => s.remove());
+
+      for (let i = 0; i < 55; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'snow';
+
+        // Tamanhos variados
+        const size = 2 + Math.random() * 5;
+        flake.style.width = size + 'px';
+        flake.style.height = size + 'px';
+
+        // Posição inicial
+        flake.style.left = Math.random() * 512 + 'px';
+        flake.style.top = -20 + 'px';
+
+        // Opacidade variada
+        flake.style.opacity = 0.4 + Math.random() * 0.6;
+
+        // Escolhe uma das 4 animações
+        const anim = Math.floor(Math.random() * 4) + 1;
+        flake.style.animationName = 'snowFall' + anim;
+
+        // Duração e delay diferentes
+        const duration = 4 + Math.random() * 7;
+        flake.style.animationDuration = duration + 's';
+        flake.style.animationDelay = (Math.random() * 8) + 's';
+        flake.style.animationTimingFunction = 'linear';
+        flake.style.animationIterationCount = 'infinite';
+
+        game.appendChild(flake);
+      }
     }
+    createSnow();
 
     const keys = {};
     document.addEventListener('keydown', e => {
