@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim vs Orca - Pixel Art</title>
+  <title>Pinguim vs Orca - CSS Pixel Art</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
@@ -10,7 +10,6 @@
       padding: 0;
       box-sizing: border-box;
       image-rendering: pixelated;
-      image-rendering: crisp-edges;
     }
 
     body {
@@ -30,128 +29,89 @@
       border: 8px solid #ffffff;
       position: relative;
       overflow: hidden;
-      box-shadow: 
-        0 0 0 4px #222222,
-        0 0 0 12px #444444;
+      box-shadow: 0 0 0 4px #222, 0 0 0 12px #444;
     }
 
-    /* Céu em faixas pixel */
+    /* Céu */
     #sky {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 420px;
+      inset: 0 0 96px 0;
       background: repeating-linear-gradient(
         to bottom,
-        #0a0a18 0px,
-        #0a0a18 8px,
-        #101028 8px,
-        #101028 16px,
-        #16163a 16px,
-        #16163a 24px,
-        #1c1c4a 24px,
-        #1c1c4a 32px,
-        #22225a 32px,
-        #22225a 40px
+        #0a0a18 0 8px,
+        #101028 8px 16px,
+        #16163a 16px 24px,
+        #1c1c4a 24px 32px
       );
       z-index: 0;
     }
 
-    /* Aurora pixel (blocos) */
+    /* Aurora */
     .aurora {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 280px;
+      top: 0; left: 0;
+      width: 100%; height: 260px;
       pointer-events: none;
       z-index: 1;
       opacity: 0.7;
     }
     .aurora1 {
-      background: repeating-linear-gradient(
-        90deg,
-        transparent 0 16px,
-        #00ff99 16px 32px,
-        transparent 32px 48px,
-        #00ccff 48px 64px
-      );
-      animation: auroraMove 10s steps(8) infinite;
+      background: repeating-linear-gradient(90deg, transparent 0 16px, #00ff99 16px 32px, transparent 32px 48px, #00ccff 48px 64px);
+      animation: aurora 10s steps(8) infinite;
     }
     .aurora2 {
-      background: repeating-linear-gradient(
-        95deg,
-        transparent 0 24px,
-        #aa66ff 24px 40px,
-        transparent 40px 64px
-      );
-      animation: auroraMove 14s steps(6) infinite reverse;
-      opacity: 0.6;
+      background: repeating-linear-gradient(95deg, transparent 0 24px, #aa66ff 24px 40px, transparent 40px 64px);
+      animation: aurora 14s steps(6) infinite reverse;
+      opacity: 0.55;
     }
-    @keyframes auroraMove {
+    @keyframes aurora {
       0%   { transform: translateX(-40px); }
       100% { transform: translateX(40px); }
     }
 
-    /* Nuvens pixel (feitas com box-shadow) */
+    /* Nuvens */
     .cloud {
       position: absolute;
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       background: #c8c8e0;
       z-index: 2;
     }
     #cloud1 {
-      top: 48px;
-      left: 40px;
-      box-shadow:
-        8px 0 #c8c8e0, 16px 0 #c8c8e0, 24px 0 #c8c8e0, 32px 0 #c8c8e0,
-        4px -8px #c8c8e0, 12px -8px #c8c8e0, 20px -8px #c8c8e0, 28px -8px #c8c8e0,
-        12px -16px #c8c8e0, 20px -16px #c8c8e0;
-      animation: cloudMove 16s steps(12) infinite;
+      top: 48px; left: 40px;
+      box-shadow: 8px 0 #c8c8e0,16px 0 #c8c8e0,24px 0 #c8c8e0,32px 0 #c8c8e0,4px -8px #c8c8e0,12px -8px #c8c8e0,20px -8px #c8c8e0,28px -8px #c8c8e0,12px -16px #c8c8e0,20px -16px #c8c8e0;
+      animation: cloud 16s steps(12) infinite;
     }
     #cloud2 {
-      top: 100px;
-      left: 300px;
-      box-shadow:
-        8px 0 #c8c8e0, 16px 0 #c8c8e0, 24px 0 #c8c8e0,
-        4px -8px #c8c8e0, 12px -8px #c8c8e0, 20px -8px #c8c8e0,
-        12px -16px #c8c8e0;
-      animation: cloudMove 22s steps(14) infinite;
+      top: 100px; left: 300px;
+      box-shadow: 8px 0 #c8c8e0,16px 0 #c8c8e0,24px 0 #c8c8e0,4px -8px #c8c8e0,12px -8px #c8c8e0,20px -8px #c8c8e0,12px -16px #c8c8e0;
+      animation: cloud 22s steps(14) infinite;
       animation-delay: -6s;
     }
-    @keyframes cloudMove {
+    @keyframes cloud {
       from { transform: translateX(-80px); }
       to   { transform: translateX(520px); }
     }
 
-    /* Neve pixel */
+    /* Neve */
     .snow {
       position: absolute;
-      width: 4px;
-      height: 4px;
+      width: 4px; height: 4px;
       background: #e0e0ff;
       z-index: 3;
       pointer-events: none;
-      animation: snowFall linear infinite;
+      animation: snow linear infinite;
     }
-    @keyframes snowFall {
+    @keyframes snow {
       0%   { transform: translateY(-10px); opacity: 1; }
       100% { transform: translateY(620px); opacity: 0.2; }
     }
 
-    /* Chão pixel */
+    /* Chão */
     #ground {
       position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 96px;
-      background: repeating-linear-gradient(
-        90deg,
-        #5a9ab8 0 16px,
-        #4a8aa8 16px 32px
-      );
+      bottom: 0; left: 0;
+      width: 100%; height: 96px;
+      background: repeating-linear-gradient(90deg, #5a9ab8 0 16px, #4a8aa8 16px 32px);
       border-top: 4px solid #a0d0e8;
       z-index: 4;
       box-shadow: inset 0 12px 0 #78b0c8;
@@ -160,9 +120,7 @@
     /* HUD */
     #hud {
       position: absolute;
-      top: 12px;
-      left: 12px;
-      right: 12px;
+      top: 12px; left: 12px; right: 12px;
       display: flex;
       justify-content: space-between;
       z-index: 20;
@@ -170,37 +128,94 @@
     }
     #score, #lives, #hiscore {
       font-size: 11px;
-      color: #ffffff;
-      background: #000000;
+      color: #fff;
+      background: #000;
       padding: 6px 10px;
-      border: 3px solid #ffffff;
-      text-shadow: none;
+      border: 3px solid #fff;
     }
     #lives { color: #ff5555; }
 
-    /* Pinguim (emoji forçado a pixel) */
+    /* ========== SPRITES PIXEL ART ========== */
+
+    /* Pinguim */
     #penguin {
       position: absolute;
       bottom: 96px;
       left: 200px;
-      font-size: 42px;
+      width: 4px;
+      height: 4px;
       z-index: 10;
-      user-select: none;
       transform-origin: center bottom;
-      filter: contrast(1.2) saturate(1.1);
+    }
+    #penguin .sprite {
+      width: 4px;
+      height: 4px;
+      background: transparent;
+      /* Corpo do pinguim (pixel art) */
+      box-shadow:
+        /* linha 1 (topo da cabeça) */
+        8px 0 #1a1a1a, 12px 0 #1a1a1a, 16px 0 #1a1a1a,
+        /* linha 2 */
+        4px 4px #1a1a1a, 8px 4px #ffffff, 12px 4px #ffffff, 16px 4px #ffffff, 20px 4px #1a1a1a,
+        /* linha 3 */
+        4px 8px #1a1a1a, 8px 8px #ffffff, 12px 8px #1a1a1a, 16px 8px #ffffff, 20px 8px #1a1a1a,
+        /* linha 4 (olhos + bico) */
+        4px 12px #1a1a1a, 8px 12px #ffffff, 12px 12px #ff9900, 16px 12px #ffffff, 20px 12px #1a1a1a,
+        /* linha 5 */
+        4px 16px #1a1a1a, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #ffffff, 20px 16px #1a1a1a,
+        /* linha 6 (corpo) */
+        4px 20px #1a1a1a, 8px 20px #1a1a1a, 12px 20px #1a1a1a, 16px 20px #1a1a1a, 20px 20px #1a1a1a,
+        /* linha 7 */
+        4px 24px #1a1a1a, 8px 24px #1a1a1a, 12px 24px #1a1a1a, 16px 24px #1a1a1a, 20px 24px #1a1a1a,
+        /* linha 8 (pés) */
+        8px 28px #ff9900, 16px 28px #ff9900;
     }
 
-    /* Peixes e Orcas */
-    .fish, .orca {
+    /* Peixe */
+    .fish {
       position: absolute;
+      width: 4px;
+      height: 4px;
       z-index: 8;
-      user-select: none;
-      filter: contrast(1.15);
     }
-    .fish { font-size: 24px; }
-    .orca { 
-      font-size: 44px; 
+    .fish .sprite {
+      width: 4px;
+      height: 4px;
+      background: transparent;
+      box-shadow:
+        /* corpo */
+        4px 4px #3399ff, 8px 4px #3399ff, 12px 4px #3399ff, 16px 4px #3399ff,
+        0px 8px #3399ff, 4px 8px #66ccff, 8px 8px #66ccff, 12px 8px #66ccff, 16px 8px #3399ff, 20px 8px #3399ff,
+        4px 12px #3399ff, 8px 12px #3399ff, 12px 12px #3399ff, 16px 12px #3399ff,
+        /* cauda */
+        20px 4px #ff9933, 24px 8px #ff9933, 20px 12px #ff9933,
+        /* olho */
+        8px 8px #ffffff;
+    }
+
+    /* Orca */
+    .orca {
+      position: absolute;
       bottom: 96px;
+      width: 4px;
+      height: 4px;
+      z-index: 8;
+    }
+    .orca .sprite {
+      width: 4px;
+      height: 4px;
+      background: transparent;
+      box-shadow:
+        /* nadadeira dorsal */
+        20px 0 #111111, 24px 0 #111111,
+        16px 4px #111111, 20px 4px #111111, 24px 4px #111111, 28px 4px #111111,
+        /* corpo */
+        4px 8px #111111, 8px 8px #111111, 12px 8px #111111, 16px 8px #111111, 20px 8px #111111, 24px 8px #111111, 28px 8px #111111, 32px 8px #111111, 36px 8px #111111,
+        0px 12px #111111, 4px 12px #111111, 8px 12px #ffffff, 12px 12px #ffffff, 16px 12px #111111, 20px 12px #111111, 24px 12px #111111, 28px 12px #111111, 32px 12px #111111, 36px 12px #111111, 40px 12px #111111,
+        0px 16px #111111, 4px 16px #111111, 8px 16px #ffffff, 12px 16px #ffffff, 16px 16px #111111, 20px 16px #111111, 24px 16px #111111, 28px 16px #111111, 32px 16px #111111, 36px 16px #111111,
+        4px 20px #111111, 8px 20px #111111, 12px 20px #111111, 16px 20px #111111, 20px 20px #111111, 24px 20px #111111, 28px 20px #111111, 32px 20px #111111,
+        /* cauda */
+        36px 16px #111111, 40px 12px #111111, 40px 20px #111111, 44px 16px #111111;
     }
 
     /* Popup */
@@ -220,20 +235,19 @@
     /* Mensagem */
     #message {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      background: #000000;
+      background: #000;
       padding: 24px 20px;
-      border: 4px solid #ffffff;
+      border: 4px solid #fff;
       font-size: 12px;
-      color: #ffffff;
+      color: #fff;
       text-align: center;
       display: none;
       z-index: 30;
       line-height: 1.8;
       min-width: 280px;
-      box-shadow: 6px 6px 0 #333333;
+      box-shadow: 6px 6px 0 #333;
     }
     .subtitle {
       font-size: 9px;
@@ -247,15 +261,15 @@
       font-size: 11px;
       font-family: 'Press Start 2P', cursive;
       background: #2288cc;
-      color: #ffffff;
-      border: 3px solid #ffffff;
+      color: #fff;
+      border: 3px solid #fff;
       cursor: pointer;
-      box-shadow: 4px 4px 0 #000000;
+      box-shadow: 4px 4px 0 #000;
     }
     #start-btn:hover {
       background: #33aaff;
       transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0 #000000;
+      box-shadow: 6px 6px 0 #000;
     }
   </style>
 </head>
@@ -275,7 +289,7 @@
       <div id="hiscore">REC 0</div>
     </div>
 
-    <div id="penguin">🐧</div>
+    <div id="penguin"><div class="sprite"></div></div>
     <div id="ground"></div>
 
     <div id="message">
@@ -300,7 +314,7 @@
 
     let score = 0;
     let lives = 3;
-    let highScore = parseInt(localStorage.getItem('pinguimPixelHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguimCssPixelHigh') || '0');
     let penguinX = 200;
     let penguinY = 0;
     let isJumping = false;
@@ -317,8 +331,8 @@
 
     hiscoreEl.textContent = 'REC ' + highScore;
 
-    // Neve pixel
-    for (let i = 0; i < 30; i++) {
+    // Neve
+    for (let i = 0; i < 28; i++) {
       const s = document.createElement('div');
       s.className = 'snow';
       s.style.left = Math.floor(Math.random() * 64) * 8 + 'px';
@@ -339,7 +353,7 @@
     document.addEventListener('keyup', e => keys[e.key] = false);
 
     function snap(v) {
-      return Math.round(v / 4) * 4; // movimento em grid de 4px
+      return Math.round(v / 4) * 4;
     }
 
     function updatePenguin() {
@@ -352,7 +366,7 @@
         penguin.style.transform = 'scaleX(1)';
       }
 
-      penguinX = Math.max(4, Math.min(448, penguinX));
+      penguinX = Math.max(8, Math.min(440, penguinX));
 
       if (isJumping) {
         velocityY += gravity;
@@ -367,7 +381,6 @@
       penguin.style.left = snap(penguinX) + 'px';
       penguin.style.bottom = (96 - snap(penguinY)) + 'px';
 
-      // efeito de piscar quando toma dano
       if (invincible) {
         penguin.style.opacity = (Math.floor(Date.now() / 100) % 2) ? '0.35' : '1';
       } else {
@@ -389,12 +402,12 @@
       if (!gameRunning) return;
       const fish = document.createElement('div');
       fish.className = 'fish';
-      fish.textContent = '🐟';
-      fish.style.left = snap(Math.random() * 440) + 'px';
-      fish.style.top = '-32px';
+      fish.innerHTML = '<div class="sprite"></div>';
+      fish.style.left = snap(Math.random() * 420) + 'px';
+      fish.style.top = '-40px';
       game.appendChild(fish);
 
-      let y = -32;
+      let y = -40;
       const spd = 2 + Math.random() * 1.4;
 
       function fall() {
@@ -403,11 +416,11 @@
         fish.style.top = snap(y) + 'px';
 
         const px = penguinX;
-        const py = 608 - 96 - 42 + penguinY;
+        const py = 608 - 96 - 32 + penguinY;
 
-        if (parseFloat(fish.style.left) < px + 44 &&
-            parseFloat(fish.style.left) + 24 > px &&
-            y < py + 42 && y + 24 > py) {
+        if (parseFloat(fish.style.left) < px + 40 &&
+            parseFloat(fish.style.left) + 28 > px &&
+            y < py + 32 && y + 20 > py) {
           score += 10;
           scoreEl.textContent = 'PONTOS ' + score;
           showPopup(px + 8, py - 8, '+10');
@@ -424,12 +437,12 @@
       if (!gameRunning) return;
       const orca = document.createElement('div');
       orca.className = 'orca';
-      orca.textContent = '🐋';
+      orca.innerHTML = '<div class="sprite"></div>';
       orca.style.left = '520px';
       game.appendChild(orca);
 
       let x = 520;
-      const spd = (3.6 + Math.random() * 2.0) * difficulty;
+      const spd = (3.5 + Math.random() * 2.0) * difficulty;
 
       function move() {
         if (!gameRunning) { orca.remove(); return; }
@@ -437,9 +450,9 @@
         orca.style.left = snap(x) + 'px';
 
         if (!invincible &&
-            x < penguinX + 46 &&
-            x + 46 > penguinX &&
-            penguinY > -26) {
+            x < penguinX + 48 &&
+            x + 52 > penguinX &&
+            penguinY > -24) {
           lives--;
           updateLives();
           invincible = true;
@@ -451,7 +464,7 @@
           }
         }
 
-        if (x < -60) { orca.remove(); return; }
+        if (x < -70) { orca.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -469,7 +482,7 @@
 
       if (score > highScore) {
         highScore = score;
-        localStorage.setItem('pinguimPixelHigh', highScore);
+        localStorage.setItem('pinguimCssPixelHigh', highScore);
         hiscoreEl.textContent = 'REC ' + highScore;
       }
 
