@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Visual Melhorado</title>
+  <title>Pinguim Runner - Personagens Melhorados</title>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
@@ -35,7 +35,6 @@
         0 20px 60px rgba(0,0,0,0.8);
     }
 
-    /* Céu com faixas mais suaves */
     #sky {
       position: absolute;
       inset: 0 0 100px 0;
@@ -51,7 +50,6 @@
       z-index: 0;
     }
 
-    /* Aurora bem mais bonita */
     .aurora {
       position: absolute;
       top: 0;
@@ -97,7 +95,6 @@
       100% { transform: translateX(5%) scaleY(1.2); }
     }
 
-    /* Nuvens melhores */
     .cloud {
       position: absolute;
       background: #b8c0e0;
@@ -108,19 +105,14 @@
       width: 90px; height: 22px;
       top: 50px; left: 20px;
       border-radius: 20px;
-      box-shadow: 
-        20px -12px 0 #b8c0e0,
-        50px -8px 0 #b8c0e0,
-        70px 0 0 #b8c0e0;
+      box-shadow: 20px -12px 0 #b8c0e0, 50px -8px 0 #b8c0e0, 70px 0 0 #b8c0e0;
       animation: cloud 20s linear infinite;
     }
     #cloud2 {
       width: 70px; height: 18px;
       top: 110px; left: 280px;
       border-radius: 18px;
-      box-shadow: 
-        16px -10px 0 #b8c0e0,
-        40px -6px 0 #b8c0e0;
+      box-shadow: 16px -10px 0 #b8c0e0, 40px -6px 0 #b8c0e0;
       animation: cloud 26s linear infinite;
       animation-delay: -8s;
     }
@@ -129,7 +121,6 @@
       to   { transform: translateX(550px); }
     }
 
-    /* Neve */
     .snow {
       position: absolute;
       width: 3px; height: 3px;
@@ -145,48 +136,29 @@
       100% { transform: translateY(630px); opacity: 0.15; }
     }
 
-    /* Chão de gelo bem melhor */
     #ground {
       position: absolute;
       bottom: 0;
       left: 0;
       width: 100%;
       height: 100px;
-      background: linear-gradient(
-        to bottom,
-        #c8e8f8 0%,
-        #a0d0e8 30%,
-        #78b0d0 70%,
-        #5890b0 100%
-      );
+      background: linear-gradient(to bottom, #c8e8f8 0%, #a0d0e8 30%, #78b0d0 70%, #5890b0 100%);
       border-top: 4px solid #e0f4ff;
       z-index: 4;
-      box-shadow: 
-        inset 0 10px 0 rgba(255,255,255,0.45),
-        0 -8px 20px rgba(100,180,220,0.3);
+      box-shadow: inset 0 10px 0 rgba(255,255,255,0.45), 0 -8px 20px rgba(100,180,220,0.3);
     }
     #ground::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 30%;
-      background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255,255,255,0.5) 30%, 
-        rgba(255,255,255,0.7) 50%, 
-        rgba(255,255,255,0.5) 70%, 
-        transparent 100%);
+      top: 0; left: 0;
+      width: 100%; height: 30%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 30%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.5) 70%, transparent 100%);
       opacity: 0.6;
     }
 
-    /* HUD */
     #hud {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      right: 14px;
+      top: 14px; left: 14px; right: 14px;
       display: flex;
       justify-content: space-between;
       z-index: 20;
@@ -203,9 +175,7 @@
     }
     #lives { color: #ff6b6b; }
 
-    /* ========== SPRITES MELHORADOS ========== */
-
-    /* Pinguim */
+    /* ========== PINGUIM MELHORADO ========== */
     #penguin {
       position: absolute;
       bottom: 100px;
@@ -219,20 +189,25 @@
       width: 4px;
       height: 4px;
       background: transparent;
+      /* Pinguim fofo e mais detalhado */
       box-shadow:
+        /* topo da cabeça */
+        12px 0 #0d0d0d, 16px 0 #0d0d0d,
         /* cabeça */
-        8px 0 #111, 12px 0 #111, 16px 0 #111,
-        4px 4px #111, 8px 4px #f0f0f0, 12px 4px #f0f0f0, 16px 4px #f0f0f0, 20px 4px #111,
-        4px 8px #111, 8px 8px #f0f0f0, 12px 8px #111, 16px 8px #f0f0f0, 20px 8px #111,
-        /* bico e olhos */
-        4px 12px #111, 8px 12px #f0f0f0, 12px 12px #ff9900, 16px 12px #f0f0f0, 20px 12px #111,
-        4px 16px #111, 8px 16px #f0f0f0, 12px 16px #f0f0f0, 16px 16px #f0f0f0, 20px 16px #111,
-        /* corpo */
-        4px 20px #111, 8px 20px #111, 12px 20px #111, 16px 20px #111, 20px 20px #111,
-        4px 24px #111, 8px 24px #111, 12px 24px #111, 16px 24px #111, 20px 24px #111,
-        4px 28px #111, 8px 28px #111, 12px 28px #111, 16px 28px #111, 20px 28px #111,
-        /* pés */
-        8px 32px #ff9900, 16px 32px #ff9900;
+        8px 4px #0d0d0d, 12px 4px #0d0d0d, 16px 4px #0d0d0d, 20px 4px #0d0d0d,
+        4px 8px #0d0d0d, 8px 8px #f5f5f5, 12px 8px #f5f5f5, 16px 8px #f5f5f5, 20px 8px #f5f5f5, 24px 8px #0d0d0d,
+        /* olhos + bico */
+        4px 12px #0d0d0d, 8px 12px #f5f5f5, 12px 12px #111, 16px 12px #ff9500, 20px 12px #f5f5f5, 24px 12px #0d0d0d,
+        4px 16px #0d0d0d, 8px 16px #f5f5f5, 12px 16px #f5f5f5, 16px 16px #f5f5f5, 20px 16px #f5f5f5, 24px 16px #0d0d0d,
+        /* peito branco */
+        4px 20px #0d0d0d, 8px 20px #f5f5f5, 12px 20px #f5f5f5, 16px 20px #f5f5f5, 20px 20px #f5f5f5, 24px 20px #0d0d0d,
+        /* corpo preto */
+        4px 24px #0d0d0d, 8px 24px #0d0d0d, 12px 24px #0d0d0d, 16px 24px #0d0d0d, 20px 24px #0d0d0d, 24px 24px #0d0d0d,
+        4px 28px #0d0d0d, 8px 28px #0d0d0d, 12px 28px #0d0d0d, 16px 28px #0d0d0d, 20px 28px #0d0d0d, 24px 28px #0d0d0d,
+        /* base */
+        8px 32px #0d0d0d, 12px 32px #0d0d0d, 16px 32px #0d0d0d, 20px 32px #0d0d0d,
+        /* pés laranja */
+        8px 36px #ff9500, 20px 36px #ff9500;
     }
 
     #penguin.running .sprite {
@@ -243,7 +218,7 @@
       50%      { transform: translateY(-4px); }
     }
 
-    /* Peixe */
+    /* ========== PEIXE ========== */
     .fish {
       position: absolute;
       width: 4px;
@@ -262,7 +237,7 @@
         8px 8px #ffffff;
     }
 
-    /* Orca */
+    /* ========== ORCA MELHORADA ========== */
     .orca {
       position: absolute;
       bottom: 100px;
@@ -274,17 +249,25 @@
       width: 4px;
       height: 4px;
       background: transparent;
+      /* Orca bem mais definida */
       box-shadow:
-        24px 0 #0a0a0a, 28px 0 #0a0a0a,
-        20px 4px #0a0a0a, 24px 4px #0a0a0a, 28px 4px #0a0a0a, 32px 4px #0a0a0a,
-        4px 8px #0a0a0a, 8px 8px #0a0a0a, 12px 8px #0a0a0a, 16px 8px #0a0a0a, 20px 8px #0a0a0a, 24px 8px #0a0a0a, 28px 8px #0a0a0a, 32px 8px #0a0a0a, 36px 8px #0a0a0a, 40px 8px #0a0a0a,
-        0px 12px #0a0a0a, 4px 12px #0a0a0a, 8px 12px #f0f0f0, 12px 12px #f0f0f0, 16px 12px #0a0a0a, 20px 12px #0a0a0a, 24px 12px #0a0a0a, 28px 12px #0a0a0a, 32px 12px #0a0a0a, 36px 12px #0a0a0a, 40px 12px #0a0a0a, 44px 12px #0a0a0a,
-        0px 16px #0a0a0a, 4px 16px #0a0a0a, 8px 16px #f0f0f0, 12px 16px #f0f0f0, 16px 16px #0a0a0a, 20px 16px #0a0a0a, 24px 16px #0a0a0a, 28px 16px #0a0a0a, 32px 16px #0a0a0a, 36px 16px #0a0a0a, 40px 16px #0a0a0a,
-        4px 20px #0a0a0a, 8px 20px #0a0a0a, 12px 20px #0a0a0a, 16px 20px #0a0a0a, 20px 20px #0a0a0a, 24px 20px #0a0a0a, 28px 20px #0a0a0a, 32px 20px #0a0a0a, 36px 20px #0a0a0a,
-        40px 12px #0a0a0a, 44px 8px #0a0a0a, 44px 16px #0a0a0a, 48px 12px #0a0a0a;
+        /* nadadeira dorsal */
+        28px 0 #0a0a0a, 32px 0 #0a0a0a,
+        24px 4px #0a0a0a, 28px 4px #0a0a0a, 32px 4px #0a0a0a, 36px 4px #0a0a0a,
+        /* corpo superior */
+        8px 8px #0a0a0a, 12px 8px #0a0a0a, 16px 8px #0a0a0a, 20px 8px #0a0a0a, 24px 8px #0a0a0a, 28px 8px #0a0a0a, 32px 8px #0a0a0a, 36px 8px #0a0a0a, 40px 8px #0a0a0a, 44px 8px #0a0a0a,
+        /* linha com mancha branca */
+        4px 12px #0a0a0a, 8px 12px #0a0a0a, 12px 12px #f0f0f0, 16px 12px #f0f0f0, 20px 12px #0a0a0a, 24px 12px #0a0a0a, 28px 12px #0a0a0a, 32px 12px #0a0a0a, 36px 12px #0a0a0a, 40px 12px #0a0a0a, 44px 12px #0a0a0a, 48px 12px #0a0a0a,
+        0px 16px #0a0a0a, 4px 16px #0a0a0a, 8px 16px #0a0a0a, 12px 16px #f0f0f0, 16px 16px #f0f0f0, 20px 16px #0a0a0a, 24px 16px #0a0a0a, 28px 16px #0a0a0a, 32px 16px #0a0a0a, 36px 16px #0a0a0a, 40px 16px #0a0a0a, 44px 16px #0a0a0a, 48px 16px #0a0a0a,
+        /* corpo inferior */
+        4px 20px #0a0a0a, 8px 20px #0a0a0a, 12px 20px #0a0a0a, 16px 20px #0a0a0a, 20px 20px #0a0a0a, 24px 20px #0a0a0a, 28px 20px #0a0a0a, 32px 20px #0a0a0a, 36px 20px #0a0a0a, 40px 20px #0a0a0a, 44px 20px #0a0a0a,
+        8px 24px #0a0a0a, 12px 24px #0a0a0a, 16px 24px #0a0a0a, 20px 24px #0a0a0a, 24px 24px #0a0a0a, 28px 24px #0a0a0a, 32px 24px #0a0a0a, 36px 24px #0a0a0a, 40px 24px #0a0a0a,
+        /* cauda */
+        48px 12px #0a0a0a, 52px 8px #0a0a0a, 52px 16px #0a0a0a, 56px 12px #0a0a0a,
+        48px 20px #0a0a0a, 52px 24px #0a0a0a;
     }
 
-    /* Gelo (obstáculo) */
+    /* Gelo */
     .ice {
       position: absolute;
       bottom: 100px;
@@ -318,11 +301,9 @@
       100% { transform: translateY(-32px) scale(1.2); opacity: 0; }
     }
 
-    /* Telas de mensagem */
     #message {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       background: rgba(0,0,0,0.92);
       padding: 28px 26px;
@@ -352,7 +333,6 @@
       border: 3px solid #fff;
       cursor: pointer;
       box-shadow: 4px 4px 0 #000;
-      transition: 0.1s;
     }
     #start-btn:hover {
       background: linear-gradient(#4ab0ff, #2a9fff);
@@ -420,7 +400,6 @@
 
     hiscoreEl.textContent = 'REC ' + highScore;
 
-    // Neve
     for (let i = 0; i < 35; i++) {
       const s = document.createElement('div');
       s.className = 'snow';
@@ -447,10 +426,8 @@
 
     function updatePenguin() {
       penguinX += runSpeed * difficulty;
-
       if (keys['ArrowLeft'] || keys['a']) penguinX -= 3.8;
       if (keys['ArrowRight'] || keys['d']) penguinX += 2.5;
-
       if (penguinX < 50) penguinX = 50;
       if (penguinX > 360) penguinX = 360;
 
@@ -508,9 +485,7 @@
         const px = penguinX;
         const py = 608 - 100 - 36 + penguinY;
 
-        if (parseFloat(fish.style.left) < px + 42 &&
-            parseFloat(fish.style.left) + 28 > px &&
-            y < py + 36 && y + 20 > py) {
+        if (parseFloat(fish.style.left) < px + 42 && parseFloat(fish.style.left) + 28 > px && y < py + 36 && y + 20 > py) {
           score += 10;
           scoreEl.textContent = 'PONTOS ' + score;
           showPopup(px + 10, py - 12, '+10');
@@ -539,10 +514,10 @@
         x -= spd;
         orca.style.left = snap(x) + 'px';
 
-        if (!invincible && x < penguinX + 50 && x + 54 > penguinX && penguinY > -26) {
+        if (!invincible && x < penguinX + 52 && x + 58 > penguinX && penguinY > -26) {
           hit();
         }
-        if (x < -80) { orca.remove(); return; }
+        if (x < -90) { orca.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
