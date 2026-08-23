@@ -96,6 +96,24 @@
       z-index: 12;
       transform-origin: center bottom;
     }
+    /* Escudo visual */
+    #penguin.shielded::after {
+      content: '';
+      position: absolute;
+      left: -10px;
+      top: -6px;
+      width: 62px;
+      height: 74px;
+      border-radius: 50%;
+      border: 3px solid rgba(80, 220, 255, 0.85);
+      box-shadow: 0 0 12px rgba(80, 220, 255, 0.7), inset 0 0 10px rgba(80, 220, 255, 0.25);
+      animation: shieldPulse 0.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shieldPulse {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.06); }
+    }
     #penguin .body {
       position: absolute;
       bottom: 8px;
@@ -247,6 +265,16 @@
       top: 1px;
       left: 1px;
     }
+    /* Peixe Dourado */
+    .fish.gold .body {
+      background: #e8b020;
+    }
+    .fish.gold .tail {
+      border-left-color: #c09018;
+    }
+    .fish.gold {
+      filter: drop-shadow(0 0 6px rgba(255, 200, 50, 0.7));
+    }
     .orca {
       position: absolute;
       bottom: 98px;
@@ -320,6 +348,29 @@
       box-shadow: 0 4px 0 #0a1520, 0 6px 10px rgba(0,0,0,0.4);
       z-index: 7;
     }
+    /* Escudo item */
+    .shield-item {
+      position: absolute;
+      bottom: 108px;
+      width: 28px;
+      height: 28px;
+      z-index: 8;
+    }
+    .shield-item .core {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: radial-gradient(circle, #a0f0ff 20%, #2090c0 80%);
+      border-radius: 50%;
+      left: 5px;
+      top: 5px;
+      box-shadow: 0 0 10px rgba(80, 220, 255, 0.9);
+      animation: shieldItemPulse 1s ease-in-out infinite;
+    }
+    @keyframes shieldItemPulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
     .popup {
       position: absolute;
       font-size: 16px;
@@ -329,6 +380,14 @@
       pointer-events: none;
       text-shadow: 0 2px 4px rgba(0,0,0,0.7);
       animation: popup 0.6s forwards;
+    }
+    .popup.gold {
+      color: #ffd040;
+      font-size: 18px;
+    }
+    .popup.shield {
+      color: #60e0ff;
+      font-size: 17px;
     }
     @keyframes popup {
       0% { transform: translateY(0); opacity: 1; }
@@ -420,10 +479,9 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Visual sério<br>
-        Física de corrida e pulo<br>
-        Plataformas em alturas diferentes<br>
-        10 Níveis
+        Plataformas altas<br>
+        Peixe Dourado (+50)<br>
+        Escudo (invencível)
       </p>
       <button id="start-btn">Iniciar</button>
     </div>
@@ -451,6 +509,21 @@
         gain.gain.setValueAtTime(0.07, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
         osc.start(now); osc.stop(now + 0.1);
+      } else if (type === 'gold') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1100, now + 0.12);
+        gain.gain.setValueAtTime(0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.start(now); osc.stop(now + 0.18);
+      } else if (type === 'shield') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.setValueAtTime(600, now + 0.08);
+        osc.frequency.setValueAtTime(800, now + 0.16);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now); osc.stop(now + 0.3);
       } else if (type === 'hit') {
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(120, now);
@@ -498,6 +571,8 @@
    
     let gameRunning = false;
     let invincible = false;
+    let shieldActive = false;
+    let shieldTimeout = null;
     let onGround = true;
     const AUTO_FORCE = 0.28;
     const ACCEL = 0.55;
@@ -512,7 +587,7 @@
     const GRAVITY_UP = 0.55;
     const GRAVITY_DOWN = 1.15;
     const MAX_FALL = 18;
-    let fishTimer, orcaTimer, platformTimer;
+    let fishTimer, orcaTimer, platformTimer, shieldTimer;
     let animId;
     let distance = 0;
     let nextLevelScore = 420;
@@ -565,6 +640,16 @@
       return false;
     }
 
+    function activateShield() {
+      shieldActive = true;
+      penguin.classList.add('shielded');
+      if (shieldTimeout) clearTimeout(shieldTimeout);
+      shieldTimeout = setTimeout(() => {
+        shieldActive = false;
+        penguin.classList.remove('shielded');
+      }, 6000);
+    }
+
     function updatePenguin() {
       velocityX += AUTO_FORCE;
       if (keys['ArrowLeft'] || keys['a']) velocityX -= ACCEL;
@@ -600,7 +685,7 @@
       if (velocityY > MAX_FALL) velocityY = MAX_FALL;
       penguinY += velocityY;
 
-      // ===== COLISÃO COM O CHÃO =====
+      // Colisão com o chão
       let landed = false;
       if (penguinY >= 0) {
         penguinY = 0;
@@ -615,7 +700,7 @@
         onGround = false;
       }
 
-      // ===== COLISÃO COM PLATAFORMAS (ALTURAS DIFERENTES) =====
+      // Colisão com plataformas
       if (!landed) {
         document.querySelectorAll('.platform').forEach(plat => {
           const platX = parseFloat(plat.style.left) || 0;
@@ -627,14 +712,10 @@
           const pRight = penguinX + 42;
           const pBottom = 100 - penguinY;
 
-          // Sobreposição horizontal
           if (pRight > platX + 4 && pLeft < platX + platW - 4) {
-            // Está caindo em cima da plataforma
             if (velocityY >= 0 &&
                 pBottom <= platTop + 6 &&
                 pBottom >= platTop - 28) {
-              
-              // Encaixa o pinguim em cima da plataforma
               penguinY = 100 - platTop;
               velocityY = 0;
               onGround = true;
@@ -651,7 +732,7 @@
       const tilt = Math.max(-6, Math.min(6, velocityX * 1.1));
       penguin.style.transform = `rotate(${tilt}deg)`;
 
-      if (invincible) {
+      if (invincible && !shieldActive) {
         penguin.style.opacity = (Math.floor(Date.now() / 90) % 2) ? '0.3' : '1';
       } else {
         penguin.style.opacity = '1';
@@ -665,9 +746,9 @@
       setTimeout(() => levelUpEl.style.display = 'none', 1400);
     }
 
-    function showPopup(x, y, txt) {
+    function showPopup(x, y, txt, extraClass = '') {
       const p = document.createElement('div');
-      p.className = 'popup';
+      p.className = 'popup' + (extraClass ? ' ' + extraClass : '');
       p.textContent = txt;
       p.style.left = x + 'px';
       p.style.top = y + 'px';
@@ -677,8 +758,9 @@
 
     function createFish() {
       if (!gameRunning) return;
+      const isGold = Math.random() < 0.12;
       const fish = document.createElement('div');
-      fish.className = 'fish';
+      fish.className = 'fish' + (isGold ? ' gold' : '');
       fish.innerHTML = `<div class="body"></div><div class="tail"></div><div class="eye"></div>`;
       fish.style.left = '510px';
       game.appendChild(fish);
@@ -689,9 +771,15 @@
         x -= spd;
         fish.style.left = x + 'px';
         if (penguinY < 16 && x < penguinX + 44 && x + 36 > penguinX) {
-          score += 20;
-          playSound('collect');
-          showPopup(penguinX + 8, 470, '+20');
+          if (isGold) {
+            score += 50;
+            playSound('gold');
+            showPopup(penguinX + 8, 470, '+50', 'gold');
+          } else {
+            score += 20;
+            playSound('collect');
+            showPopup(penguinX + 8, 470, '+20');
+          }
           fish.remove();
           return;
         }
@@ -720,7 +808,7 @@
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = x + 'px';
-        if (!invincible && x < penguinX + 58 && x + 65 > penguinX && penguinY > -22) {
+        if (!invincible && !shieldActive && x < penguinX + 58 && x + 65 > penguinX && penguinY > -22) {
           hit();
         }
         if (x < -90) { orca.remove(); return; }
@@ -733,18 +821,13 @@
       if (!gameRunning) return;
       const plat = document.createElement('div');
       plat.className = 'platform';
-      
       const width = 70 + Math.random() * 110;
-      
-      // Altura variada: de 50px até 220px acima do chão
       const heightAboveGround = 50 + Math.random() * 170;
       const bottom = 100 + heightAboveGround;
-      
       plat.style.width = width + 'px';
       plat.style.left = '510px';
       plat.style.bottom = bottom + 'px';
       game.appendChild(plat);
-      
       let x = 510;
       const spd = (3.7 + Math.random() * 1.3) * (1 + level * 0.09);
       function move() {
@@ -752,6 +835,32 @@
         x -= spd;
         plat.style.left = x + 'px';
         if (x < -160) { plat.remove(); return; }
+        requestAnimationFrame(move);
+      }
+      requestAnimationFrame(move);
+    }
+
+    function createShield() {
+      if (!gameRunning) return;
+      const item = document.createElement('div');
+      item.className = 'shield-item';
+      item.innerHTML = `<div class="core"></div>`;
+      item.style.left = '510px';
+      game.appendChild(item);
+      let x = 510;
+      const spd = (3.4 + Math.random() * 1.2) * (1 + level * 0.08);
+      function move() {
+        if (!gameRunning) { item.remove(); return; }
+        x -= spd;
+        item.style.left = x + 'px';
+        if (penguinY < 20 && x < penguinX + 44 && x + 28 > penguinX) {
+          activateShield();
+          playSound('shield');
+          showPopup(penguinX + 4, 460, 'ESCUDO!', 'shield');
+          item.remove();
+          return;
+        }
+        if (x < -40) { item.remove(); return; }
         requestAnimationFrame(move);
       }
       requestAnimationFrame(move);
@@ -775,8 +884,11 @@
       clearInterval(fishTimer);
       clearInterval(orcaTimer);
       clearInterval(platformTimer);
+      clearInterval(shieldTimer);
       cancelAnimationFrame(animId);
-      penguin.classList.remove('running');
+      if (shieldTimeout) clearTimeout(shieldTimeout);
+      shieldActive = false;
+      penguin.classList.remove('shielded', 'running');
       playSound('gameover');
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
@@ -803,13 +915,16 @@
     }
 
     function startGame() {
-      document.querySelectorAll('.fish, .orca, .platform, .popup').forEach(el => el.remove());
+      document.querySelectorAll('.fish, .orca, .platform, .popup, .shield-item').forEach(el => el.remove());
       score = 0;
       distance = 0;
       lives = 3;
       level = 1;
       nextLevelScore = 420;
       invincible = false;
+      shieldActive = false;
+      if (shieldTimeout) clearTimeout(shieldTimeout);
+      penguin.classList.remove('shielded');
       onGround = true;
       velocityX = 0;
       velocityY = 0;
@@ -828,6 +943,7 @@
       fishTimer = setInterval(createFish, 1150);
       orcaTimer = setInterval(createOrca, 2050);
       platformTimer = setInterval(createPlatform, 1450);
+      shieldTimer = setInterval(createShield, 9000);
       loop();
     }
 
