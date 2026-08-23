@@ -33,7 +33,6 @@
       touch-action: none;
     }
 
-    /* Aurora mais fria e séria */
     .aurora {
       position: absolute;
       top: 0; left: 0;
@@ -64,7 +63,6 @@
       100% { transform: translateX(35%); }
     }
 
-    /* Estrelas */
     .star {
       position: absolute;
       background: #d0e4f8;
@@ -118,7 +116,7 @@
     #lives { color: #d06060; }
     #level { color: #5a9ab8; }
 
-    /* ========== PINGUIM SÉRIO ========== */
+    /* ========== PINGUIM COM SOMBRAS DRAMÁTICAS ========== */
     #penguin {
       position: absolute;
       bottom: 110px;
@@ -127,9 +125,10 @@
       height: 72px;
       z-index: 12;
       transform-origin: center bottom;
+      /* Sombra projetada principal */
+      filter: drop-shadow(4px 8px 6px rgba(0, 0, 0, 0.65));
     }
 
-    /* Corpo principal mais alongado e sério */
     #penguin .body {
       position: absolute;
       bottom: 10px;
@@ -138,9 +137,13 @@
       height: 42px;
       background: #0a0a0a;
       border-radius: 45% 45% 38% 38%;
+      /* Sombra de volume */
+      box-shadow: 
+        3px 4px 0 rgba(0,0,0,0.45),
+        inset -4px -5px 8px rgba(0,0,0,0.35),
+        inset 2px 2px 4px rgba(40,40,40,0.15);
     }
 
-    /* Barriga */
     #penguin .belly {
       position: absolute;
       bottom: 16px;
@@ -149,9 +152,11 @@
       height: 28px;
       background: #d4d4d4;
       border-radius: 42%;
+      box-shadow: 
+        inset -3px -3px 6px rgba(0,0,0,0.18),
+        inset 1px 1px 3px rgba(255,255,255,0.25);
     }
 
-    /* Cabeça */
     #penguin .head {
       position: absolute;
       bottom: 46px;
@@ -160,9 +165,12 @@
       height: 26px;
       background: #0a0a0a;
       border-radius: 50%;
+      box-shadow: 
+        2px 3px 0 rgba(0,0,0,0.4),
+        inset -3px -4px 7px rgba(0,0,0,0.4),
+        inset 2px 2px 3px rgba(50,50,50,0.12);
     }
 
-    /* Olhos sérios */
     #penguin .eye {
       position: absolute;
       width: 7px;
@@ -170,6 +178,7 @@
       background: #f0f0f0;
       border-radius: 50%;
       top: 8px;
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     #penguin .eye::after {
       content: '';
@@ -184,7 +193,6 @@
     #penguin .eye.left { left: 4px; }
     #penguin .eye.right { right: 4px; }
 
-    /* Sobrancelha sutil para dar seriedade */
     #penguin .brow {
       position: absolute;
       width: 8px;
@@ -202,7 +210,6 @@
       transform: rotate(8deg);
     }
 
-    /* Bico mais definido */
     #penguin .beak {
       position: absolute;
       bottom: 5px;
@@ -212,9 +219,9 @@
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-top: 7px solid #c07820;
+      filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.4));
     }
 
-    /* Nadadeiras */
     #penguin .flipper {
       position: absolute;
       width: 12px;
@@ -222,6 +229,9 @@
       background: #0a0a0a;
       border-radius: 40% 40% 35% 35%;
       bottom: 22px;
+      box-shadow: 
+        2px 3px 0 rgba(0,0,0,0.4),
+        inset -2px -3px 5px rgba(0,0,0,0.3);
     }
     #penguin .flipper.left {
       left: -4px;
@@ -248,7 +258,6 @@
       50% { transform: rotate(36deg); }
     }
 
-    /* Pés */
     #penguin .foot {
       position: absolute;
       bottom: 0;
@@ -256,6 +265,7 @@
       height: 8px;
       background: #c07820;
       border-radius: 4px 4px 2px 2px;
+      box-shadow: 1px 2px 2px rgba(0,0,0,0.45);
     }
     #penguin .foot.left { left: 9px; }
     #penguin .foot.right { right: 9px; }
@@ -287,7 +297,6 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Peixe */
     .fish {
       position: absolute;
       bottom: 112px;
@@ -337,7 +346,6 @@
     .fish.gold .tail { border-left-color: #c09018; }
     .fish.gold { filter: drop-shadow(0 0 7px rgba(255, 200, 50, 0.75)); }
 
-    /* Orca */
     .orca {
       position: absolute;
       bottom: 108px;
@@ -610,8 +618,8 @@
       <div class="subtitle">Pinguim Runner</div>
       <div class="info">
         Visual frio e sério<br>
-        Plataformas • Peixe Dourado<br>
-        Escudo • Música de Corrida
+        Sombras dramáticas<br>
+        Plataformas • Peixe Dourado • Escudo
       </div>
       <button id="start-btn">JOGAR</button>
     </div>
@@ -620,7 +628,6 @@
   <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // Música de corrida
     let musicNodes = [];
     let musicGain = null;
     let musicPlaying = false;
@@ -827,7 +834,6 @@
     let nextLevelScore = 420;
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
-    // Estrelas
     for (let i = 0; i < 45; i++) {
       const star = document.createElement('div');
       star.className = 'star';
@@ -840,7 +846,6 @@
       game.appendChild(star);
     }
 
-    // Neve
     for (let i = 0; i < 50; i++) {
       const flake = document.createElement('div');
       flake.className = 'snow';
