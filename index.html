@@ -230,6 +230,14 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
+    /* Partículas */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 16;
+    }
+
     .fish {
       position: absolute;
       bottom: 112px;
@@ -419,7 +427,6 @@
       border: 1px solid #2a4a5a;
     }
 
-    /* Telas */
     #message, #ranking-screen, #name-screen {
       position: absolute;
       top: 0; left: 0;
@@ -457,7 +464,6 @@
       margin-bottom: 28px;
       max-width: 300px;
     }
-
     .btn {
       background: linear-gradient(to bottom, #163a52, #0e2a3c);
       color: #c8dcec;
@@ -481,7 +487,6 @@
       color: #8ab0c8;
     }
 
-    /* Ranking */
     .ranking-list {
       width: 100%;
       max-width: 340px;
@@ -502,11 +507,7 @@
     .rank-row.top1 { border-color: #c9a227; background: rgba(80,60,10,0.3); }
     .rank-row.top2 { border-color: #8a9aaa; }
     .rank-row.top3 { border-color: #8a5a30; }
-    .rank-pos {
-      width: 28px;
-      font-weight: 800;
-      color: #70b0d0;
-    }
+    .rank-pos { width: 28px; font-weight: 800; color: #70b0d0; }
     .rank-name {
       flex: 1;
       color: #c8d8e8;
@@ -516,10 +517,7 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-    .rank-score {
-      color: #80d0a0;
-      font-weight: 700;
-    }
+    .rank-score { color: #80d0a0; font-weight: 700; }
 
     #name-input {
       background: rgba(0,0,0,0.5);
@@ -533,9 +531,7 @@
       margin-bottom: 18px;
       outline: none;
     }
-    #name-input:focus {
-      border-color: #4a8ab0;
-    }
+    #name-input:focus { border-color: #4a8ab0; }
 
     #controls {
       position: absolute;
@@ -608,19 +604,17 @@
       <button id="btn-right">▶</button>
     </div>
 
-    <!-- Tela Inicial -->
     <div id="message">
       <div class="logo">ICE RACE</div>
       <div class="subtitle">Pinguim Runner</div>
       <div class="info">
-        Combo • Cristal • Estalactites<br>
-        Slide • Escudo • Ranking
+        Partículas + Screen Shake<br>
+        Combo • Cristal • Slide • Escudo
       </div>
       <button class="btn" id="start-btn">JOGAR</button>
       <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
     </div>
 
-    <!-- Tela de Ranking -->
     <div id="ranking-screen">
       <div class="logo" style="font-size:32px;">RANKING</div>
       <div class="subtitle">Top 10</div>
@@ -628,7 +622,6 @@
       <button class="btn" id="back-btn">VOLTAR</button>
     </div>
 
-    <!-- Tela de Nome (novo recorde) -->
     <div id="name-screen">
       <div class="logo" style="font-size:28px;">NOVO RECORDE!</div>
       <div class="info" id="new-score-text">Pontos: 0</div>
@@ -757,25 +750,86 @@
       }
     }
 
-    // ===== RANKING SYSTEM =====
-    let ranking = JSON.parse(localStorage.getItem('iceRaceRanking') || '[]');
+    // ===== PARTÍCULAS + SCREEN SHAKE =====
+    let particles = [];
 
+    function spawnParticles(x, y, color, count = 10) {
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = 3 + Math.random() * 5;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.background = color;
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.opacity = '1';
+        game.appendChild(p);
+
+        particles.push({
+          el: p,
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 8,
+          vy: (Math.random() - 0.8) * 9,
+          life: 1,
+          decay: 0.025 + Math.random() * 0.02
+        });
+      }
+    }
+
+    function updateParticles() {
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.25; // gravidade leve
+        p.life -= p.decay;
+
+        p.el.style.left = p.x + 'px';
+        p.el.style.top = p.y + 'px';
+        p.el.style.opacity = Math.max(0, p.life);
+
+        if (p.life <= 0) {
+          p.el.remove();
+          particles.splice(i, 1);
+        }
+      }
+    }
+
+    function shakeScreen(intensity = 7, duration = 280) {
+      const start = performance.now();
+      function animate(now) {
+        const elapsed = now - start;
+        if (elapsed > duration) {
+          game.style.transform = '';
+          return;
+        }
+        const progress = elapsed / duration;
+        const currentIntensity = intensity * (1 - progress);
+        const x = (Math.random() - 0.5) * currentIntensity * 2;
+        const y = (Math.random() - 0.5) * currentIntensity * 2;
+        game.style.transform = `translate(${x}px, ${y}px)`;
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    // ===== RANKING =====
+    let ranking = JSON.parse(localStorage.getItem('iceRaceRanking') || '[]');
     function saveRanking() {
       localStorage.setItem('iceRaceRanking', JSON.stringify(ranking));
     }
-
     function addToRanking(name, score) {
       ranking.push({ name: name || 'Jogador', score: Math.floor(score), date: Date.now() });
       ranking.sort((a, b) => b.score - a.score);
       ranking = ranking.slice(0, 10);
       saveRanking();
     }
-
     function isHighScore(score) {
       if (ranking.length < 10) return true;
       return score > ranking[ranking.length - 1].score;
     }
-
     function renderRanking() {
       const list = document.getElementById('ranking-list');
       if (ranking.length === 0) {
@@ -783,21 +837,19 @@
         return;
       }
       list.innerHTML = ranking.map((r, i) => `
-        <div class="rank-row ${i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : ''}">
-          <span class="rank-pos">${i + 1}º</span>
+        <div class="rank-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
+          <span class="rank-pos">${i+1}º</span>
           <span class="rank-name">${r.name}</span>
           <span class="rank-score">${r.score}</span>
         </div>
       `).join('');
     }
-
     function showRanking() {
       document.getElementById('message').style.display = 'none';
       document.getElementById('name-screen').style.display = 'none';
       renderRanking();
       document.getElementById('ranking-screen').style.display = 'flex';
     }
-
     function hideRanking() {
       document.getElementById('ranking-screen').style.display = 'none';
       document.getElementById('message').style.display = 'flex';
@@ -1061,6 +1113,11 @@
           addCombo();
           playSound(isGold ? 'gold' : 'collect');
           showPopup(penguinX + 8, 520, '+' + pts + (mult > 1 ? ' x' + mult : ''), isGold ? 'gold' : (mult > 1 ? 'combo' : ''));
+
+          // Partículas
+          const py = 840 - (110 - penguinY) - 40;
+          spawnParticles(penguinX + 20, py, isGold ? '#ffd040' : '#4a9ad4', isGold ? 14 : 9);
+
           fish.remove();
           return;
         }
@@ -1094,6 +1151,10 @@
           addCombo();
           playSound('crystal');
           showPopup(penguinX + 4, 510, '+' + pts, 'crystal');
+
+          const py = 840 - (110 - penguinY) - 50;
+          spawnParticles(penguinX + 20, py, '#70e0ff', 12);
+
           crystal.remove();
           return;
         }
@@ -1196,6 +1257,10 @@
           activateShield();
           playSound('shield');
           showPopup(penguinX + 4, 510, 'ESCUDO!', 'shield');
+
+          const py = 840 - (110 - penguinY) - 40;
+          spawnParticles(penguinX + 20, py, '#60e0ff', 14);
+
           item.remove();
           return;
         }
@@ -1212,6 +1277,7 @@
       combo = 0; comboTimer = 0;
       comboEl.style.display = 'none';
       playSound('hit');
+      shakeScreen(8, 320); // Screen shake
       setTimeout(() => invincible = false, 1500);
       if (lives <= 0) gameOver();
     }
@@ -1237,6 +1303,10 @@
       stopRaceMusic();
       playSound('gameover');
 
+      // limpa partículas
+      particles.forEach(p => p.el.remove());
+      particles = [];
+
       const finalScore = Math.floor(score);
       if (finalScore > highScore) {
         highScore = finalScore;
@@ -1244,7 +1314,6 @@
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
-      // Verifica se entrou no ranking
       if (isHighScore(finalScore)) {
         pendingScore = finalScore;
         document.getElementById('new-score-text').textContent = 'Pontos: ' + finalScore;
@@ -1274,11 +1343,13 @@
     function loop() {
       if (!gameRunning) return;
       updatePenguin();
+      updateParticles();
       animId = requestAnimationFrame(loop);
     }
 
     function startGame() {
-      document.querySelectorAll('.fish, .orca, .platform, .popup, .shield-item, .crystal, .icicle').forEach(el => el.remove());
+      document.querySelectorAll('.fish, .orca, .platform, .popup, .shield-item, .crystal, .icicle, .particle').forEach(el => el.remove());
+      particles = [];
       score = 0; distance = 0; lives = 3; level = 1;
       nextLevelScore = 420; invincible = false; shieldActive = false;
       isSliding = false; combo = 0; comboTimer = 0;
@@ -1309,23 +1380,17 @@
       loop();
     }
 
-    // Eventos das telas
     document.getElementById('start-btn').addEventListener('click', startGame);
     document.getElementById('ranking-btn').addEventListener('click', showRanking);
     document.getElementById('back-btn').addEventListener('click', hideRanking);
-
     document.getElementById('save-name-btn').addEventListener('click', () => {
       const name = document.getElementById('name-input').value.trim() || 'Jogador';
       addToRanking(name, pendingScore);
       document.getElementById('name-screen').style.display = 'none';
       showGameOverScreen(pendingScore);
     });
-
-    // Enter no input de nome
     document.getElementById('name-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        document.getElementById('save-name-btn').click();
-      }
+      if (e.key === 'Enter') document.getElementById('save-name-btn').click();
     });
   </script>
 </body>
