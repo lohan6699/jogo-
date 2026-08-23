@@ -98,12 +98,8 @@
     }
     #lives { color: #d06060; }
     #level { color: #5a9ab8; }
-    #combo {
-      color: #70e0a0;
-      display: none;
-    }
+    #combo { color: #70e0a0; display: none; }
 
-    /* PINGUIM */
     #penguin {
       position: absolute;
       bottom: 110px;
@@ -113,60 +109,39 @@
       z-index: 12;
       transform-origin: center bottom;
       filter: drop-shadow(4px 8px 6px rgba(0,0,0,0.65));
-      transition: height 0.12s, width 0.12s;
+      transition: height 0.12s;
     }
-    #penguin.sliding {
-      height: 38px;
-    }
-    #penguin.sliding .head {
-      bottom: 18px;
-    }
-    #penguin.sliding .body {
-      height: 22px;
-      bottom: 6px;
-    }
-    #penguin.sliding .belly {
-      height: 14px;
-      bottom: 10px;
-    }
-    #penguin.sliding .flipper {
-      bottom: 8px;
-      height: 14px;
-    }
+    #penguin.sliding { height: 38px; }
+    #penguin.sliding .head { bottom: 18px; }
+    #penguin.sliding .body { height: 22px; bottom: 6px; }
+    #penguin.sliding .belly { height: 14px; bottom: 10px; }
+    #penguin.sliding .flipper { bottom: 8px; height: 14px; }
     #penguin .body {
       position: absolute;
-      bottom: 10px;
-      left: 9px;
-      width: 30px;
-      height: 42px;
+      bottom: 10px; left: 9px;
+      width: 30px; height: 42px;
       background: #0a0a0a;
       border-radius: 45% 45% 38% 38%;
       box-shadow: 3px 4px 0 rgba(0,0,0,0.45), inset -4px -5px 8px rgba(0,0,0,0.35);
     }
     #penguin .belly {
       position: absolute;
-      bottom: 16px;
-      left: 13px;
-      width: 22px;
-      height: 28px;
+      bottom: 16px; left: 13px;
+      width: 22px; height: 28px;
       background: #d4d4d4;
       border-radius: 42%;
-      box-shadow: inset -3px -3px 6px rgba(0,0,0,0.18);
     }
     #penguin .head {
       position: absolute;
-      bottom: 46px;
-      left: 10px;
-      width: 28px;
-      height: 26px;
+      bottom: 46px; left: 10px;
+      width: 28px; height: 26px;
       background: #0a0a0a;
       border-radius: 50%;
       box-shadow: 2px 3px 0 rgba(0,0,0,0.4), inset -3px -4px 7px rgba(0,0,0,0.4);
     }
     #penguin .eye {
       position: absolute;
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       background: #f0f0f0;
       border-radius: 50%;
       top: 8px;
@@ -174,19 +149,16 @@
     #penguin .eye::after {
       content: '';
       position: absolute;
-      width: 3.5px;
-      height: 3.5px;
+      width: 3.5px; height: 3.5px;
       background: #111;
       border-radius: 50%;
-      top: 1.8px;
-      left: 2px;
+      top: 1.8px; left: 2px;
     }
     #penguin .eye.left { left: 4px; }
     #penguin .eye.right { right: 4px; }
     #penguin .brow {
       position: absolute;
-      width: 8px;
-      height: 2px;
+      width: 8px; height: 2px;
       background: #1a1a1a;
       border-radius: 2px;
       top: 5px;
@@ -195,23 +167,18 @@
     #penguin .brow.right { right: 3px; transform: rotate(8deg); }
     #penguin .beak {
       position: absolute;
-      bottom: 5px;
-      left: 9px;
-      width: 0;
-      height: 0;
+      bottom: 5px; left: 9px;
+      width: 0; height: 0;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-top: 7px solid #c07820;
-      filter: drop-shadow(1px 2px 1px rgba(0,0,0,0.4));
     }
     #penguin .flipper {
       position: absolute;
-      width: 12px;
-      height: 24px;
+      width: 12px; height: 24px;
       background: #0a0a0a;
       border-radius: 40% 40% 35% 35%;
       bottom: 22px;
-      box-shadow: 2px 3px 0 rgba(0,0,0,0.4);
     }
     #penguin .flipper.left {
       left: -4px;
@@ -236,11 +203,9 @@
     #penguin .foot {
       position: absolute;
       bottom: 0;
-      width: 13px;
-      height: 8px;
+      width: 13px; height: 8px;
       background: #c07820;
       border-radius: 4px 4px 2px 2px;
-      box-shadow: 1px 2px 2px rgba(0,0,0,0.45);
     }
     #penguin .foot.left { left: 9px; }
     #penguin .foot.right { right: 9px; }
@@ -252,10 +217,8 @@
     #penguin.shielded::after {
       content: '';
       position: absolute;
-      left: -12px;
-      top: -8px;
-      width: 72px;
-      height: 86px;
+      left: -12px; top: -8px;
+      width: 72px; height: 86px;
       border-radius: 50%;
       border: 3px solid rgba(70,200,240,0.8);
       box-shadow: 0 0 16px rgba(70,200,240,0.6);
@@ -267,18 +230,15 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Itens */
     .fish {
       position: absolute;
       bottom: 112px;
-      width: 40px;
-      height: 19px;
+      width: 40px; height: 19px;
       z-index: 8;
     }
     .fish .body {
       position: absolute;
-      width: 28px;
-      height: 15px;
+      width: 28px; height: 15px;
       background: #2a6a9a;
       border-radius: 50%;
       left: 0; top: 2px;
@@ -310,17 +270,14 @@
     .fish.gold .tail { border-left-color: #c09018; }
     .fish.gold { filter: drop-shadow(0 0 7px rgba(255,200,50,0.75)); }
 
-    /* Cristal de Gelo */
     .crystal {
       position: absolute;
       bottom: 115px;
-      width: 22px;
-      height: 28px;
+      width: 22px; height: 28px;
       z-index: 8;
     }
     .crystal .shape {
-      width: 0;
-      height: 0;
+      width: 0; height: 0;
       border-left: 11px solid transparent;
       border-right: 11px solid transparent;
       border-bottom: 28px solid #70e0ff;
@@ -335,22 +292,19 @@
     .orca {
       position: absolute;
       bottom: 108px;
-      width: 78px;
-      height: 34px;
+      width: 78px; height: 34px;
       z-index: 9;
     }
     .orca .body {
       position: absolute;
-      width: 58px;
-      height: 24px;
+      width: 58px; height: 24px;
       background: #0a0a0a;
       border-radius: 50% 35% 35% 50%;
       left: 0; top: 6px;
     }
     .orca .belly {
       position: absolute;
-      width: 28px;
-      height: 13px;
+      width: 28px; height: 13px;
       background: #d0d0d0;
       border-radius: 50%;
       left: 9px; top: 14px;
@@ -387,16 +341,13 @@
       top: 1px; left: 1px;
     }
 
-    /* Estalactite */
     .icicle {
       position: absolute;
-      width: 16px;
-      height: 36px;
+      width: 16px; height: 36px;
       z-index: 10;
     }
     .icicle .shape {
-      width: 0;
-      height: 0;
+      width: 0; height: 0;
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
       border-top: 36px solid #a8d4e8;
@@ -416,14 +367,12 @@
     .shield-item {
       position: absolute;
       bottom: 118px;
-      width: 30px;
-      height: 30px;
+      width: 30px; height: 30px;
       z-index: 8;
     }
     .shield-item .core {
       position: absolute;
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       background: radial-gradient(circle, #90e8ff 15%, #1a80a8 80%);
       border-radius: 50%;
       left: 5px; top: 5px;
@@ -456,8 +405,7 @@
 
     #level-up {
       position: absolute;
-      top: 42%;
-      left: 50%;
+      top: 42%; left: 50%;
       transform: translate(-50%, -50%);
       background: rgba(0,0,0,0.88);
       color: #70c0e0;
@@ -471,56 +419,122 @@
       border: 1px solid #2a4a5a;
     }
 
-    #message {
+    /* Telas */
+    #message, #ranking-screen, #name-screen {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
       background: linear-gradient(to bottom, rgba(1,4,12,0.94) 0%, rgba(4,14,24,0.96) 100%);
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 30;
       text-align: center;
-      padding: 40px 30px;
+      padding: 30px 24px;
     }
-    #message .logo {
-      font-size: 52px;
+    #message { display: flex; }
+
+    .logo {
+      font-size: 48px;
       font-weight: 800;
       color: #d8e8f4;
-      letter-spacing: 5px;
-      text-shadow: 0 0 24px rgba(80,160,220,0.35), 0 4px 0 #061018;
-      margin-bottom: 8px;
-    }
-    #message .subtitle {
-      font-size: 14px;
-      color: #5a8aa8;
       letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-bottom: 28px;
+      text-shadow: 0 0 24px rgba(80,160,220,0.35), 0 4px 0 #061018;
+      margin-bottom: 6px;
     }
-    #message .info {
+    .subtitle {
+      font-size: 13px;
+      color: #5a8aa8;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .info {
       font-size: 13px;
       color: #6a8fa8;
       line-height: 1.7;
-      margin-bottom: 36px;
+      margin-bottom: 28px;
       max-width: 300px;
     }
-    #start-btn {
+
+    .btn {
       background: linear-gradient(to bottom, #163a52, #0e2a3c);
       color: #c8dcec;
       border: 1px solid #2a5a78;
-      padding: 16px 48px;
+      padding: 14px 36px;
       border-radius: 6px;
-      font-size: 17px;
+      font-size: 15px;
       font-weight: 700;
       cursor: pointer;
       transition: 0.15s;
       letter-spacing: 1px;
+      margin: 6px;
     }
-    #start-btn:hover {
+    .btn:hover {
       background: linear-gradient(to bottom, #1e4a68, #163a52);
       transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #2a4a60;
+      color: #8ab0c8;
+    }
+
+    /* Ranking */
+    .ranking-list {
+      width: 100%;
+      max-width: 340px;
+      margin: 16px 0 24px;
+      text-align: left;
+    }
+    .rank-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 14px;
+      margin-bottom: 6px;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid #1a2c3a;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .rank-row.top1 { border-color: #c9a227; background: rgba(80,60,10,0.3); }
+    .rank-row.top2 { border-color: #8a9aaa; }
+    .rank-row.top3 { border-color: #8a5a30; }
+    .rank-pos {
+      width: 28px;
+      font-weight: 800;
+      color: #70b0d0;
+    }
+    .rank-name {
+      flex: 1;
+      color: #c8d8e8;
+      font-weight: 600;
+      padding: 0 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .rank-score {
+      color: #80d0a0;
+      font-weight: 700;
+    }
+
+    #name-input {
+      background: rgba(0,0,0,0.5);
+      border: 1px solid #2a4a60;
+      color: #d0e4f4;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 16px;
+      width: 220px;
+      text-align: center;
+      margin-bottom: 18px;
+      outline: none;
+    }
+    #name-input:focus {
+      border-color: #4a8ab0;
     }
 
     #controls {
@@ -535,8 +549,7 @@
     }
     #controls button {
       pointer-events: auto;
-      width: 64px;
-      height: 64px;
+      width: 64px; height: 64px;
       border-radius: 50%;
       background: rgba(10,22,34,0.85);
       border: 2px solid #2a4a60;
@@ -549,23 +562,13 @@
       cursor: pointer;
       user-select: none;
       touch-action: manipulation;
-      transition: 0.1s;
     }
     #controls button:active,
     #controls button.pressed {
       background: rgba(30,60,85,0.95);
       transform: scale(0.93);
     }
-    #btn-jump {
-      width: 72px;
-      height: 72px;
-      font-size: 26px;
-    }
-    #btn-slide {
-      width: 64px;
-      height: 64px;
-      font-size: 18px;
-    }
+    #btn-jump { width: 72px; height: 72px; font-size: 26px; }
   </style>
 </head>
 <body>
@@ -596,7 +599,6 @@
       <div class="foot left"></div>
       <div class="foot right"></div>
     </div>
-
     <div id="ground"></div>
 
     <div id="controls">
@@ -606,15 +608,32 @@
       <button id="btn-right">▶</button>
     </div>
 
+    <!-- Tela Inicial -->
     <div id="message">
       <div class="logo">ICE RACE</div>
-      <div class="subtitle">Mais Jogabilidade</div>
+      <div class="subtitle">Pinguim Runner</div>
       <div class="info">
-        Combo • Cristal de Gelo<br>
-        Estalactites • Slide (↓)<br>
-        Escudo • Peixe Dourado
+        Combo • Cristal • Estalactites<br>
+        Slide • Escudo • Ranking
       </div>
-      <button id="start-btn">JOGAR</button>
+      <button class="btn" id="start-btn">JOGAR</button>
+      <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
+    </div>
+
+    <!-- Tela de Ranking -->
+    <div id="ranking-screen">
+      <div class="logo" style="font-size:32px;">RANKING</div>
+      <div class="subtitle">Top 10</div>
+      <div class="ranking-list" id="ranking-list"></div>
+      <button class="btn" id="back-btn">VOLTAR</button>
+    </div>
+
+    <!-- Tela de Nome (novo recorde) -->
+    <div id="name-screen">
+      <div class="logo" style="font-size:28px;">NOVO RECORDE!</div>
+      <div class="info" id="new-score-text">Pontos: 0</div>
+      <input type="text" id="name-input" placeholder="Seu nome" maxlength="12" autocomplete="off">
+      <button class="btn" id="save-name-btn">SALVAR</button>
     </div>
   </div>
 
@@ -629,46 +648,26 @@
       musicGain.gain.value = 0;
       musicGain.connect(audioCtx.destination);
       musicGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.8);
-
       const bass = audioCtx.createOscillator();
-      bass.type = 'triangle';
-      bass.frequency.value = 55;
-      const bassGain = audioCtx.createGain();
-      bassGain.gain.value = 0.32;
-      bass.connect(bassGain);
-      bassGain.connect(musicGain);
-      bass.start();
-
+      bass.type = 'triangle'; bass.frequency.value = 55;
+      const bassGain = audioCtx.createGain(); bassGain.gain.value = 0.32;
+      bass.connect(bassGain); bassGain.connect(musicGain); bass.start();
       const pad = audioCtx.createOscillator();
-      pad.type = 'sine';
-      pad.frequency.value = 110;
-      const padGain = audioCtx.createGain();
-      padGain.gain.value = 0.11;
-      pad.connect(padGain);
-      padGain.connect(musicGain);
-      pad.start();
-
+      pad.type = 'sine'; pad.frequency.value = 110;
+      const padGain = audioCtx.createGain(); padGain.gain.value = 0.11;
+      pad.connect(padGain); padGain.connect(musicGain); pad.start();
       const bufferSize = 2 * audioCtx.sampleRate;
       const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = noiseBuffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
       const noise = audioCtx.createBufferSource();
-      noise.buffer = noiseBuffer;
-      noise.loop = true;
+      noise.buffer = noiseBuffer; noise.loop = true;
       const filter = audioCtx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 400;
-      filter.Q.value = 0.6;
-      const noiseGain = audioCtx.createGain();
-      noiseGain.gain.value = 0.04;
-      noise.connect(filter);
-      filter.connect(noiseGain);
-      noiseGain.connect(musicGain);
-      noise.start();
-
+      filter.type = 'bandpass'; filter.frequency.value = 400; filter.Q.value = 0.6;
+      const noiseGain = audioCtx.createGain(); noiseGain.gain.value = 0.04;
+      noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(musicGain); noise.start();
       musicNodes = [bass, pad, noise, musicGain];
       musicPlaying = true;
-
       const notes = [220, 247, 262, 294, 330, 294, 262, 247];
       let noteIndex = 0;
       musicInterval = setInterval(() => {
@@ -679,10 +678,8 @@
         osc.frequency.value = notes[noteIndex % notes.length];
         g.gain.setValueAtTime(0.06, audioCtx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-        osc.connect(g);
-        g.connect(musicGain);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.45);
+        osc.connect(g); g.connect(musicGain);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
         noteIndex++;
       }, 480);
     }
@@ -697,8 +694,7 @@
       }
       setTimeout(() => {
         musicNodes.forEach(n => { try { n.stop(); } catch(e){} });
-        musicNodes = [];
-        musicGain = null;
+        musicNodes = []; musicGain = null;
       }, 1500);
     }
 
@@ -706,8 +702,7 @@
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
+      osc.connect(gain); gain.connect(audioCtx.destination);
       const now = audioCtx.currentTime;
       if (type === 'jump') {
         osc.type = 'triangle';
@@ -762,6 +757,53 @@
       }
     }
 
+    // ===== RANKING SYSTEM =====
+    let ranking = JSON.parse(localStorage.getItem('iceRaceRanking') || '[]');
+
+    function saveRanking() {
+      localStorage.setItem('iceRaceRanking', JSON.stringify(ranking));
+    }
+
+    function addToRanking(name, score) {
+      ranking.push({ name: name || 'Jogador', score: Math.floor(score), date: Date.now() });
+      ranking.sort((a, b) => b.score - a.score);
+      ranking = ranking.slice(0, 10);
+      saveRanking();
+    }
+
+    function isHighScore(score) {
+      if (ranking.length < 10) return true;
+      return score > ranking[ranking.length - 1].score;
+    }
+
+    function renderRanking() {
+      const list = document.getElementById('ranking-list');
+      if (ranking.length === 0) {
+        list.innerHTML = '<div style="color:#6a8fa8;text-align:center;padding:20px;">Nenhum recorde ainda</div>';
+        return;
+      }
+      list.innerHTML = ranking.map((r, i) => `
+        <div class="rank-row ${i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : ''}">
+          <span class="rank-pos">${i + 1}º</span>
+          <span class="rank-name">${r.name}</span>
+          <span class="rank-score">${r.score}</span>
+        </div>
+      `).join('');
+    }
+
+    function showRanking() {
+      document.getElementById('message').style.display = 'none';
+      document.getElementById('name-screen').style.display = 'none';
+      renderRanking();
+      document.getElementById('ranking-screen').style.display = 'flex';
+    }
+
+    function hideRanking() {
+      document.getElementById('ranking-screen').style.display = 'none';
+      document.getElementById('message').style.display = 'flex';
+    }
+
+    // ===== GAME =====
     const game = document.getElementById('game');
     const penguin = document.getElementById('penguin');
     const scoreEl = document.getElementById('score');
@@ -771,7 +813,6 @@
     const comboEl = document.getElementById('combo');
     const message = document.getElementById('message');
     const levelUpEl = document.getElementById('level-up');
-    const startBtn = document.getElementById('start-btn');
     const controls = document.getElementById('controls');
 
     let score = 0, lives = 3, level = 1;
@@ -782,16 +823,14 @@
     let jumpHeld = false, coyoteTime = 0, jumpBuffer = 0;
     let combo = 0, comboTimer = 0;
     const COMBO_MAX_TIME = 90;
-
     const AUTO_FORCE = 0.28, ACCEL = 0.55, FRICTION = 0.88, MAX_SPEED_BASE = 4.8;
     const COYOTE_MAX = 8, BUFFER_MAX = 10, JUMP_FORCE = -15.5;
     const GRAVITY_UP = 0.55, GRAVITY_DOWN = 1.15, MAX_FALL = 18;
-
     let fishTimer, orcaTimer, platformTimer, shieldTimer, crystalTimer, icicleTimer;
     let animId, distance = 0, nextLevelScore = 420;
+    let pendingScore = 0;
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
-    // Estrelas e neve
     for (let i = 0; i < 45; i++) {
       const star = document.createElement('div');
       star.className = 'star';
@@ -820,8 +859,7 @@
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
       if ((e.key === 'ArrowUp' || e.key === ' ') && gameRunning) {
-        jumpBuffer = BUFFER_MAX;
-        jumpHeld = true;
+        jumpBuffer = BUFFER_MAX; jumpHeld = true;
       }
       if ((e.key === 'ArrowDown' || e.key === 's') && gameRunning && onGround) {
         isSliding = true;
@@ -843,8 +881,7 @@
     game.addEventListener('pointerdown', e => {
       if (!gameRunning) return;
       if (e.target.closest('#controls')) return;
-      jumpBuffer = BUFFER_MAX;
-      jumpHeld = true;
+      jumpBuffer = BUFFER_MAX; jumpHeld = true;
     });
     game.addEventListener('pointerup', () => jumpHeld = false);
 
@@ -860,7 +897,7 @@
     setupButton(document.getElementById('btn-left'), () => keys['ArrowLeft'] = true, () => keys['ArrowLeft'] = false);
     setupButton(document.getElementById('btn-right'), () => keys['ArrowRight'] = true, () => keys['ArrowRight'] = false);
     setupButton(document.getElementById('btn-jump'), () => { jumpBuffer = BUFFER_MAX; jumpHeld = true; }, () => jumpHeld = false);
-    setupButton(document.getElementById('btn-slide'), 
+    setupButton(document.getElementById('btn-slide'),
       () => { if (onGround) { isSliding = true; penguin.classList.add('sliding'); penguin.classList.remove('running'); } },
       () => { isSliding = false; penguin.classList.remove('sliding'); if (onGround) penguin.classList.add('running'); }
     );
@@ -868,9 +905,7 @@
     function tryJump() {
       if ((onGround || coyoteTime > 0) && jumpBuffer > 0 && !isSliding) {
         velocityY = JUMP_FORCE;
-        onGround = false;
-        coyoteTime = 0;
-        jumpBuffer = 0;
+        onGround = false; coyoteTime = 0; jumpBuffer = 0;
         penguin.classList.remove('running', 'sliding');
         isSliding = false;
         playSound('jump');
@@ -896,6 +931,10 @@
       comboEl.textContent = 'Combo x' + Math.min(combo, 8);
     }
 
+    function getComboMultiplier() {
+      return Math.min(1 + Math.floor(combo / 2), 5);
+    }
+
     function updatePenguin() {
       velocityX += AUTO_FORCE;
       if (keys['ArrowLeft'] || keys['a']) velocityX -= ACCEL;
@@ -918,7 +957,6 @@
         playSound('levelup');
       }
 
-      // Combo timer
       if (comboTimer > 0) {
         comboTimer--;
         if (comboTimer <= 0) {
@@ -942,8 +980,7 @@
 
       let landed = false;
       if (penguinY >= 0) {
-        penguinY = 0;
-        velocityY = 0;
+        penguinY = 0; velocityY = 0;
         if (!onGround) {
           onGround = true;
           if (!isSliding) penguin.classList.add('running');
@@ -960,15 +997,12 @@
           const platW = parseFloat(plat.style.width) || 0;
           const platBottom = parseFloat(plat.style.bottom) || 110;
           const platTop = platBottom + 24;
-          const pLeft = penguinX;
-          const pRight = penguinX + 48;
+          const pLeft = penguinX, pRight = penguinX + 48;
           const pBottom = 110 - penguinY;
           if (pRight > platX + 4 && pLeft < platX + platW - 4) {
             if (velocityY >= 0 && pBottom <= platTop + 6 && pBottom >= platTop - 30) {
               penguinY = 110 - platTop;
-              velocityY = 0;
-              onGround = true;
-              coyoteTime = COYOTE_MAX;
+              velocityY = 0; onGround = true; coyoteTime = COYOTE_MAX;
               if (!isSliding) penguin.classList.add('running');
               landed = true;
             }
@@ -1003,10 +1037,6 @@
       p.style.top = y + 'px';
       game.appendChild(p);
       setTimeout(() => p.remove(), 600);
-    }
-
-    function getComboMultiplier() {
-      return Math.min(1 + Math.floor(combo / 2), 5);
     }
 
     function createFish() {
@@ -1046,7 +1076,6 @@
       crystal.className = 'crystal';
       crystal.innerHTML = `<div class="shape"></div>`;
       crystal.style.left = '590px';
-      // às vezes aparece mais alto
       const heightOffset = Math.random() < 0.4 ? 40 + Math.random() * 80 : 0;
       crystal.style.bottom = (115 + heightOffset) + 'px';
       game.appendChild(crystal);
@@ -1087,7 +1116,6 @@
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = x + 'px';
-        // slide permite passar por baixo
         const canHit = isSliding ? (penguinY > -5) : (penguinY > -24);
         if (!invincible && !shieldActive && canHit && x < penguinX + 64 && x + 70 > penguinX) {
           hit();
@@ -1113,7 +1141,6 @@
         if (!gameRunning) { icicle.remove(); return; }
         y += fallSpeed;
         icicle.style.top = y + 'px';
-        // colisão
         const penguinTop = 840 - (110 - penguinY) - 72;
         const penguinBottom = 840 - (110 - penguinY);
         if (!invincible && !shieldActive &&
@@ -1182,8 +1209,7 @@
       lives--;
       updateLives();
       invincible = true;
-      combo = 0;
-      comboTimer = 0;
+      combo = 0; comboTimer = 0;
       comboEl.style.display = 'none';
       playSound('hit');
       setTimeout(() => invincible = false, 1500);
@@ -1210,22 +1236,39 @@
       controls.style.display = 'none';
       stopRaceMusic();
       playSound('gameover');
-      if (Math.floor(score) > highScore) {
-        highScore = Math.floor(score);
+
+      const finalScore = Math.floor(score);
+      if (finalScore > highScore) {
+        highScore = finalScore;
         localStorage.setItem('iceRaceHigh', highScore);
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
+
+      // Verifica se entrou no ranking
+      if (isHighScore(finalScore)) {
+        pendingScore = finalScore;
+        document.getElementById('new-score-text').textContent = 'Pontos: ' + finalScore;
+        document.getElementById('name-input').value = '';
+        document.getElementById('name-screen').style.display = 'flex';
+      } else {
+        showGameOverScreen(finalScore);
+      }
+    }
+
+    function showGameOverScreen(finalScore) {
       message.innerHTML = `
-        <div class="logo" style="font-size:36px;margin-bottom:12px;">GAME OVER</div>
-        <div class="info" style="margin-bottom:28px;">
-          Pontos: <strong style="color:#c8d8e8">${Math.floor(score)}</strong><br>
+        <div class="logo" style="font-size:34px;">GAME OVER</div>
+        <div class="info" style="margin-bottom:20px;">
+          Pontos: <strong style="color:#c8d8e8">${finalScore}</strong><br>
           Nível: <strong style="color:#c8d8e8">${level}</strong><br>
           Recorde: ${highScore}
         </div>
-        <button id="start-btn">JOGAR NOVAMENTE</button>
+        <button class="btn" id="start-btn">JOGAR NOVAMENTE</button>
+        <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
       `;
       message.style.display = 'flex';
       document.getElementById('start-btn').addEventListener('click', startGame);
+      document.getElementById('ranking-btn').addEventListener('click', showRanking);
     }
 
     function loop() {
@@ -1250,6 +1293,8 @@
       updateLives();
       penguinX = 150; penguinY = 0;
       message.style.display = 'none';
+      document.getElementById('ranking-screen').style.display = 'none';
+      document.getElementById('name-screen').style.display = 'none';
       controls.style.display = 'flex';
       gameRunning = true;
       penguin.classList.add('running');
@@ -1264,8 +1309,24 @@
       loop();
     }
 
-    startBtn.addEventListener('click', startGame);
-    message.style.display = 'flex';
+    // Eventos das telas
+    document.getElementById('start-btn').addEventListener('click', startGame);
+    document.getElementById('ranking-btn').addEventListener('click', showRanking);
+    document.getElementById('back-btn').addEventListener('click', hideRanking);
+
+    document.getElementById('save-name-btn').addEventListener('click', () => {
+      const name = document.getElementById('name-input').value.trim() || 'Jogador';
+      addToRanking(name, pendingScore);
+      document.getElementById('name-screen').style.display = 'none';
+      showGameOverScreen(pendingScore);
+    });
+
+    // Enter no input de nome
+    document.getElementById('name-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        document.getElementById('save-name-btn').click();
+      }
+    });
   </script>
 </body>
 </html>
