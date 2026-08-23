@@ -2,85 +2,79 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Com Nadadeiras</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  <title>Pinguim Runner - Visual Sério</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #01050c;
+      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      font-family: 'Nunito', sans-serif;
+      font-family: 'Inter', sans-serif;
       overflow: hidden;
     }
 
     #game {
       width: 480px;
-      height: 680px;
-      background: linear-gradient(to bottom, #050d1c 0%, #0c1a32 30%, #132b4a 60%, #1c3d5e 100%);
-      border-radius: 24px;
+      height: 700px;
+      background: linear-gradient(to bottom, #02060f 0%, #061018 25%, #0a1a28 50%, #0f2a3c 100%);
+      border-radius: 8px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 5px #1a3050, 0 0 0 10px #0d1f35, 0 30px 80px rgba(0,0,0,0.8);
+      box-shadow: 0 0 0 2px #1a2a3a, 0 20px 60px rgba(0,0,0,0.9);
     }
 
+    /* Aurora séria */
     .aurora {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 55%;
+      width: 100%; height: 50%;
       pointer-events: none;
       z-index: 1;
       mix-blend-mode: screen;
+      opacity: 0.45;
     }
     .aurora1 {
-      background: radial-gradient(ellipse 120% 70% at 25% 35%, rgba(0,255,190,0.28) 0%, transparent 65%);
-      filter: blur(8px);
-      animation: aurora1 13s ease-in-out infinite alternate;
+      background: linear-gradient(120deg, transparent 20%, rgba(0,180,140,0.15) 40%, transparent 70%);
+      animation: auroraMove 18s linear infinite;
     }
     .aurora2 {
-      background: radial-gradient(ellipse 100% 60% at 75% 25%, rgba(150,70,255,0.22) 0%, transparent 65%);
-      filter: blur(12px);
-      animation: aurora2 17s ease-in-out infinite alternate-reverse;
+      background: linear-gradient(100deg, transparent 30%, rgba(80,40,180,0.12) 50%, transparent 80%);
+      animation: auroraMove 24s linear infinite reverse;
     }
-    @keyframes aurora1 {
-      0% { transform: translateX(-15px) scaleY(1); opacity: 0.7; }
-      100% { transform: translateX(25px) scaleY(1.15); opacity: 1; }
-    }
-    @keyframes aurora2 {
-      0% { transform: translateX(20px) scaleY(1.1); opacity: 0.6; }
-      100% { transform: translateX(-20px) scaleY(0.95); opacity: 0.9; }
+    @keyframes auroraMove {
+      0% { transform: translateX(-30%); }
+      100% { transform: translateX(30%); }
     }
 
     .snow {
       position: absolute;
-      background: white;
+      background: rgba(220,230,240,0.7);
       border-radius: 50%;
       z-index: 2;
       pointer-events: none;
-      box-shadow: 0 0 8px rgba(255,255,255,0.9);
     }
     @keyframes snowFall {
-      0% { transform: translateY(-30px) translateX(0); opacity: 0.95; }
-      100% { transform: translateY(720px) translateX(40px); opacity: 0.1; }
+      0% { transform: translateY(-20px); opacity: 0.8; }
+      100% { transform: translateY(720px); opacity: 0.05; }
     }
 
     #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 110px;
-      background: linear-gradient(to bottom, #d0f0ff 0%, #a8d8f0 40%, #78b8d8 100%);
-      border-top: 5px solid #e8f8ff;
+      height: 100px;
+      background: linear-gradient(to bottom, #1a3040 0%, #0e1e28 100%);
+      border-top: 2px solid #2a4050;
       z-index: 3;
-      box-shadow: inset 0 15px 30px rgba(255,255,255,0.5);
     }
 
     #hud {
       position: absolute;
-      top: 16px;
+      top: 14px;
       left: 14px;
       right: 14px;
       display: flex;
@@ -90,327 +84,282 @@
       gap: 6px;
     }
     #score, #lives, #level, #hiscore {
-      background: rgba(0,10,30,0.7);
-      color: white;
-      padding: 8px 13px;
-      border-radius: 40px;
-      font-size: 14px;
-      font-weight: 800;
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.6);
+      color: #c8d8e8;
+      padding: 7px 12px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      border: 1px solid #1a2a3a;
     }
-    #lives { color: #ff6b6b; }
-    #level { color: #ffeb3b; }
+    #lives { color: #e07070; }
+    #level { color: #70b0d0; }
 
-    /* ========== PINGUIM COM NADDEIRAS ========== */
+    /* ========== PINGUIM SÉRIO ========== */
     #penguin {
       position: absolute;
-      bottom: 105px;
+      bottom: 100px;
       left: 130px;
-      width: 56px;
-      height: 64px;
+      width: 42px;
+      height: 62px;
       z-index: 12;
       transform-origin: center bottom;
     }
 
-    /* Corpo */
     #penguin .body {
       position: absolute;
-      bottom: 10px;
-      left: 10px;
-      width: 36px;
-      height: 40px;
-      background: #1a1a1a;
-      border-radius: 50% 50% 42% 42%;
-      z-index: 2;
+      bottom: 8px;
+      left: 7px;
+      width: 28px;
+      height: 36px;
+      background: #0e0e0e;
+      border-radius: 40% 40% 30% 30%;
     }
 
-    /* Barriga branca */
     #penguin .belly {
       position: absolute;
-      bottom: 16px;
-      left: 16px;
-      width: 24px;
-      height: 26px;
-      background: #f8f8f8;
-      border-radius: 50%;
-      z-index: 3;
+      bottom: 14px;
+      left: 11px;
+      width: 20px;
+      height: 24px;
+      background: #d8d8d8;
+      border-radius: 40%;
     }
 
-    /* Cabeça */
     #penguin .head {
       position: absolute;
-      bottom: 40px;
-      left: 11px;
-      width: 34px;
-      height: 30px;
-      background: #1a1a1a;
-      border-radius: 50%;
-      z-index: 4;
-    }
-
-    /* Olhos */
-    #penguin .eye {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      top: 9px;
-      z-index: 5;
-    }
-    #penguin .eye::after {
-      content: '';
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #111;
-      border-radius: 50%;
-      top: 2px;
-      left: 2.5px;
-    }
-    #penguin .eye.left { left: 6px; }
-    #penguin .eye.right { right: 6px; }
-
-    /* Bico */
-    #penguin .beak {
-      position: absolute;
-      bottom: 5px;
-      left: 12px;
-      width: 0;
-      height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 8px solid #ff9900;
-      z-index: 5;
-    }
-
-    /* ===== NADDEIRAS (MÃOS) ===== */
-    #penguin .flipper {
-      position: absolute;
-      width: 14px;
-      height: 22px;
-      background: #1a1a1a;
-      border-radius: 50% 50% 40% 40%;
-      z-index: 1;
-      bottom: 22px;
-    }
-    #penguin .flipper.left {
-      left: 0;
-      transform: rotate(-25deg);
-      transform-origin: top center;
-    }
-    #penguin .flipper.right {
-      right: 0;
-      transform: rotate(25deg);
-      transform-origin: top center;
-    }
-
-    /* Animação das nadadeiras quando corre */
-    #penguin.running .flipper.left {
-      animation: flipperLeft 0.25s ease-in-out infinite;
-    }
-    #penguin.running .flipper.right {
-      animation: flipperRight 0.25s ease-in-out infinite;
-    }
-    @keyframes flipperLeft {
-      0%, 100% { transform: rotate(-25deg); }
-      50% { transform: rotate(-45deg); }
-    }
-    @keyframes flipperRight {
-      0%, 100% { transform: rotate(25deg); }
-      50% { transform: rotate(45deg); }
-    }
-
-    /* Pés */
-    #penguin .foot {
-      position: absolute;
-      bottom: 0;
-      width: 13px;
-      height: 9px;
-      background: #ff9900;
-      border-radius: 7px 7px 3px 3px;
-      z-index: 1;
-    }
-    #penguin .foot.left { left: 11px; }
-    #penguin .foot.right { right: 11px; }
-
-    #penguin.running .foot.left {
-      animation: footLeft 0.25s ease-in-out infinite;
-    }
-    #penguin.running .foot.right {
-      animation: footRight 0.25s ease-in-out infinite;
-    }
-    @keyframes footLeft {
-      0%, 100% { transform: translateY(0) rotate(-8deg); }
-      50% { transform: translateY(-3px) rotate(8deg); }
-    }
-    @keyframes footRight {
-      0%, 100% { transform: translateY(0) rotate(8deg); }
-      50% { transform: translateY(-3px) rotate(-8deg); }
-    }
-
-    #penguin.running {
-      animation: bodyBob 0.25s ease-in-out infinite;
-    }
-    @keyframes bodyBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-
-    /* ========== PEIXE ========== */
-    .fish {
-      position: absolute;
-      bottom: 108px;
-      width: 42px;
+      bottom: 38px;
+      left: 8px;
+      width: 26px;
       height: 24px;
-      z-index: 8;
-      animation: fishSwim 0.8s ease-in-out infinite;
-    }
-    .fish .body {
-      position: absolute;
-      width: 30px;
-      height: 18px;
-      background: #2a9fff;
+      background: #0e0e0e;
       border-radius: 50%;
-      left: 0;
-      top: 3px;
     }
-    .fish .tail {
-      position: absolute;
-      right: 0;
-      top: 2px;
-      width: 0;
-      height: 0;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 14px solid #ff8c00;
-    }
-    .fish .eye {
+
+    #penguin .eye {
       position: absolute;
       width: 5px;
       height: 5px;
-      background: white;
+      background: #e8e8e8;
       border-radius: 50%;
-      left: 8px;
-      top: 7px;
+      top: 8px;
     }
-    .fish .eye::after {
+    #penguin .eye::after {
       content: '';
       position: absolute;
       width: 2.5px;
       height: 2.5px;
       background: #111;
       border-radius: 50%;
-      top: 1px;
+      top: 1.2px;
       left: 1.5px;
     }
-    @keyframes fishSwim {
-      0%, 100% { transform: translateY(0) rotate(-3deg); }
-      50% { transform: translateY(-4px) rotate(3deg); }
+    #penguin .eye.left { left: 5px; }
+    #penguin .eye.right { right: 5px; }
+
+    #penguin .beak {
+      position: absolute;
+      bottom: 4px;
+      left: 9px;
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 6px solid #c07020;
     }
 
-    /* ========== ORCA ========== */
+    /* Nadadeiras sérias */
+    #penguin .flipper {
+      position: absolute;
+      width: 11px;
+      height: 20px;
+      background: #0e0e0e;
+      border-radius: 40% 40% 30% 30%;
+      bottom: 20px;
+    }
+    #penguin .flipper.left {
+      left: -2px;
+      transform: rotate(-20deg);
+      transform-origin: top center;
+    }
+    #penguin .flipper.right {
+      right: -2px;
+      transform: rotate(20deg);
+      transform-origin: top center;
+    }
+
+    #penguin.running .flipper.left {
+      animation: flipperL 0.28s ease-in-out infinite;
+    }
+    #penguin.running .flipper.right {
+      animation: flipperR 0.28s ease-in-out infinite;
+    }
+    @keyframes flipperL {
+      0%, 100% { transform: rotate(-20deg); }
+      50% { transform: rotate(-38deg); }
+    }
+    @keyframes flipperR {
+      0%, 100% { transform: rotate(20deg); }
+      50% { transform: rotate(38deg); }
+    }
+
+    #penguin .foot {
+      position: absolute;
+      bottom: 0;
+      width: 11px;
+      height: 7px;
+      background: #c07020;
+      border-radius: 4px 4px 2px 2px;
+    }
+    #penguin .foot.left { left: 8px; }
+    #penguin .foot.right { right: 8px; }
+
+    #penguin.running {
+      animation: bodyBob 0.28s ease-in-out infinite;
+    }
+    @keyframes bodyBob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    /* ========== PEIXE SÉRIO ========== */
+    .fish {
+      position: absolute;
+      bottom: 102px;
+      width: 38px;
+      height: 18px;
+      z-index: 8;
+    }
+    .fish .body {
+      position: absolute;
+      width: 26px;
+      height: 14px;
+      background: #2a6a9a;
+      border-radius: 50%;
+      left: 0;
+      top: 2px;
+    }
+    .fish .tail {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      border-left: 12px solid #1a4a70;
+    }
+    .fish .eye {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 50%;
+      left: 7px;
+      top: 5px;
+    }
+    .fish .eye::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #111;
+      border-radius: 50%;
+      top: 1px;
+      left: 1px;
+    }
+
+    /* ========== ORCA SÉRIA ========== */
     .orca {
       position: absolute;
-      bottom: 100px;
-      width: 70px;
-      height: 36px;
+      bottom: 98px;
+      width: 72px;
+      height: 32px;
       z-index: 9;
-      animation: orcaSwim 0.7s ease-in-out infinite;
     }
     .orca .body {
       position: absolute;
-      width: 55px;
-      height: 26px;
-      background: #111;
-      border-radius: 50% 40% 40% 50%;
+      width: 54px;
+      height: 22px;
+      background: #0a0a0a;
+      border-radius: 50% 35% 35% 50%;
       left: 0;
       top: 6px;
     }
     .orca .belly {
       position: absolute;
-      width: 28px;
-      height: 14px;
-      background: #f0f0f0;
+      width: 26px;
+      height: 12px;
+      background: #d0d0d0;
       border-radius: 50%;
       left: 8px;
-      top: 14px;
+      top: 13px;
     }
     .orca .fin {
       position: absolute;
       top: 0;
-      left: 22px;
+      left: 24px;
       width: 0;
       height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 16px solid #111;
+      border-left: 7px solid transparent;
+      border-right: 7px solid transparent;
+      border-bottom: 14px solid #0a0a0a;
     }
     .orca .tail {
       position: absolute;
       right: 0;
-      top: 4px;
+      top: 3px;
       width: 0;
       height: 0;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      border-left: 16px solid #111;
+      border-top: 11px solid transparent;
+      border-bottom: 11px solid transparent;
+      border-left: 15px solid #0a0a0a;
     }
     .orca .eye {
       position: absolute;
-      width: 5px;
-      height: 5px;
-      background: white;
+      width: 4px;
+      height: 4px;
+      background: #e0e0e0;
       border-radius: 50%;
       left: 12px;
-      top: 11px;
+      top: 10px;
     }
     .orca .eye::after {
       content: '';
       position: absolute;
-      width: 2.5px;
-      height: 2.5px;
+      width: 2px;
+      height: 2px;
       background: #111;
       border-radius: 50%;
       top: 1px;
-      left: 1.5px;
-    }
-    @keyframes orcaSwim {
-      0%   { transform: translateY(0) rotate(-2deg); }
-      50%  { transform: translateY(-7px) rotate(2deg); }
-      100% { transform: translateY(0) rotate(-2deg); }
+      left: 1px;
     }
 
-    /* Plataformas estilo Mario */
+    /* Plataformas de gelo sérias */
     .platform {
       position: absolute;
-      bottom: 105px;
-      height: 32px;
-      background: linear-gradient(to bottom, #e8d4a8 0%, #c4a dig 40%, #a67c52 100%);
-      border-radius: 4px;
-      border: 3px solid #5c3a1e;
-      box-shadow: 
-        inset 0 4px 0 #f5e6c8,
-        inset 0 -4px 0 #8b5a2b,
-        0 6px 0 #3d2314,
-        0 8px 12px rgba(0,0,0,0.35);
+      bottom: 100px;
+      height: 22px;
+      background: linear-gradient(to bottom, #3a5a6e, #1e3344);
+      border-radius: 2px;
+      border: 1px solid #4a6a7e;
+      box-shadow: 0 4px 0 #0a1520, 0 6px 10px rgba(0,0,0,0.4);
       z-index: 7;
     }
 
     .popup {
       position: absolute;
-      font-size: 20px;
-      font-weight: 900;
-      color: #ffeb3b;
+      font-size: 16px;
+      font-weight: 700;
+      color: #70c0e0;
       z-index: 15;
       pointer-events: none;
-      text-shadow: 0 3px 6px rgba(0,0,0,0.6);
-      animation: popup 0.7s forwards;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+      animation: popup 0.6s forwards;
     }
     @keyframes popup {
-      0% { transform: translateY(0) scale(1); opacity: 1; }
-      100% { transform: translateY(-45px) scale(1.4); opacity: 0; }
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-30px); opacity: 0; }
     }
 
     #level-up {
@@ -418,15 +367,16 @@
       top: 42%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.82);
-      color: #ffeb3b;
-      font-size: 32px;
-      font-weight: 900;
-      padding: 18px 36px;
-      border-radius: 24px;
+      background: rgba(0,0,0,0.85);
+      color: #70c0e0;
+      font-size: 26px;
+      font-weight: 800;
+      padding: 14px 28px;
+      border-radius: 6px;
       z-index: 25;
       display: none;
       text-align: center;
+      border: 1px solid #2a4a5a;
     }
 
     #message {
@@ -434,41 +384,40 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(255,255,255,0.97);
-      padding: 36px 40px;
-      border-radius: 28px;
+      background: #0a1520;
+      padding: 32px 36px;
+      border-radius: 8px;
       text-align: center;
       z-index: 30;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       display: none;
-      min-width: 300px;
+      min-width: 280px;
+      border: 1px solid #1a2a3a;
     }
     #message h1 {
-      font-size: 28px;
-      color: #0d47a1;
+      font-size: 24px;
+      color: #c8d8e8;
       margin-bottom: 12px;
     }
     #message p {
-      font-size: 16px;
-      color: #1565c0;
+      font-size: 14px;
+      color: #7a9ab0;
       line-height: 1.6;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
     #start-btn {
-      background: linear-gradient(135deg, #2196f3, #1565c0);
-      color: white;
-      border: none;
-      padding: 15px 42px;
-      border-radius: 50px;
-      font-size: 18px;
-      font-weight: 800;
+      background: #1a3a50;
+      color: #c8d8e8;
+      border: 1px solid #2a4a60;
+      padding: 12px 32px;
+      border-radius: 4px;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 10px 25px rgba(33,150,243,0.45);
-      transition: 0.2s;
+      transition: 0.15s;
     }
     #start-btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 14px 30px rgba(33,150,243,0.55);
+      background: #2a4a60;
     }
   </style>
 </head>
@@ -481,13 +430,12 @@
     <div id="hud">
       <div id="score">Pontos: 0</div>
       <div id="level">Nível 1</div>
-      <div id="lives">❤️❤️❤️</div>
+      <div id="lives">♥ ♥ ♥</div>
       <div id="hiscore">Rec: 0</div>
     </div>
 
-    <div id="level-up">NÍVEL 2!</div>
+    <div id="level-up">NÍVEL 2</div>
 
-    <!-- Pinguim completo com nadadeiras -->
     <div id="penguin">
       <div class="flipper left"></div>
       <div class="flipper right"></div>
@@ -507,11 +455,11 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Agora com nadadeiras!<br>
-        Física boa de corrida e pulo<br>
+        Visual sério<br>
+        Física de corrida e pulo<br>
         10 Níveis
       </p>
-      <button id="start-btn">Começar</button>
+      <button id="start-btn">Iniciar</button>
     </div>
   </div>
 
@@ -527,41 +475,41 @@
       const now = audioCtx.currentTime;
 
       if (type === 'jump') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(600, now + 0.12);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-        osc.start(now); osc.stop(now + 0.15);
-      } else if (type === 'collect') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(700, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
-        gain.gain.setValueAtTime(0.12, now);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(380, now + 0.1);
+        gain.gain.setValueAtTime(0.08, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
         osc.start(now); osc.stop(now + 0.12);
+      } else if (type === 'collect') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(780, now + 0.08);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
       } else if (type === 'hit') {
         osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(60, now + 0.25);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now); osc.stop(now + 0.3);
+        osc.frequency.setValueAtTime(120, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + 0.2);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
       } else if (type === 'gameover') {
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.exponentialRampToValueAtTime(100, now + 0.5);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-        osc.start(now); osc.stop(now + 0.55);
-      } else if (type === 'start' || type === 'levelup') {
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.setValueAtTime(600, now + 0.1);
-        osc.frequency.setValueAtTime(800, now + 0.2);
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.4);
         gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now); osc.stop(now + 0.3);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+        osc.start(now); osc.stop(now + 0.45);
+      } else if (type === 'start' || type === 'levelup') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.setValueAtTime(420, now + 0.08);
+        osc.frequency.setValueAtTime(560, now + 0.16);
+        gain.gain.setValueAtTime(0.07, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+        osc.start(now); osc.stop(now + 0.25);
       }
     }
 
@@ -578,7 +526,7 @@
     let score = 0;
     let lives = 3;
     let level = 1;
-    let highScore = parseInt(localStorage.getItem('pinguimFlipperHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguimSeriousHigh') || '0');
     
     let penguinX = 130;
     let penguinY = 0;
@@ -611,16 +559,16 @@
 
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
-    for (let i = 0; i < 45; i++) {
+    for (let i = 0; i < 40; i++) {
       const flake = document.createElement('div');
       flake.className = 'snow';
-      const size = 2 + Math.random() * 4.5;
+      const size = 1.5 + Math.random() * 3;
       flake.style.width = size + 'px';
       flake.style.height = size + 'px';
       flake.style.left = Math.random() * 480 + 'px';
-      flake.style.animation = `snowFall ${5 + Math.random() * 7}s linear infinite`;
-      flake.style.animationDelay = Math.random() * 9 + 's';
-      flake.style.opacity = 0.45 + Math.random() * 0.55;
+      flake.style.animation = `snowFall ${6 + Math.random() * 8}s linear infinite`;
+      flake.style.animationDelay = Math.random() * 10 + 's';
+      flake.style.opacity = 0.3 + Math.random() * 0.4;
       game.appendChild(flake);
     }
 
@@ -720,8 +668,8 @@
         const platX = parseFloat(plat.style.left);
         const platW = parseFloat(plat.style.width);
 
-        if (penguinX + 50 > platX && penguinX < platX + platW &&
-            penguinY > -10 && penguinY < 28 && velocityY >= 0) {
+        if (penguinX + 42 > platX && penguinX < platX + platW &&
+            penguinY > -8 && penguinY < 24 && velocityY >= 0) {
           penguinY = 0;
           velocityY = 0;
           onGround = true;
@@ -731,13 +679,13 @@
       });
 
       penguin.style.left = penguinX + 'px';
-      penguin.style.bottom = (105 - penguinY) + 'px';
+      penguin.style.bottom = (100 - penguinY) + 'px';
 
-      const tilt = Math.max(-8, Math.min(8, velocityX * 1.2));
+      const tilt = Math.max(-6, Math.min(6, velocityX * 1.1));
       penguin.style.transform = `rotate(${tilt}deg)`;
 
       if (invincible) {
-        penguin.style.opacity = (Math.floor(Date.now() / 80) % 2) ? '0.35' : '1';
+        penguin.style.opacity = (Math.floor(Date.now() / 90) % 2) ? '0.3' : '1';
       } else {
         penguin.style.opacity = '1';
       }
@@ -746,9 +694,9 @@
     }
 
     function showLevelUp() {
-      levelUpEl.textContent = 'NÍVEL ' + level + '!';
+      levelUpEl.textContent = 'NÍVEL ' + level;
       levelUpEl.style.display = 'block';
-      setTimeout(() => levelUpEl.style.display = 'none', 1500);
+      setTimeout(() => levelUpEl.style.display = 'none', 1400);
     }
 
     function showPopup(x, y, txt) {
@@ -758,18 +706,14 @@
       p.style.left = x + 'px';
       p.style.top = y + 'px';
       game.appendChild(p);
-      setTimeout(() => p.remove(), 700);
+      setTimeout(() => p.remove(), 600);
     }
 
     function createFish() {
       if (!gameRunning) return;
       const fish = document.createElement('div');
       fish.className = 'fish';
-      fish.innerHTML = `
-        <div class="body"></div>
-        <div class="tail"></div>
-        <div class="eye"></div>
-      `;
+      fish.innerHTML = `<div class="body"></div><div class="tail"></div><div class="eye"></div>`;
       fish.style.left = '510px';
       game.appendChild(fish);
 
@@ -781,10 +725,10 @@
         x -= spd;
         fish.style.left = x + 'px';
 
-        if (penguinY < 18 && x < penguinX + 50 && x + 40 > penguinX) {
+        if (penguinY < 16 && x < penguinX + 44 && x + 36 > penguinX) {
           score += 20;
           playSound('collect');
-          showPopup(penguinX + 10, 460, '+20');
+          showPopup(penguinX + 8, 470, '+20');
           fish.remove();
           return;
         }
@@ -816,7 +760,7 @@
         x -= spd;
         orca.style.left = x + 'px';
 
-        if (!invincible && x < penguinX + 60 && x + 65 > penguinX && penguinY > -25) {
+        if (!invincible && x < penguinX + 58 && x + 65 > penguinX && penguinY > -22) {
           hit();
         }
         if (x < -90) { orca.remove(); return; }
@@ -832,7 +776,7 @@
       const width = 90 + Math.random() * 80;
       plat.style.width = width + 'px';
       plat.style.left = '510px';
-      plat.style.bottom = '105px';
+      plat.style.bottom = '100px';
       game.appendChild(plat);
 
       let x = 510;
@@ -858,7 +802,7 @@
     }
 
     function updateLives() {
-      livesEl.textContent = '❤️'.repeat(lives) + '🖤'.repeat(3 - lives);
+      livesEl.textContent = '♥ '.repeat(lives).trim() + (lives < 3 ? ' ♡'.repeat(3 - lives) : '');
     }
 
     function gameOver() {
@@ -872,7 +816,7 @@
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguimFlipperHigh', highScore);
+        localStorage.setItem('pinguimSeriousHigh', highScore);
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
@@ -883,7 +827,7 @@
           Nível: <strong>${level}</strong><br>
           Recorde: ${highScore}
         </p>
-        <button id="start-btn">Jogar de Novo</button>
+        <button id="start-btn">Jogar Novamente</button>
       `;
       message.style.display = 'block';
       document.getElementById('start-btn').addEventListener('click', startGame);
