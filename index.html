@@ -405,7 +405,6 @@
       border: 1px solid #2a4a5a;
     }
 
-    /* ===== TELA DE ENTRADA ===== */
     #message {
       position: absolute;
       top: 0;
@@ -463,7 +462,6 @@
       transform: translateY(1px);
     }
 
-    /* Controles Touch */
     #controls {
       position: absolute;
       bottom: 22px;
@@ -541,13 +539,13 @@
       <button id="btn-right">▶</button>
     </div>
 
-    <!-- Tela de Entrada -->
     <div id="message">
       <div class="logo">ICE RACE</div>
       <div class="subtitle">Pinguim Runner</div>
       <div class="info">
         Plataformas altas • Peixe Dourado<br>
-        Escudo • Controles Touch
+        Escudo • Controles Touch<br>
+        Trilha Atmosférica
       </div>
       <button id="start-btn">JOGAR</button>
     </div>
@@ -555,6 +553,107 @@
 
   <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // ===== TRILHA ATMOSFÉRICA =====
+    let ambientNodes = [];
+    let ambientGain = null;
+    let ambientPlaying = false;
+
+    function startAmbient() {
+      if (ambientPlaying) return;
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      ambientGain = audioCtx.createGain();
+      ambientGain.gain.value = 0;
+      ambientGain.connect(audioCtx.destination);
+
+      // Fade in suave
+      ambientGain.gain.linearRampToValueAtTime(0.042, audioCtx.currentTime + 2.5);
+
+      // 1. Drone grave (sensação de frio e profundidade)
+      const drone = audioCtx.createOscillator();
+      drone.type = 'sine';
+      drone.frequency.value = 46;
+      const droneGain = audioCtx.createGain();
+      droneGain.gain.value = 0.45;
+      drone.connect(droneGain);
+      droneGain.connect(ambientGain);
+      drone.start();
+
+      // 2. Pad médio suave
+      const pad = audioCtx.createOscillator();
+      pad.type = 'triangle';
+      pad.frequency.value = 92;
+      const padGain = audioCtx.createGain();
+      padGain.gain.value = 0.14;
+      pad.connect(padGain);
+      padGain.connect(ambientGain);
+      pad.start();
+
+      // 3. Segundo pad mais agudo e bem baixo
+      const pad2 = audioCtx.createOscillator();
+      pad2.type = 'sine';
+      pad2.frequency.value = 184;
+      const pad2Gain = audioCtx.createGain();
+      pad2Gain.gain.value = 0.06;
+      pad2.connect(pad2Gain);
+      pad2Gain.connect(ambientGain);
+      pad2.start();
+
+      // 4. Vento (ruído filtrado)
+      const bufferSize = 2 * audioCtx.sampleRate;
+      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = noiseBuffer;
+      noise.loop = true;
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 380;
+      filter.Q.value = 0.7;
+
+      const noiseGain = audioCtx.createGain();
+      noiseGain.gain.value = 0.07;
+
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(ambientGain);
+      noise.start();
+
+      // LFO bem lento para o vento "respirar"
+      const lfo = audioCtx.createOscillator();
+      lfo.type = 'sine';
+      lfo.frequency.value = 0.08;
+      const lfoGain = audioCtx.createGain();
+      lfoGain.gain.value = 120;
+      lfo.connect(lfoGain);
+      lfoGain.connect(filter.frequency);
+      lfo.start();
+
+      ambientNodes = [drone, pad, pad2, noise, lfo, ambientGain];
+      ambientPlaying = true;
+    }
+
+    function stopAmbient() {
+      if (!ambientPlaying || !ambientGain) return;
+      ambientGain.gain.cancelScheduledValues(audioCtx.currentTime);
+      ambientGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+      
+      setTimeout(() => {
+        ambientNodes.forEach(node => {
+          try { node.stop(); } catch(e) {}
+        });
+        ambientNodes = [];
+        ambientGain = null;
+        ambientPlaying = false;
+      }, 1400);
+    }
+
+    // ===== EFEITOS SONOROS =====
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
@@ -664,7 +763,6 @@
     let nextLevelScore = 420;
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
-    // Neve
     for (let i = 0; i < 50; i++) {
       const flake = document.createElement('div');
       flake.className = 'snow';
@@ -993,6 +1091,7 @@
       shieldActive = false;
       penguin.classList.remove('shielded', 'running');
       controls.style.display = 'none';
+      stopAmbient();
       playSound('gameover');
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
@@ -1047,6 +1146,7 @@
       gameRunning = true;
       penguin.classList.add('running');
       playSound('start');
+      startAmbient();               // <-- inicia a trilha
       fishTimer = setInterval(createFish, 1150);
       orcaTimer = setInterval(createOrca, 2050);
       platformTimer = setInterval(createPlatform, 1450);
