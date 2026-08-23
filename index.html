@@ -100,6 +100,27 @@
     #level { color: #5a9ab8; }
     #combo { color: #70e0a0; display: none; }
 
+    /* Botão de Pausa */
+    #pause-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      background: rgba(0,0,0,0.55);
+      border: 1px solid #1a2c3a;
+      border-radius: 8px;
+      color: #b8cddc;
+      font-size: 18px;
+      z-index: 22;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+    #pause-btn:active { background: rgba(30,50,70,0.8); }
+
     #penguin {
       position: absolute;
       bottom: 110px;
@@ -230,7 +251,6 @@
       50% { opacity: 1; transform: scale(1.05); }
     }
 
-    /* Partículas */
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -427,7 +447,8 @@
       border: 1px solid #2a4a5a;
     }
 
-    #message, #ranking-screen, #name-screen {
+    /* Telas de overlay */
+    #message, #ranking-screen, #name-screen, #pause-screen {
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
@@ -578,6 +599,10 @@
       <div id="lives">♥ ♥ ♥</div>
       <div id="hiscore">Rec: 0</div>
     </div>
+
+    <!-- Botão de Pausa -->
+    <button id="pause-btn">❚❚</button>
+
     <div id="level-up">NÍVEL 2</div>
 
     <div id="penguin">
@@ -604,17 +629,27 @@
       <button id="btn-right">▶</button>
     </div>
 
+    <!-- Tela Inicial -->
     <div id="message">
       <div class="logo">ICE RACE</div>
       <div class="subtitle">Pinguim Runner</div>
       <div class="info">
-        Partículas + Screen Shake<br>
+        P para Pausar<br>
         Combo • Cristal • Slide • Escudo
       </div>
       <button class="btn" id="start-btn">JOGAR</button>
       <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
     </div>
 
+    <!-- Tela de Pausa -->
+    <div id="pause-screen">
+      <div class="logo" style="font-size:36px;">PAUSADO</div>
+      <div class="subtitle">Jogo pausado</div>
+      <button class="btn" id="resume-btn">CONTINUAR</button>
+      <button class="btn btn-secondary" id="menu-btn">MENU PRINCIPAL</button>
+    </div>
+
+    <!-- Ranking -->
     <div id="ranking-screen">
       <div class="logo" style="font-size:32px;">RANKING</div>
       <div class="subtitle">Top 10</div>
@@ -622,6 +657,7 @@
       <button class="btn" id="back-btn">VOLTAR</button>
     </div>
 
+    <!-- Nome -->
     <div id="name-screen">
       <div class="logo" style="font-size:28px;">NOVO RECORDE!</div>
       <div class="info" id="new-score-text">Pontos: 0</div>
@@ -691,6 +727,18 @@
       }, 1500);
     }
 
+    function pauseMusic() {
+      if (musicGain && musicPlaying) {
+        musicGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+      }
+    }
+
+    function resumeMusic() {
+      if (musicGain && musicPlaying) {
+        musicGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.4);
+      }
+    }
+
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
@@ -750,7 +798,7 @@
       }
     }
 
-    // ===== PARTÍCULAS + SCREEN SHAKE =====
+    // ===== PARTÍCULAS + SHAKE =====
     let particles = [];
 
     function spawnParticles(x, y, color, count = 10) {
@@ -763,13 +811,9 @@
         p.style.background = color;
         p.style.left = x + 'px';
         p.style.top = y + 'px';
-        p.style.opacity = '1';
         game.appendChild(p);
-
         particles.push({
-          el: p,
-          x: x,
-          y: y,
+          el: p, x, y,
           vx: (Math.random() - 0.5) * 8,
           vy: (Math.random() - 0.8) * 9,
           life: 1,
@@ -783,13 +827,11 @@
         const p = particles[i];
         p.x += p.vx;
         p.y += p.vy;
-        p.vy += 0.25; // gravidade leve
+        p.vy += 0.25;
         p.life -= p.decay;
-
         p.el.style.left = p.x + 'px';
         p.el.style.top = p.y + 'px';
         p.el.style.opacity = Math.max(0, p.life);
-
         if (p.life <= 0) {
           p.el.remove();
           particles.splice(i, 1);
@@ -847,6 +889,7 @@
     function showRanking() {
       document.getElementById('message').style.display = 'none';
       document.getElementById('name-screen').style.display = 'none';
+      document.getElementById('pause-screen').style.display = 'none';
       renderRanking();
       document.getElementById('ranking-screen').style.display = 'flex';
     }
@@ -866,11 +909,14 @@
     const message = document.getElementById('message');
     const levelUpEl = document.getElementById('level-up');
     const controls = document.getElementById('controls');
+    const pauseBtn = document.getElementById('pause-btn');
+    const pauseScreen = document.getElementById('pause-screen');
 
     let score = 0, lives = 3, level = 1;
     let highScore = parseInt(localStorage.getItem('iceRaceHigh') || '0');
     let penguinX = 150, penguinY = 0, velocityX = 0, velocityY = 0;
-    let gameRunning = false, invincible = false, shieldActive = false;
+    let gameRunning = false, paused = false;
+    let invincible = false, shieldActive = false;
     let shieldTimeout = null, onGround = true, isSliding = false;
     let jumpHeld = false, coyoteTime = 0, jumpBuffer = 0;
     let combo = 0, comboTimer = 0;
@@ -910,6 +956,16 @@
     const keys = {};
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
+
+      // Pausa com P ou Escape
+      if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape') && gameRunning) {
+        togglePause();
+        e.preventDefault();
+        return;
+      }
+
+      if (paused) return;
+
       if ((e.key === 'ArrowUp' || e.key === ' ') && gameRunning) {
         jumpBuffer = BUFFER_MAX; jumpHeld = true;
       }
@@ -920,19 +976,20 @@
       }
       if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
     });
+
     document.addEventListener('keyup', e => {
       keys[e.key] = false;
       if (e.key === 'ArrowUp' || e.key === ' ') jumpHeld = false;
       if (e.key === 'ArrowDown' || e.key === 's') {
         isSliding = false;
         penguin.classList.remove('sliding');
-        if (onGround) penguin.classList.add('running');
+        if (onGround && !paused) penguin.classList.add('running');
       }
     });
 
     game.addEventListener('pointerdown', e => {
-      if (!gameRunning) return;
-      if (e.target.closest('#controls')) return;
+      if (!gameRunning || paused) return;
+      if (e.target.closest('#controls') || e.target.closest('#pause-btn')) return;
       jumpBuffer = BUFFER_MAX; jumpHeld = true;
     });
     game.addEventListener('pointerup', () => jumpHeld = false);
@@ -950,9 +1007,64 @@
     setupButton(document.getElementById('btn-right'), () => keys['ArrowRight'] = true, () => keys['ArrowRight'] = false);
     setupButton(document.getElementById('btn-jump'), () => { jumpBuffer = BUFFER_MAX; jumpHeld = true; }, () => jumpHeld = false);
     setupButton(document.getElementById('btn-slide'),
-      () => { if (onGround) { isSliding = true; penguin.classList.add('sliding'); penguin.classList.remove('running'); } },
-      () => { isSliding = false; penguin.classList.remove('sliding'); if (onGround) penguin.classList.add('running'); }
+      () => { if (onGround && !paused) { isSliding = true; penguin.classList.add('sliding'); penguin.classList.remove('running'); } },
+      () => { isSliding = false; penguin.classList.remove('sliding'); if (onGround && !paused) penguin.classList.add('running'); }
     );
+
+    // ===== SISTEMA DE PAUSA =====
+    function togglePause() {
+      if (!gameRunning) return;
+      paused = !paused;
+
+      if (paused) {
+        // Pausar
+        cancelAnimationFrame(animId);
+        clearInterval(fishTimer);
+        clearInterval(orcaTimer);
+        clearInterval(platformTimer);
+        clearInterval(shieldTimer);
+        clearInterval(crystalTimer);
+        clearInterval(icicleTimer);
+        pauseMusic();
+        pauseScreen.style.display = 'flex';
+        pauseBtn.style.display = 'none';
+        controls.style.display = 'none';
+      } else {
+        // Continuar
+        pauseScreen.style.display = 'none';
+        pauseBtn.style.display = 'flex';
+        controls.style.display = 'flex';
+        resumeMusic();
+        // Reinicia os spawns
+        fishTimer = setInterval(createFish, 1100);
+        orcaTimer = setInterval(createOrca, 2000);
+        platformTimer = setInterval(createPlatform, 1400);
+        shieldTimer = setInterval(createShield, 9500);
+        crystalTimer = setInterval(createCrystal, 4200);
+        icicleTimer = setInterval(createIcicle, 2800);
+        loop();
+      }
+    }
+
+    function goToMenu() {
+      paused = false;
+      gameRunning = false;
+      cancelAnimationFrame(animId);
+      clearInterval(fishTimer);
+      clearInterval(orcaTimer);
+      clearInterval(platformTimer);
+      clearInterval(shieldTimer);
+      clearInterval(crystalTimer);
+      clearInterval(icicleTimer);
+      stopRaceMusic();
+      pauseScreen.style.display = 'none';
+      pauseBtn.style.display = 'none';
+      controls.style.display = 'none';
+      document.querySelectorAll('.fish, .orca, .platform, .popup, .shield-item, .crystal, .icicle, .particle').forEach(el => el.remove());
+      particles = [];
+      penguin.classList.remove('shielded', 'running', 'sliding');
+      message.style.display = 'flex';
+    }
 
     function tryJump() {
       if ((onGround || coyoteTime > 0) && jumpBuffer > 0 && !isSliding) {
@@ -1092,7 +1204,7 @@
     }
 
     function createFish() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       const isGold = Math.random() < 0.12;
       const fish = document.createElement('div');
       fish.className = 'fish' + (isGold ? ' gold' : '');
@@ -1102,7 +1214,7 @@
       let x = 590;
       const spd = (3.6 + Math.random() * 1.5) * (1 + level * 0.09);
       function move() {
-        if (!gameRunning) { fish.remove(); return; }
+        if (!gameRunning || paused) { fish.remove(); return; }
         x -= spd;
         fish.style.left = x + 'px';
         const hitHeight = isSliding ? 30 : 18;
@@ -1113,11 +1225,8 @@
           addCombo();
           playSound(isGold ? 'gold' : 'collect');
           showPopup(penguinX + 8, 520, '+' + pts + (mult > 1 ? ' x' + mult : ''), isGold ? 'gold' : (mult > 1 ? 'combo' : ''));
-
-          // Partículas
           const py = 840 - (110 - penguinY) - 40;
           spawnParticles(penguinX + 20, py, isGold ? '#ffd040' : '#4a9ad4', isGold ? 14 : 9);
-
           fish.remove();
           return;
         }
@@ -1128,7 +1237,7 @@
     }
 
     function createCrystal() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       const crystal = document.createElement('div');
       crystal.className = 'crystal';
       crystal.innerHTML = `<div class="shape"></div>`;
@@ -1139,7 +1248,7 @@
       let x = 590;
       const spd = (3.5 + Math.random() * 1.3) * (1 + level * 0.08);
       function move() {
-        if (!gameRunning) { crystal.remove(); return; }
+        if (!gameRunning || paused) { crystal.remove(); return; }
         x -= spd;
         crystal.style.left = x + 'px';
         const crystalBottom = 115 + heightOffset;
@@ -1151,10 +1260,8 @@
           addCombo();
           playSound('crystal');
           showPopup(penguinX + 4, 510, '+' + pts, 'crystal');
-
           const py = 840 - (110 - penguinY) - 50;
           spawnParticles(penguinX + 20, py, '#70e0ff', 12);
-
           crystal.remove();
           return;
         }
@@ -1165,7 +1272,7 @@
     }
 
     function createOrca() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       const orca = document.createElement('div');
       orca.className = 'orca';
       orca.innerHTML = `<div class="fin"></div><div class="body"></div><div class="belly"></div><div class="tail"></div><div class="eye"></div>`;
@@ -1174,7 +1281,7 @@
       let x = 610;
       const spd = (4.5 + Math.random() * 1.8) * (1 + level * 0.11);
       function move() {
-        if (!gameRunning) { orca.remove(); return; }
+        if (!gameRunning || paused) { orca.remove(); return; }
         x -= spd;
         orca.style.left = x + 'px';
         const canHit = isSliding ? (penguinY > -5) : (penguinY > -24);
@@ -1188,7 +1295,7 @@
     }
 
     function createIcicle() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       const icicle = document.createElement('div');
       icicle.className = 'icicle';
       icicle.innerHTML = `<div class="shape"></div>`;
@@ -1199,7 +1306,7 @@
       let y = -40;
       const fallSpeed = 5.5 + Math.random() * 2.5 + level * 0.3;
       function move() {
-        if (!gameRunning) { icicle.remove(); return; }
+        if (!gameRunning || paused) { icicle.remove(); return; }
         y += fallSpeed;
         icicle.style.top = y + 'px';
         const penguinTop = 840 - (110 - penguinY) - 72;
@@ -1218,7 +1325,7 @@
     }
 
     function createPlatform() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       const plat = document.createElement('div');
       plat.className = 'platform';
       const width = 75 + Math.random() * 120;
@@ -1231,7 +1338,7 @@
       let x = 590;
       const spd = (3.7 + Math.random() * 1.3) * (1 + level * 0.09);
       function move() {
-        if (!gameRunning) { plat.remove(); return; }
+        if (!gameRunning || paused) { plat.remove(); return; }
         x -= spd;
         plat.style.left = x + 'px';
         if (x < -170) { plat.remove(); return; }
@@ -1241,7 +1348,7 @@
     }
 
     function createShield() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       const item = document.createElement('div');
       item.className = 'shield-item';
       item.innerHTML = `<div class="core"></div>`;
@@ -1250,17 +1357,15 @@
       let x = 590;
       const spd = (3.4 + Math.random() * 1.2) * (1 + level * 0.08);
       function move() {
-        if (!gameRunning) { item.remove(); return; }
+        if (!gameRunning || paused) { item.remove(); return; }
         x -= spd;
         item.style.left = x + 'px';
         if (penguinY < 22 && x < penguinX + 50 && x + 30 > penguinX) {
           activateShield();
           playSound('shield');
           showPopup(penguinX + 4, 510, 'ESCUDO!', 'shield');
-
           const py = 840 - (110 - penguinY) - 40;
           spawnParticles(penguinX + 20, py, '#60e0ff', 14);
-
           item.remove();
           return;
         }
@@ -1277,7 +1382,7 @@
       combo = 0; comboTimer = 0;
       comboEl.style.display = 'none';
       playSound('hit');
-      shakeScreen(8, 320); // Screen shake
+      shakeScreen(8, 320);
       setTimeout(() => invincible = false, 1500);
       if (lives <= 0) gameOver();
     }
@@ -1288,6 +1393,7 @@
 
     function gameOver() {
       gameRunning = false;
+      paused = false;
       clearInterval(fishTimer);
       clearInterval(orcaTimer);
       clearInterval(platformTimer);
@@ -1300,10 +1406,10 @@
       isSliding = false;
       penguin.classList.remove('shielded', 'running', 'sliding');
       controls.style.display = 'none';
+      pauseBtn.style.display = 'none';
+      pauseScreen.style.display = 'none';
       stopRaceMusic();
       playSound('gameover');
-
-      // limpa partículas
       particles.forEach(p => p.el.remove());
       particles = [];
 
@@ -1341,7 +1447,7 @@
     }
 
     function loop() {
-      if (!gameRunning) return;
+      if (!gameRunning || paused) return;
       updatePenguin();
       updateParticles();
       animId = requestAnimationFrame(loop);
@@ -1352,7 +1458,7 @@
       particles = [];
       score = 0; distance = 0; lives = 3; level = 1;
       nextLevelScore = 420; invincible = false; shieldActive = false;
-      isSliding = false; combo = 0; comboTimer = 0;
+      isSliding = false; combo = 0; comboTimer = 0; paused = false;
       if (shieldTimeout) clearTimeout(shieldTimeout);
       penguin.classList.remove('shielded', 'sliding');
       onGround = true; velocityX = 0; velocityY = 0;
@@ -1366,7 +1472,9 @@
       message.style.display = 'none';
       document.getElementById('ranking-screen').style.display = 'none';
       document.getElementById('name-screen').style.display = 'none';
+      pauseScreen.style.display = 'none';
       controls.style.display = 'flex';
+      pauseBtn.style.display = 'flex';
       gameRunning = true;
       penguin.classList.add('running');
       playSound('start');
@@ -1380,6 +1488,7 @@
       loop();
     }
 
+    // Eventos
     document.getElementById('start-btn').addEventListener('click', startGame);
     document.getElementById('ranking-btn').addEventListener('click', showRanking);
     document.getElementById('back-btn').addEventListener('click', hideRanking);
@@ -1392,6 +1501,11 @@
     document.getElementById('name-input').addEventListener('keydown', e => {
       if (e.key === 'Enter') document.getElementById('save-name-btn').click();
     });
+
+    // Botões de pausa
+    pauseBtn.addEventListener('click', togglePause);
+    document.getElementById('resume-btn').addEventListener('click', togglePause);
+    document.getElementById('menu-btn').addEventListener('click', goToMenu);
   </script>
 </body>
 </html>
