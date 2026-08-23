@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pinguim Runner - Visual Bom</title>
+  <title>Pinguim Runner - Com Nadadeiras</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -102,83 +102,138 @@
     #lives { color: #ff6b6b; }
     #level { color: #ffeb3b; }
 
-    /* ========== PINGUIM CSS ========== */
+    /* ========== PINGUIM COM NADDEIRAS ========== */
     #penguin {
       position: absolute;
       bottom: 105px;
       left: 130px;
-      width: 48px;
-      height: 58px;
+      width: 56px;
+      height: 64px;
       z-index: 12;
       transform-origin: center bottom;
     }
+
+    /* Corpo */
     #penguin .body {
       position: absolute;
-      bottom: 8px;
-      left: 6px;
+      bottom: 10px;
+      left: 10px;
       width: 36px;
-      height: 42px;
+      height: 40px;
       background: #1a1a1a;
-      border-radius: 50% 50% 45% 45%;
+      border-radius: 50% 50% 42% 42%;
+      z-index: 2;
     }
+
+    /* Barriga branca */
     #penguin .belly {
       position: absolute;
-      bottom: 14px;
-      left: 12px;
+      bottom: 16px;
+      left: 16px;
       width: 24px;
-      height: 28px;
-      background: #f5f5f5;
+      height: 26px;
+      background: #f8f8f8;
       border-radius: 50%;
+      z-index: 3;
     }
+
+    /* Cabeça */
     #penguin .head {
       position: absolute;
-      bottom: 38px;
-      left: 8px;
-      width: 32px;
-      height: 28px;
+      bottom: 40px;
+      left: 11px;
+      width: 34px;
+      height: 30px;
       background: #1a1a1a;
       border-radius: 50%;
+      z-index: 4;
     }
+
+    /* Olhos */
     #penguin .eye {
       position: absolute;
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       background: white;
       border-radius: 50%;
-      top: 8px;
+      top: 9px;
+      z-index: 5;
     }
     #penguin .eye::after {
       content: '';
       position: absolute;
-      width: 3.5px;
-      height: 3.5px;
+      width: 4px;
+      height: 4px;
       background: #111;
       border-radius: 50%;
-      top: 1.5px;
-      left: 2px;
+      top: 2px;
+      left: 2.5px;
     }
     #penguin .eye.left { left: 6px; }
     #penguin .eye.right { right: 6px; }
+
+    /* Bico */
     #penguin .beak {
       position: absolute;
-      bottom: 6px;
-      left: 11px;
+      bottom: 5px;
+      left: 12px;
       width: 0;
       height: 0;
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
-      border-top: 7px solid #ff9900;
+      border-top: 8px solid #ff9900;
+      z-index: 5;
     }
+
+    /* ===== NADDEIRAS (MÃOS) ===== */
+    #penguin .flipper {
+      position: absolute;
+      width: 14px;
+      height: 22px;
+      background: #1a1a1a;
+      border-radius: 50% 50% 40% 40%;
+      z-index: 1;
+      bottom: 22px;
+    }
+    #penguin .flipper.left {
+      left: 0;
+      transform: rotate(-25deg);
+      transform-origin: top center;
+    }
+    #penguin .flipper.right {
+      right: 0;
+      transform: rotate(25deg);
+      transform-origin: top center;
+    }
+
+    /* Animação das nadadeiras quando corre */
+    #penguin.running .flipper.left {
+      animation: flipperLeft 0.25s ease-in-out infinite;
+    }
+    #penguin.running .flipper.right {
+      animation: flipperRight 0.25s ease-in-out infinite;
+    }
+    @keyframes flipperLeft {
+      0%, 100% { transform: rotate(-25deg); }
+      50% { transform: rotate(-45deg); }
+    }
+    @keyframes flipperRight {
+      0%, 100% { transform: rotate(25deg); }
+      50% { transform: rotate(45deg); }
+    }
+
+    /* Pés */
     #penguin .foot {
       position: absolute;
       bottom: 0;
-      width: 12px;
-      height: 8px;
+      width: 13px;
+      height: 9px;
       background: #ff9900;
-      border-radius: 6px 6px 3px 3px;
+      border-radius: 7px 7px 3px 3px;
+      z-index: 1;
     }
-    #penguin .foot.left { left: 8px; }
-    #penguin .foot.right { right: 8px; }
+    #penguin .foot.left { left: 11px; }
+    #penguin .foot.right { right: 11px; }
 
     #penguin.running .foot.left {
       animation: footLeft 0.25s ease-in-out infinite;
@@ -187,13 +242,14 @@
       animation: footRight 0.25s ease-in-out infinite;
     }
     @keyframes footLeft {
-      0%, 100% { transform: translateY(0) rotate(-10deg); }
-      50% { transform: translateY(-3px) rotate(10deg); }
+      0%, 100% { transform: translateY(0) rotate(-8deg); }
+      50% { transform: translateY(-3px) rotate(8deg); }
     }
     @keyframes footRight {
-      0%, 100% { transform: translateY(0) rotate(10deg); }
-      50% { transform: translateY(-3px) rotate(-10deg); }
+      0%, 100% { transform: translateY(0) rotate(8deg); }
+      50% { transform: translateY(-3px) rotate(-8deg); }
     }
+
     #penguin.running {
       animation: bodyBob 0.25s ease-in-out infinite;
     }
@@ -202,13 +258,14 @@
       50% { transform: translateY(-4px); }
     }
 
-    /* ========== PEIXE CSS ========== */
+    /* ========== PEIXE ========== */
     .fish {
       position: absolute;
       bottom: 108px;
       width: 42px;
       height: 24px;
       z-index: 8;
+      animation: fishSwim 0.8s ease-in-out infinite;
     }
     .fish .body {
       position: absolute;
@@ -248,21 +305,19 @@
       top: 1px;
       left: 1.5px;
     }
-    .fish {
-      animation: fishSwim 0.8s ease-in-out infinite;
-    }
     @keyframes fishSwim {
       0%, 100% { transform: translateY(0) rotate(-3deg); }
       50% { transform: translateY(-4px) rotate(3deg); }
     }
 
-    /* ========== ORCA CSS ========== */
+    /* ========== ORCA ========== */
     .orca {
       position: absolute;
       bottom: 100px;
       width: 70px;
       height: 36px;
       z-index: 9;
+      animation: orcaSwim 0.7s ease-in-out infinite;
     }
     .orca .body {
       position: absolute;
@@ -320,9 +375,6 @@
       border-radius: 50%;
       top: 1px;
       left: 1.5px;
-    }
-    .orca {
-      animation: orcaSwim 0.7s ease-in-out infinite;
     }
     @keyframes orcaSwim {
       0%   { transform: translateY(0) rotate(-2deg); }
@@ -435,8 +487,10 @@
 
     <div id="level-up">NÍVEL 2!</div>
 
-    <!-- Pinguim CSS -->
+    <!-- Pinguim completo com nadadeiras -->
     <div id="penguin">
+      <div class="flipper left"></div>
+      <div class="flipper right"></div>
       <div class="body"></div>
       <div class="belly"></div>
       <div class="head">
@@ -453,7 +507,7 @@
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Visual próprio (sem emoji)<br>
+        Agora com nadadeiras!<br>
         Física boa de corrida e pulo<br>
         10 Níveis
       </p>
@@ -524,7 +578,7 @@
     let score = 0;
     let lives = 3;
     let level = 1;
-    let highScore = parseInt(localStorage.getItem('pinguimGoodHigh') || '0');
+    let highScore = parseInt(localStorage.getItem('pinguimFlipperHigh') || '0');
     
     let penguinX = 130;
     let penguinY = 0;
@@ -535,13 +589,11 @@
     let invincible = false;
     let onGround = true;
 
-    // Física de Corrida
     const AUTO_FORCE = 0.28;
     const ACCEL = 0.55;
     const FRICTION = 0.88;
     const MAX_SPEED_BASE = 4.8;
 
-    // Física de Pulo
     let jumpHeld = false;
     let coyoteTime = 0;
     let jumpBuffer = 0;
@@ -559,7 +611,6 @@
 
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
-    // Neve
     for (let i = 0; i < 45; i++) {
       const flake = document.createElement('div');
       flake.className = 'snow';
@@ -611,7 +662,6 @@
     }
 
     function updatePenguin() {
-      // Física de Corrida
       velocityX += AUTO_FORCE;
 
       if (keys['ArrowLeft'] || keys['a']) velocityX -= ACCEL;
@@ -639,7 +689,6 @@
         playSound('levelup');
       }
 
-      // Física de Pulo
       if (jumpBuffer > 0) jumpBuffer--;
       if (coyoteTime > 0) coyoteTime--;
 
@@ -667,12 +716,11 @@
         onGround = false;
       }
 
-      // Plataformas
       document.querySelectorAll('.platform').forEach(plat => {
         const platX = parseFloat(plat.style.left);
         const platW = parseFloat(plat.style.width);
 
-        if (penguinX + 48 > platX && penguinX < platX + platW &&
+        if (penguinX + 50 > platX && penguinX < platX + platW &&
             penguinY > -10 && penguinY < 28 && velocityY >= 0) {
           penguinY = 0;
           velocityY = 0;
@@ -824,7 +872,7 @@
 
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
-        localStorage.setItem('pinguimGoodHigh', highScore);
+        localStorage.setItem('pinguimFlipperHigh', highScore);
         hiscoreEl.textContent = 'Rec: ' + highScore;
       }
 
