@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Pinguim Runner - Visual Sério</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
@@ -14,6 +15,7 @@
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
       overflow: hidden;
+      touch-action: none;
     }
     #game {
       width: 480px;
@@ -23,6 +25,7 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 0 0 2px #1a2a3a, 0 20px 60px rgba(0,0,0,0.9);
+      touch-action: none;
     }
     .aurora {
       position: absolute;
@@ -96,7 +99,6 @@
       z-index: 12;
       transform-origin: center bottom;
     }
-    /* Escudo visual */
     #penguin.shielded::after {
       content: '';
       position: absolute;
@@ -265,7 +267,6 @@
       top: 1px;
       left: 1px;
     }
-    /* Peixe Dourado */
     .fish.gold .body {
       background: #e8b020;
     }
@@ -348,7 +349,6 @@
       box-shadow: 0 4px 0 #0a1520, 0 6px 10px rgba(0,0,0,0.4);
       z-index: 7;
     }
-    /* Escudo item */
     .shield-item {
       position: absolute;
       bottom: 108px;
@@ -449,6 +449,51 @@
     #start-btn:hover {
       background: #2a4a60;
     }
+
+    /* ===== CONTROLES TOUCH ===== */
+    #controls {
+      position: absolute;
+      bottom: 18px;
+      left: 0;
+      right: 0;
+      display: none;
+      justify-content: space-between;
+      padding: 0 18px;
+      z-index: 25;
+      pointer-events: none;
+    }
+    #controls button {
+      pointer-events: auto;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(15, 30, 45, 0.82);
+      border: 2px solid #3a5a70;
+      color: #b0d0e8;
+      font-size: 26px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      transition: background 0.1s, transform 0.1s;
+    }
+    #controls button:active,
+    #controls button.pressed {
+      background: rgba(40, 80, 110, 0.95);
+      transform: scale(0.93);
+      border-color: #5a8aaa;
+    }
+    #btn-jump {
+      width: 80px;
+      height: 80px;
+      font-size: 30px;
+      background: rgba(20, 50, 70, 0.88);
+      border-color: #4a7a9a;
+    }
   </style>
 </head>
 <body>
@@ -476,12 +521,19 @@
       <div class="foot right"></div>
     </div>
     <div id="ground"></div>
+
+    <!-- Controles Touch -->
+    <div id="controls">
+      <button id="btn-left">◀</button>
+      <button id="btn-jump">▲</button>
+      <button id="btn-right">▶</button>
+    </div>
+
     <div id="message">
       <h1>Pinguim Runner</h1>
       <p>
-        Plataformas altas<br>
-        Peixe Dourado (+50)<br>
-        Escudo (invencível)
+        Plataformas • Peixe Dourado<br>
+        Escudo • Controles Touch
       </p>
       <button id="start-btn">Iniciar</button>
     </div>
@@ -558,6 +610,10 @@
     const message = document.getElementById('message');
     const levelUpEl = document.getElementById('level-up');
     const startBtn = document.getElementById('start-btn');
+    const controls = document.getElementById('controls');
+    const btnLeft = document.getElementById('btn-left');
+    const btnRight = document.getElementById('btn-right');
+    const btnJump = document.getElementById('btn-jump');
 
     let score = 0;
     let lives = 3;
@@ -606,7 +662,9 @@
       game.appendChild(flake);
     }
 
+    // ===== CONTROLES (teclado + touch) =====
     const keys = {};
+
     document.addEventListener('keydown', e => {
       keys[e.key] = true;
       if ((e.key === 'ArrowUp' || e.key === ' ') && gameRunning) {
@@ -619,13 +677,57 @@
       keys[e.key] = false;
       if (e.key === 'ArrowUp' || e.key === ' ') jumpHeld = false;
     });
-    game.addEventListener('mousedown', () => {
-      if (gameRunning) {
+
+    // Toque / clique na área do jogo = pular
+    game.addEventListener('pointerdown', (e) => {
+      if (!gameRunning) return;
+      // Ignora se clicou nos botões de controle
+      if (e.target.closest('#controls')) return;
+      jumpBuffer = BUFFER_MAX;
+      jumpHeld = true;
+    });
+    game.addEventListener('pointerup', () => {
+      jumpHeld = false;
+    });
+    game.addEventListener('pointercancel', () => {
+      jumpHeld = false;
+    });
+
+    // Botões de controle
+    function setupButton(btn, onDown, onUp) {
+      const start = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        btn.classList.add('pressed');
+        onDown();
+      };
+      const end = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        btn.classList.remove('pressed');
+        onUp();
+      };
+      btn.addEventListener('pointerdown', start);
+      btn.addEventListener('pointerup', end);
+      btn.addEventListener('pointerleave', end);
+      btn.addEventListener('pointercancel', end);
+    }
+
+    setupButton(btnLeft, 
+      () => { keys['ArrowLeft'] = true; },
+      () => { keys['ArrowLeft'] = false; }
+    );
+    setupButton(btnRight,
+      () => { keys['ArrowRight'] = true; },
+      () => { keys['ArrowRight'] = false; }
+    );
+    setupButton(btnJump,
+      () => {
         jumpBuffer = BUFFER_MAX;
         jumpHeld = true;
-      }
-    });
-    game.addEventListener('mouseup', () => jumpHeld = false);
+      },
+      () => { jumpHeld = false; }
+    );
 
     function tryJump() {
       if ((onGround || coyoteTime > 0) && jumpBuffer > 0) {
@@ -889,6 +991,7 @@
       if (shieldTimeout) clearTimeout(shieldTimeout);
       shieldActive = false;
       penguin.classList.remove('shielded', 'running');
+      controls.style.display = 'none';
       playSound('gameover');
       if (Math.floor(score) > highScore) {
         highScore = Math.floor(score);
@@ -931,12 +1034,15 @@
       coyoteTime = 0;
       jumpBuffer = 0;
       jumpHeld = false;
+      keys['ArrowLeft'] = false;
+      keys['ArrowRight'] = false;
       scoreEl.textContent = 'Pontos: 0';
       levelEl.textContent = 'Nível 1';
       updateLives();
       penguinX = 130;
       penguinY = 0;
       message.style.display = 'none';
+      controls.style.display = 'flex';
       gameRunning = true;
       penguin.classList.add('running');
       playSound('start');
