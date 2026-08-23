@@ -20,54 +20,81 @@
     #game {
       width: 560px;
       height: 840px;
-      background: linear-gradient(to bottom, #02060f 0%, #061018 25%, #0a1a28 50%, #0f2a3c 100%);
+      background: linear-gradient(to bottom, 
+        #01040c 0%, 
+        #020b16 20%, 
+        #041525 45%, 
+        #0a1f32 70%, 
+        #0d2838 100%);
       border-radius: 10px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 0 0 2px #1a2a3a, 0 25px 70px rgba(0,0,0,0.95);
+      box-shadow: 0 0 0 2px #0f1c28, 0 25px 70px rgba(0,0,0,0.95);
       touch-action: none;
     }
+
+    /* Aurora mais fria e séria */
     .aurora {
       position: absolute;
       top: 0; left: 0;
-      width: 100%; height: 50%;
+      width: 100%; height: 55%;
       pointer-events: none;
       z-index: 1;
       mix-blend-mode: screen;
-      opacity: 0.45;
+      opacity: 0.38;
     }
     .aurora1 {
-      background: linear-gradient(120deg, transparent 20%, rgba(0,180,140,0.15) 40%, transparent 70%);
-      animation: auroraMove 18s linear infinite;
+      background: linear-gradient(125deg, 
+        transparent 15%, 
+        rgba(0, 160, 140, 0.18) 35%, 
+        rgba(20, 80, 120, 0.12) 55%, 
+        transparent 75%);
+      animation: auroraMove 22s linear infinite;
     }
     .aurora2 {
-      background: linear-gradient(100deg, transparent 30%, rgba(80,40,180,0.12) 50%, transparent 80%);
-      animation: auroraMove 24s linear infinite reverse;
+      background: linear-gradient(105deg, 
+        transparent 25%, 
+        rgba(60, 40, 140, 0.14) 45%, 
+        rgba(0, 100, 130, 0.10) 65%, 
+        transparent 85%);
+      animation: auroraMove 28s linear infinite reverse;
     }
     @keyframes auroraMove {
-      0% { transform: translateX(-30%); }
-      100% { transform: translateX(30%); }
+      0% { transform: translateX(-35%); }
+      100% { transform: translateX(35%); }
     }
+
+    /* Estrelas */
+    .star {
+      position: absolute;
+      background: #d0e4f8;
+      border-radius: 50%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
     .snow {
       position: absolute;
-      background: rgba(220,230,240,0.7);
+      background: rgba(210, 225, 240, 0.65);
       border-radius: 50%;
       z-index: 2;
       pointer-events: none;
     }
     @keyframes snowFall {
-      0% { transform: translateY(-20px); opacity: 0.8; }
-      100% { transform: translateY(860px); opacity: 0.05; }
+      0% { transform: translateY(-20px); opacity: 0.7; }
+      100% { transform: translateY(860px); opacity: 0.04; }
     }
+
     #ground {
       position: absolute;
       bottom: 0;
       width: 100%;
       height: 110px;
-      background: linear-gradient(to bottom, #1a3040 0%, #0e1e28 100%);
-      border-top: 2px solid #2a4050;
+      background: linear-gradient(to bottom, #122530 0%, #0a1822 100%);
+      border-top: 2px solid #1e3545;
       z-index: 3;
     }
+
     #hud {
       position: absolute;
       top: 16px;
@@ -80,116 +107,130 @@
       gap: 8px;
     }
     #score, #lives, #level, #hiscore {
-      background: rgba(0,0,0,0.6);
-      color: #c8d8e8;
+      background: rgba(0,0,0,0.55);
+      color: #b8cddc;
       padding: 8px 14px;
       border-radius: 5px;
       font-size: 14px;
       font-weight: 700;
-      border: 1px solid #1a2a3a;
+      border: 1px solid #1a2c3a;
     }
-    #lives { color: #e07070; }
-    #level { color: #70b0d0; }
+    #lives { color: #d06060; }
+    #level { color: #5a9ab8; }
 
+    /* ========== PINGUIM SÉRIO ========== */
     #penguin {
       position: absolute;
       bottom: 110px;
       left: 150px;
-      width: 46px;
-      height: 68px;
+      width: 48px;
+      height: 72px;
       z-index: 12;
       transform-origin: center bottom;
     }
-    #penguin.shielded::after {
-      content: '';
-      position: absolute;
-      left: -11px;
-      top: -7px;
-      width: 68px;
-      height: 82px;
-      border-radius: 50%;
-      border: 3px solid rgba(80, 220, 255, 0.85);
-      box-shadow: 0 0 14px rgba(80, 220, 255, 0.7), inset 0 0 12px rgba(80, 220, 255, 0.25);
-      animation: shieldPulse 0.8s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes shieldPulse {
-      0%, 100% { opacity: 0.85; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.06); }
-    }
+
+    /* Corpo principal mais alongado e sério */
     #penguin .body {
       position: absolute;
-      bottom: 9px;
-      left: 8px;
+      bottom: 10px;
+      left: 9px;
       width: 30px;
-      height: 40px;
-      background: #0e0e0e;
-      border-radius: 40% 40% 30% 30%;
+      height: 42px;
+      background: #0a0a0a;
+      border-radius: 45% 45% 38% 38%;
     }
+
+    /* Barriga */
     #penguin .belly {
       position: absolute;
-      bottom: 15px;
-      left: 12px;
+      bottom: 16px;
+      left: 13px;
       width: 22px;
-      height: 26px;
-      background: #d8d8d8;
-      border-radius: 40%;
+      height: 28px;
+      background: #d4d4d4;
+      border-radius: 42%;
     }
+
+    /* Cabeça */
     #penguin .head {
       position: absolute;
-      bottom: 42px;
-      left: 9px;
+      bottom: 46px;
+      left: 10px;
       width: 28px;
       height: 26px;
-      background: #0e0e0e;
+      background: #0a0a0a;
       border-radius: 50%;
     }
+
+    /* Olhos sérios */
     #penguin .eye {
       position: absolute;
-      width: 5.5px;
-      height: 5.5px;
-      background: #e8e8e8;
+      width: 7px;
+      height: 7px;
+      background: #f0f0f0;
       border-radius: 50%;
-      top: 9px;
+      top: 8px;
     }
     #penguin .eye::after {
       content: '';
       position: absolute;
-      width: 2.8px;
-      height: 2.8px;
+      width: 3.5px;
+      height: 3.5px;
       background: #111;
       border-radius: 50%;
-      top: 1.3px;
-      left: 1.6px;
+      top: 1.8px;
+      left: 2px;
     }
-    #penguin .eye.left { left: 5px; }
-    #penguin .eye.right { right: 5px; }
+    #penguin .eye.left { left: 4px; }
+    #penguin .eye.right { right: 4px; }
+
+    /* Sobrancelha sutil para dar seriedade */
+    #penguin .brow {
+      position: absolute;
+      width: 8px;
+      height: 2px;
+      background: #1a1a1a;
+      border-radius: 2px;
+      top: 5px;
+    }
+    #penguin .brow.left {
+      left: 3px;
+      transform: rotate(-8deg);
+    }
+    #penguin .brow.right {
+      right: 3px;
+      transform: rotate(8deg);
+    }
+
+    /* Bico mais definido */
     #penguin .beak {
       position: absolute;
-      bottom: 4px;
-      left: 10px;
+      bottom: 5px;
+      left: 9px;
       width: 0;
       height: 0;
-      border-left: 4.5px solid transparent;
-      border-right: 4.5px solid transparent;
-      border-top: 7px solid #c07020;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid #c07820;
     }
+
+    /* Nadadeiras */
     #penguin .flipper {
       position: absolute;
       width: 12px;
-      height: 22px;
-      background: #0e0e0e;
-      border-radius: 40% 40% 30% 30%;
+      height: 24px;
+      background: #0a0a0a;
+      border-radius: 40% 40% 35% 35%;
       bottom: 22px;
     }
     #penguin .flipper.left {
-      left: -3px;
-      transform: rotate(-20deg);
+      left: -4px;
+      transform: rotate(-18deg);
       transform-origin: top center;
     }
     #penguin .flipper.right {
-      right: -3px;
-      transform: rotate(20deg);
+      right: -4px;
+      transform: rotate(18deg);
       transform-origin: top center;
     }
     #penguin.running .flipper.left {
@@ -199,23 +240,26 @@
       animation: flipperR 0.28s ease-in-out infinite;
     }
     @keyframes flipperL {
-      0%, 100% { transform: rotate(-20deg); }
-      50% { transform: rotate(-38deg); }
+      0%, 100% { transform: rotate(-18deg); }
+      50% { transform: rotate(-36deg); }
     }
     @keyframes flipperR {
-      0%, 100% { transform: rotate(20deg); }
-      50% { transform: rotate(38deg); }
+      0%, 100% { transform: rotate(18deg); }
+      50% { transform: rotate(36deg); }
     }
+
+    /* Pés */
     #penguin .foot {
       position: absolute;
       bottom: 0;
-      width: 12px;
+      width: 13px;
       height: 8px;
-      background: #c07020;
+      background: #c07820;
       border-radius: 4px 4px 2px 2px;
     }
     #penguin .foot.left { left: 9px; }
     #penguin .foot.right { right: 9px; }
+
     #penguin.running {
       animation: bodyBob 0.28s ease-in-out infinite;
     }
@@ -224,6 +268,26 @@
       50% { transform: translateY(-3px); }
     }
 
+    /* Escudo */
+    #penguin.shielded::after {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: -8px;
+      width: 72px;
+      height: 86px;
+      border-radius: 50%;
+      border: 3px solid rgba(70, 200, 240, 0.8);
+      box-shadow: 0 0 16px rgba(70, 200, 240, 0.6), inset 0 0 12px rgba(70, 200, 240, 0.2);
+      animation: shieldPulse 0.85s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shieldPulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    /* Peixe */
     .fish {
       position: absolute;
       bottom: 112px;
@@ -273,6 +337,7 @@
     .fish.gold .tail { border-left-color: #c09018; }
     .fish.gold { filter: drop-shadow(0 0 7px rgba(255, 200, 50, 0.75)); }
 
+    /* Orca */
     .orca {
       position: absolute;
       bottom: 108px;
@@ -341,10 +406,10 @@
     .platform {
       position: absolute;
       height: 24px;
-      background: linear-gradient(to bottom, #3a5a6e, #1e3344);
+      background: linear-gradient(to bottom, #2e4a5c, #1a2e3c);
       border-radius: 3px;
-      border: 1px solid #4a6a7e;
-      box-shadow: 0 5px 0 #0a1520, 0 7px 12px rgba(0,0,0,0.4);
+      border: 1px solid #3a5a6e;
+      box-shadow: 0 5px 0 #08141c, 0 7px 12px rgba(0,0,0,0.45);
       z-index: 7;
     }
 
@@ -359,11 +424,11 @@
       position: absolute;
       width: 20px;
       height: 20px;
-      background: radial-gradient(circle, #a0f0ff 20%, #2090c0 80%);
+      background: radial-gradient(circle, #90e8ff 15%, #1a80a8 80%);
       border-radius: 50%;
       left: 5px;
       top: 5px;
-      box-shadow: 0 0 12px rgba(80, 220, 255, 0.9);
+      box-shadow: 0 0 12px rgba(70, 200, 240, 0.85);
       animation: shieldItemPulse 1s ease-in-out infinite;
     }
     @keyframes shieldItemPulse {
@@ -411,7 +476,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(to bottom, rgba(2,6,15,0.92) 0%, rgba(6,16,24,0.95) 100%);
+      background: linear-gradient(to bottom, rgba(1,4,12,0.94) 0%, rgba(4,14,24,0.96) 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -423,29 +488,29 @@
     #message .logo {
       font-size: 52px;
       font-weight: 800;
-      color: #e8f4ff;
-      letter-spacing: 4px;
-      text-shadow: 0 0 20px rgba(100, 180, 255, 0.4), 0 4px 0 #0a2030;
+      color: #d8e8f4;
+      letter-spacing: 5px;
+      text-shadow: 0 0 24px rgba(80, 160, 220, 0.35), 0 4px 0 #061018;
       margin-bottom: 8px;
     }
     #message .subtitle {
-      font-size: 15px;
-      color: #6a9ab8;
-      letter-spacing: 3px;
+      font-size: 14px;
+      color: #5a8aa8;
+      letter-spacing: 4px;
       text-transform: uppercase;
       margin-bottom: 36px;
     }
     #message .info {
       font-size: 14px;
-      color: #7a9ab0;
+      color: #6a8fa8;
       line-height: 1.7;
       margin-bottom: 40px;
       max-width: 280px;
     }
     #start-btn {
-      background: linear-gradient(to bottom, #1e4a68, #163a52);
-      color: #d0e8f8;
-      border: 1px solid #3a6a88;
+      background: linear-gradient(to bottom, #163a52, #0e2a3c);
+      color: #c8dcec;
+      border: 1px solid #2a5a78;
       padding: 16px 48px;
       border-radius: 6px;
       font-size: 17px;
@@ -455,11 +520,8 @@
       letter-spacing: 1px;
     }
     #start-btn:hover {
-      background: linear-gradient(to bottom, #2a5a78, #1e4a62);
+      background: linear-gradient(to bottom, #1e4a68, #163a52);
       transform: translateY(-1px);
-    }
-    #start-btn:active {
-      transform: translateY(1px);
     }
 
     #controls {
@@ -478,9 +540,9 @@
       width: 76px;
       height: 76px;
       border-radius: 50%;
-      background: rgba(15, 30, 45, 0.82);
-      border: 2px solid #3a5a70;
-      color: #b0d0e8;
+      background: rgba(10, 22, 34, 0.85);
+      border: 2px solid #2a4a60;
+      color: #a0c0d8;
       font-size: 28px;
       font-weight: 700;
       display: flex;
@@ -494,16 +556,16 @@
     }
     #controls button:active,
     #controls button.pressed {
-      background: rgba(40, 80, 110, 0.95);
+      background: rgba(30, 60, 85, 0.95);
       transform: scale(0.93);
-      border-color: #5a8aaa;
+      border-color: #4a7a9a;
     }
     #btn-jump {
       width: 84px;
       height: 84px;
       font-size: 32px;
-      background: rgba(20, 50, 70, 0.88);
-      border-color: #4a7a9a;
+      background: rgba(15, 35, 50, 0.9);
+      border-color: #3a6a88;
     }
   </style>
 </head>
@@ -518,12 +580,15 @@
       <div id="hiscore">Rec: 0</div>
     </div>
     <div id="level-up">NÍVEL 2</div>
+
     <div id="penguin">
       <div class="flipper left"></div>
       <div class="flipper right"></div>
       <div class="body"></div>
       <div class="belly"></div>
       <div class="head">
+        <div class="brow left"></div>
+        <div class="brow right"></div>
         <div class="eye left"></div>
         <div class="eye right"></div>
         <div class="beak"></div>
@@ -531,6 +596,7 @@
       <div class="foot left"></div>
       <div class="foot right"></div>
     </div>
+
     <div id="ground"></div>
 
     <div id="controls">
@@ -543,9 +609,9 @@
       <div class="logo">ICE RACE</div>
       <div class="subtitle">Pinguim Runner</div>
       <div class="info">
-        Plataformas altas • Peixe Dourado<br>
-        Escudo • Controles Touch<br>
-        Música de Corrida
+        Visual frio e sério<br>
+        Plataformas • Peixe Dourado<br>
+        Escudo • Música de Corrida
       </div>
       <button id="start-btn">JOGAR</button>
     </div>
@@ -554,7 +620,7 @@
   <script>
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // ===== MÚSICA DE CORRIDA =====
+    // Música de corrida
     let musicNodes = [];
     let musicGain = null;
     let musicPlaying = false;
@@ -569,7 +635,6 @@
       musicGain.connect(audioCtx.destination);
       musicGain.gain.linearRampToValueAtTime(0.085, audioCtx.currentTime + 1.8);
 
-      // Baixo pulsante
       const bass = audioCtx.createOscillator();
       bass.type = 'triangle';
       bass.frequency.value = 55;
@@ -579,7 +644,6 @@
       bassGain.connect(musicGain);
       bass.start();
 
-      // Pad atmosférico
       const pad = audioCtx.createOscillator();
       pad.type = 'sine';
       pad.frequency.value = 110;
@@ -589,7 +653,6 @@
       padGain.connect(musicGain);
       pad.start();
 
-      // Vento suave
       const bufferSize = 2 * audioCtx.sampleRate;
       const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
       const data = noiseBuffer.getChannelData(0);
@@ -615,13 +678,11 @@
       musicNodes = [bass, pad, noise, musicGain];
       musicPlaying = true;
 
-      // Melodia simples que se repete (notas geladas)
-      const notes = [220, 247, 262, 294, 330, 294, 262, 247]; // escala simples
+      const notes = [220, 247, 262, 294, 330, 294, 262, 247];
       let noteIndex = 0;
 
       musicInterval = setInterval(() => {
         if (!musicPlaying) return;
-
         const osc = audioCtx.createOscillator();
         const g = audioCtx.createGain();
         osc.type = 'sine';
@@ -632,25 +693,21 @@
         g.connect(musicGain);
         osc.start();
         osc.stop(audioCtx.currentTime + 0.5);
-
         noteIndex++;
-      }, 480); // ritmo da melodia
+      }, 480);
     }
 
     function stopRaceMusic() {
       if (!musicPlaying) return;
       musicPlaying = false;
-
       if (musicInterval) {
         clearInterval(musicInterval);
         musicInterval = null;
       }
-
       if (musicGain) {
         musicGain.gain.cancelScheduledValues(audioCtx.currentTime);
         musicGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 1.4);
       }
-
       setTimeout(() => {
         musicNodes.forEach(node => {
           try { node.stop(); } catch(e) {}
@@ -660,7 +717,6 @@
       }, 1600);
     }
 
-    // ===== EFEITOS SONOROS =====
     function playSound(type) {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
@@ -771,6 +827,20 @@
     let nextLevelScore = 420;
     hiscoreEl.textContent = 'Rec: ' + highScore;
 
+    // Estrelas
+    for (let i = 0; i < 45; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      const size = 1 + Math.random() * 2.2;
+      star.style.width = size + 'px';
+      star.style.height = size + 'px';
+      star.style.left = Math.random() * 560 + 'px';
+      star.style.top = Math.random() * 520 + 'px';
+      star.style.opacity = 0.3 + Math.random() * 0.6;
+      game.appendChild(star);
+    }
+
+    // Neve
     for (let i = 0; i < 50; i++) {
       const flake = document.createElement('div');
       flake.className = 'snow';
@@ -780,7 +850,7 @@
       flake.style.left = Math.random() * 560 + 'px';
       flake.style.animation = `snowFall ${6 + Math.random() * 8}s linear infinite`;
       flake.style.animationDelay = Math.random() * 10 + 's';
-      flake.style.opacity = 0.3 + Math.random() * 0.4;
+      flake.style.opacity = 0.25 + Math.random() * 0.4;
       game.appendChild(flake);
     }
 
@@ -920,7 +990,7 @@
           const platTop = platBottom + 24;
 
           const pLeft = penguinX;
-          const pRight = penguinX + 46;
+          const pRight = penguinX + 48;
           const pBottom = 110 - penguinY;
 
           if (pRight > platX + 4 && pLeft < platX + platW - 4) {
@@ -979,7 +1049,7 @@
         if (!gameRunning) { fish.remove(); return; }
         x -= spd;
         fish.style.left = x + 'px';
-        if (penguinY < 18 && x < penguinX + 48 && x + 38 > penguinX) {
+        if (penguinY < 18 && x < penguinX + 50 && x + 38 > penguinX) {
           if (isGold) {
             score += 50;
             playSound('gold');
@@ -1017,7 +1087,7 @@
         if (!gameRunning) { orca.remove(); return; }
         x -= spd;
         orca.style.left = x + 'px';
-        if (!invincible && !shieldActive && x < penguinX + 62 && x + 70 > penguinX && penguinY > -24) {
+        if (!invincible && !shieldActive && x < penguinX + 64 && x + 70 > penguinX && penguinY > -24) {
           hit();
         }
         if (x < -100) { orca.remove(); return; }
@@ -1062,7 +1132,7 @@
         if (!gameRunning) { item.remove(); return; }
         x -= spd;
         item.style.left = x + 'px';
-        if (penguinY < 22 && x < penguinX + 48 && x + 30 > penguinX) {
+        if (penguinY < 22 && x < penguinX + 50 && x + 30 > penguinX) {
           activateShield();
           playSound('shield');
           showPopup(penguinX + 4, 510, 'ESCUDO!', 'shield');
@@ -1154,7 +1224,7 @@
       gameRunning = true;
       penguin.classList.add('running');
       playSound('start');
-      startRaceMusic();          // <-- música começa aqui
+      startRaceMusic();
       fishTimer = setInterval(createFish, 1150);
       orcaTimer = setInterval(createOrca, 2050);
       platformTimer = setInterval(createPlatform, 1450);
