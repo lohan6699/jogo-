@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Ice Race</title>
+  <title>Ice Race - PC + Controle</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,6 +16,12 @@
       font-family: 'Inter', sans-serif;
       overflow: hidden;
       touch-action: none;
+    }
+    #game-wrapper {
+      width: 560px;
+      height: 840px;
+      transform-origin: center center;
+      position: relative;
     }
     #game {
       width: 560px;
@@ -551,7 +557,7 @@
       color: #6a8fa8;
       line-height: 1.7;
       margin-bottom: 28px;
-      max-width: 300px;
+      max-width: 340px;
     }
     .btn {
       background: linear-gradient(to bottom, #163a52, #0e2a3c);
@@ -654,77 +660,99 @@
       transform: scale(0.93);
     }
     #btn-jump { width: 72px; height: 72px; font-size: 26px; }
+
+    #gamepad-status {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      color: #4a7a90;
+      z-index: 21;
+      pointer-events: none;
+      display: none;
+      background: rgba(0,0,0,0.4);
+      padding: 3px 10px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-  <div id="game">
-    <div class="aurora aurora1"></div>
-    <div class="aurora aurora2"></div>
-    <div id="hud">
-      <div id="score">Pontos: 0</div>
-      <div id="level">Nível 1</div>
-      <div id="combo">Combo x1</div>
-      <div id="lives">♥ ♥ ♥</div>
-      <div id="hiscore">Rec: 0</div>
-    </div>
-    <button id="pause-btn">❚❚</button>
-    <div id="level-up">NÍVEL 2</div>
-
-    <div id="penguin">
-      <div class="flipper left"></div>
-      <div class="flipper right"></div>
-      <div class="body"></div>
-      <div class="belly"></div>
-      <div class="head">
-        <div class="brow left"></div>
-        <div class="brow right"></div>
-        <div class="eye left"></div>
-        <div class="eye right"></div>
-        <div class="beak"></div>
+  <div id="game-wrapper">
+    <div id="game">
+      <div class="aurora aurora1"></div>
+      <div class="aurora aurora2"></div>
+      <div id="hud">
+        <div id="score">Pontos: 0</div>
+        <div id="level">Nível 1</div>
+        <div id="combo">Combo x1</div>
+        <div id="lives">♥ ♥ ♥</div>
+        <div id="hiscore">Rec: 0</div>
       </div>
-      <div class="foot left"></div>
-      <div class="foot right"></div>
-    </div>
-    <div id="ground"></div>
+      <button id="pause-btn">❚❚</button>
+      <div id="level-up">NÍVEL 2</div>
 
-    <div id="controls">
-      <button id="btn-left">◀</button>
-      <button id="btn-slide">▼</button>
-      <button id="btn-jump">▲</button>
-      <button id="btn-right">▶</button>
-    </div>
-
-    <div id="message">
-      <div class="logo">ICE RACE</div>
-      <div class="subtitle">Pinguim Runner</div>
-      <div class="info">
-        Escudo • Ímã • Bloco de Gelo<br>
-        Plataformas que ficam mais difíceis<br>
-        P para Pausar
+      <div id="penguin">
+        <div class="flipper left"></div>
+        <div class="flipper right"></div>
+        <div class="body"></div>
+        <div class="belly"></div>
+        <div class="head">
+          <div class="brow left"></div>
+          <div class="brow right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="beak"></div>
+        </div>
+        <div class="foot left"></div>
+        <div class="foot right"></div>
       </div>
-      <button class="btn" id="start-btn">JOGAR</button>
-      <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
-    </div>
+      <div id="ground"></div>
 
-    <div id="pause-screen">
-      <div class="logo" style="font-size:36px;">PAUSADO</div>
-      <div class="subtitle">Jogo pausado</div>
-      <button class="btn" id="resume-btn">CONTINUAR</button>
-      <button class="btn btn-secondary" id="menu-btn">MENU PRINCIPAL</button>
-    </div>
+      <div id="controls">
+        <button id="btn-left">◀</button>
+        <button id="btn-slide">▼</button>
+        <button id="btn-jump">▲</button>
+        <button id="btn-right">▶</button>
+      </div>
 
-    <div id="ranking-screen">
-      <div class="logo" style="font-size:32px;">RANKING</div>
-      <div class="subtitle">Top 10</div>
-      <div class="ranking-list" id="ranking-list"></div>
-      <button class="btn" id="back-btn">VOLTAR</button>
-    </div>
+      <div id="gamepad-status">Controle conectado ✓</div>
 
-    <div id="name-screen">
-      <div class="logo" style="font-size:28px;">NOVO RECORDE!</div>
-      <div class="info" id="new-score-text">Pontos: 0</div>
-      <input type="text" id="name-input" placeholder="Seu nome" maxlength="12" autocomplete="off">
-      <button class="btn" id="save-name-btn">SALVAR</button>
+      <div id="message">
+        <div class="logo">ICE RACE</div>
+        <div class="subtitle">Pinguim Runner</div>
+        <div class="info">
+          Escudo • Ímã • Bloco de Gelo<br>
+          Plataformas que ficam mais difíceis<br>
+          <br>
+          <strong style="color:#8ab8d0">Teclado:</strong> Setas / WASD + Espaço<br>
+          <strong style="color:#8ab8d0">Controle:</strong> Analógico / D-Pad + A / X<br>
+          P ou Start para Pausar
+        </div>
+        <button class="btn" id="start-btn">JOGAR</button>
+        <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
+      </div>
+
+      <div id="pause-screen">
+        <div class="logo" style="font-size:36px;">PAUSADO</div>
+        <div class="subtitle">Jogo pausado</div>
+        <button class="btn" id="resume-btn">CONTINUAR</button>
+        <button class="btn btn-secondary" id="menu-btn">MENU PRINCIPAL</button>
+      </div>
+
+      <div id="ranking-screen">
+        <div class="logo" style="font-size:32px;">RANKING</div>
+        <div class="subtitle">Top 10</div>
+        <div class="ranking-list" id="ranking-list"></div>
+        <button class="btn" id="back-btn">VOLTAR</button>
+      </div>
+
+      <div id="name-screen">
+        <div class="logo" style="font-size:28px;">NOVO RECORDE!</div>
+        <div class="info" id="new-score-text">Pontos: 0</div>
+        <input type="text" id="name-input" placeholder="Seu nome" maxlength="12" autocomplete="off">
+        <button class="btn" id="save-name-btn">SALVAR</button>
+      </div>
     </div>
   </div>
 
@@ -938,6 +966,7 @@
     }
 
     const game = document.getElementById('game');
+    const gameWrapper = document.getElementById('game-wrapper');
     const penguin = document.getElementById('penguin');
     const scoreEl = document.getElementById('score');
     const livesEl = document.getElementById('lives');
@@ -949,6 +978,7 @@
     const controls = document.getElementById('controls');
     const pauseBtn = document.getElementById('pause-btn');
     const pauseScreen = document.getElementById('pause-screen');
+    const gamepadStatus = document.getElementById('gamepad-status');
 
     let score = 0, lives = 3, level = 1;
     let highScore = parseInt(localStorage.getItem('iceRaceHigh') || '0');
@@ -967,6 +997,75 @@
     let animId, distance = 0, nextLevelScore = 420;
     let pendingScore = 0;
     hiscoreEl.textContent = 'Rec: ' + highScore;
+
+    // Gamepad state
+    let gpLeft = false, gpRight = false, gpJump = false, gpSlide = false;
+    let lastStartPressed = false;
+    let gamepadConnected = false;
+
+    // Fit to PC screen
+    function fitToScreen() {
+      const scale = Math.min(
+        (window.innerWidth - 16) / 560,
+        (window.innerHeight - 16) / 840
+      ) * 0.98;
+      gameWrapper.style.transform = `scale(${Math.max(0.4, scale)})`;
+    }
+    window.addEventListener('resize', fitToScreen);
+    fitToScreen();
+
+    // Gamepad connection
+    window.addEventListener('gamepadconnected', (e) => {
+      gamepadConnected = true;
+      gamepadStatus.style.display = 'block';
+      gamepadStatus.textContent = 'Controle conectado ✓';
+    });
+    window.addEventListener('gamepaddisconnected', () => {
+      gamepadConnected = false;
+      gamepadStatus.style.display = 'none';
+      gpLeft = gpRight = gpJump = gpSlide = false;
+    });
+
+    function pollGamepad() {
+      const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+      let found = false;
+      for (let i = 0; i < gamepads.length; i++) {
+        const gp = gamepads[i];
+        if (!gp) continue;
+        found = true;
+        const dead = 0.25;
+
+        // Left stick or D-Pad
+        const axisX = gp.axes[0] || 0;
+        gpLeft = axisX < -dead || (gp.buttons[14] && gp.buttons[14].pressed);
+        gpRight = axisX > dead || (gp.buttons[15] && gp.buttons[15].pressed);
+
+        // Jump: A (0), Cross, or D-Pad Up (12), or R2/L2 sometimes
+        gpJump = (gp.buttons[0] && gp.buttons[0].pressed) ||
+                 (gp.buttons[12] && gp.buttons[12].pressed) ||
+                 (gp.buttons[2] && gp.buttons[2].pressed); // X / Square also jump
+
+        // Slide: B (1), Circle, or D-Pad Down (13)
+        gpSlide = (gp.buttons[1] && gp.buttons[1].pressed) ||
+                  (gp.buttons[13] && gp.buttons[13].pressed);
+
+        // Start / Options for pause (button 9 usually)
+        const startPressed = (gp.buttons[9] && gp.buttons[9].pressed) ||
+                             (gp.buttons[8] && gp.buttons[8].pressed);
+        if (startPressed && !lastStartPressed && gameRunning) {
+          togglePause();
+        }
+        lastStartPressed = startPressed;
+        break; // use first connected gamepad
+      }
+      if (found && !gamepadConnected) {
+        gamepadConnected = true;
+        gamepadStatus.style.display = 'block';
+      }
+      if (!found) {
+        gpLeft = gpRight = gpJump = gpSlide = false;
+      }
+    }
 
     for (let i = 0; i < 45; i++) {
       const star = document.createElement('div');
@@ -999,20 +1098,20 @@
         togglePause(); e.preventDefault(); return;
       }
       if (paused) return;
-      if ((e.key === 'ArrowUp' || e.key === ' ') && gameRunning) {
+      if ((e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w' || e.key === 'W') && gameRunning) {
         jumpBuffer = BUFFER_MAX; jumpHeld = true;
       }
-      if ((e.key === 'ArrowDown' || e.key === 's') && gameRunning && onGround) {
+      if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && gameRunning && onGround) {
         isSliding = true;
         penguin.classList.add('sliding');
         penguin.classList.remove('running');
       }
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','W','a','A','s','S','d','D'].includes(e.key)) e.preventDefault();
     });
     document.addEventListener('keyup', e => {
       keys[e.key] = false;
-      if (e.key === 'ArrowUp' || e.key === ' ') jumpHeld = false;
-      if (e.key === 'ArrowDown' || e.key === 's') {
+      if (e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w' || e.key === 'W') jumpHeld = false;
+      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
         isSliding = false;
         penguin.classList.remove('sliding');
         if (onGround && !paused) penguin.classList.add('running');
@@ -1134,9 +1233,31 @@
     }
 
     function updatePenguin() {
+      // Poll gamepad every frame
+      pollGamepad();
+
+      // Apply gamepad jump
+      if (gpJump) {
+        jumpBuffer = BUFFER_MAX;
+        jumpHeld = true;
+      }
+
+      // Apply gamepad slide
+      if (gpSlide && onGround && !paused) {
+        isSliding = true;
+        penguin.classList.add('sliding');
+        penguin.classList.remove('running');
+      } else if (!gpSlide && !(keys['ArrowDown'] || keys['s'] || keys['S'])) {
+        if (isSliding) {
+          isSliding = false;
+          penguin.classList.remove('sliding');
+          if (onGround && !paused) penguin.classList.add('running');
+        }
+      }
+
       velocityX += AUTO_FORCE;
-      if (keys['ArrowLeft'] || keys['a']) velocityX -= ACCEL;
-      if (keys['ArrowRight'] || keys['d']) velocityX += ACCEL * 0.7;
+      if (keys['ArrowLeft'] || keys['a'] || keys['A'] || gpLeft) velocityX -= ACCEL;
+      if (keys['ArrowRight'] || keys['d'] || keys['D'] || gpRight) velocityX += ACCEL * 0.7;
       velocityX *= FRICTION;
       const maxSpeed = MAX_SPEED_BASE + (level - 1) * 0.35;
       if (velocityX > maxSpeed) velocityX = maxSpeed;
@@ -1246,7 +1367,6 @@
       const spd = (3.6 + Math.random() * 1.5) * (1 + level * 0.09);
       function move() {
         if (!gameRunning || paused) { fish.remove(); return; }
-        // Ímã puxa
         if (magnetActive) {
           const dx = (penguinX + 24) - x;
           if (Math.abs(dx) < 230) x += dx * 0.09;
@@ -1391,7 +1511,6 @@
       const plat = document.createElement('div');
       plat.className = 'platform';
 
-      // Dificuldade por nível
       const minW = Math.max(42, 95 - level * 6);
       const maxW = Math.max(65, 170 - level * 9);
       const width = minW + Math.random() * (maxW - minW);
@@ -1571,6 +1690,7 @@
       onGround = true; velocityX = 0; velocityY = 0;
       coyoteTime = 0; jumpBuffer = 0; jumpHeld = false;
       keys['ArrowLeft'] = false; keys['ArrowRight'] = false;
+      gpLeft = gpRight = gpJump = gpSlide = false;
       scoreEl.textContent = 'Pontos: 0';
       levelEl.textContent = 'Nível 1';
       comboEl.style.display = 'none';
@@ -1606,6 +1726,18 @@
     pauseBtn.addEventListener('click', togglePause);
     document.getElementById('resume-btn').addEventListener('click', togglePause);
     document.getElementById('menu-btn').addEventListener('click', goToMenu);
+
+    // Initial gamepad check
+    setTimeout(() => {
+      const gps = navigator.getGamepads ? navigator.getGamepads() : [];
+      for (let g of gps) {
+        if (g) {
+          gamepadConnected = true;
+          gamepadStatus.style.display = 'block';
+          break;
+        }
+      }
+    }, 500);
   </script>
 </body>
 </html>
