@@ -2,1742 +2,315 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Ice Race - PC + Controle</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corrida de Pinguins</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #000;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(#87CEEB, #E0F7FA);
       min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      overflow: hidden;
-      touch-action: none;
-    }
-    #game-wrapper {
-      width: 560px;
-      height: 840px;
-      transform-origin: center center;
-      position: relative;
-    }
-    #game {
-      width: 560px;
-      height: 840px;
-      background: linear-gradient(to bottom, #01040c 0%, #020b16 20%, #041525 45%, #0a1f32 70%, #0d2838 100%);
-      border-radius: 10px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 0 2px #0f1c28, 0 25px 70px rgba(0,0,0,0.95);
-      touch-action: none;
-    }
-    .aurora {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 55%;
-      pointer-events: none;
-      z-index: 1;
-      mix-blend-mode: screen;
-      opacity: 0.38;
-    }
-    .aurora1 {
-      background: linear-gradient(125deg, transparent 15%, rgba(0,160,140,0.18) 35%, rgba(20,80,120,0.12) 55%, transparent 75%);
-      animation: auroraMove 22s linear infinite;
-    }
-    .aurora2 {
-      background: linear-gradient(105deg, transparent 25%, rgba(60,40,140,0.14) 45%, rgba(0,100,130,0.10) 65%, transparent 85%);
-      animation: auroraMove 28s linear infinite reverse;
-    }
-    @keyframes auroraMove {
-      0% { transform: translateX(-35%); }
-      100% { transform: translateX(35%); }
-    }
-    .star {
-      position: absolute;
-      background: #d0e4f8;
-      border-radius: 50%;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .snow {
-      position: absolute;
-      background: rgba(210,225,240,0.65);
-      border-radius: 50%;
-      z-index: 2;
-      pointer-events: none;
-    }
-    @keyframes snowFall {
-      0% { transform: translateY(-20px); opacity: 0.7; }
-      100% { transform: translateY(860px); opacity: 0.04; }
-    }
-    #ground {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 110px;
-      background: linear-gradient(to bottom, #122530 0%, #0a1822 100%);
-      border-top: 2px solid #1e3545;
-      z-index: 3;
-    }
-    #hud {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      right: 70px;
       display: flex;
-      justify-content: space-between;
-      z-index: 20;
-      pointer-events: none;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    #score, #lives, #level, #hiscore, #combo {
-      background: rgba(0,0,0,0.55);
-      color: #b8cddc;
-      padding: 7px 12px;
-      border-radius: 5px;
-      font-size: 13px;
-      font-weight: 700;
-      border: 1px solid #1a2c3a;
-    }
-    #lives { color: #d06060; }
-    #level { color: #5a9ab8; }
-    #combo { color: #70e0a0; display: none; }
-
-    #pause-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      width: 42px;
-      height: 42px;
-      background: rgba(0,0,0,0.55);
-      border: 1px solid #1a2c3a;
-      border-radius: 8px;
-      color: #b8cddc;
-      font-size: 18px;
-      z-index: 22;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      pointer-events: auto;
-    }
-    #pause-btn:active { background: rgba(30,50,70,0.8); }
-
-    #penguin {
-      position: absolute;
-      bottom: 110px;
-      left: 150px;
-      width: 48px;
-      height: 72px;
-      z-index: 12;
-      transform-origin: center bottom;
-      filter: drop-shadow(4px 8px 6px rgba(0,0,0,0.65));
-      transition: height 0.12s;
-    }
-    #penguin.sliding { height: 38px; }
-    #penguin.sliding .head { bottom: 18px; }
-    #penguin.sliding .body { height: 22px; bottom: 6px; }
-    #penguin.sliding .belly { height: 14px; bottom: 10px; }
-    #penguin.sliding .flipper { bottom: 8px; height: 14px; }
-    #penguin .body {
-      position: absolute;
-      bottom: 10px; left: 9px;
-      width: 30px; height: 42px;
-      background: #0a0a0a;
-      border-radius: 45% 45% 38% 38%;
-      box-shadow: 3px 4px 0 rgba(0,0,0,0.45), inset -4px -5px 8px rgba(0,0,0,0.35);
-    }
-    #penguin .belly {
-      position: absolute;
-      bottom: 16px; left: 13px;
-      width: 22px; height: 28px;
-      background: #d4d4d4;
-      border-radius: 42%;
-    }
-    #penguin .head {
-      position: absolute;
-      bottom: 46px; left: 10px;
-      width: 28px; height: 26px;
-      background: #0a0a0a;
-      border-radius: 50%;
-      box-shadow: 2px 3px 0 rgba(0,0,0,0.4), inset -3px -4px 7px rgba(0,0,0,0.4);
-    }
-    #penguin .eye {
-      position: absolute;
-      width: 7px; height: 7px;
-      background: #f0f0f0;
-      border-radius: 50%;
-      top: 8px;
-    }
-    #penguin .eye::after {
-      content: '';
-      position: absolute;
-      width: 3.5px; height: 3.5px;
-      background: #111;
-      border-radius: 50%;
-      top: 1.8px; left: 2px;
-    }
-    #penguin .eye.left { left: 4px; }
-    #penguin .eye.right { right: 4px; }
-    #penguin .brow {
-      position: absolute;
-      width: 8px; height: 2px;
-      background: #1a1a1a;
-      border-radius: 2px;
-      top: 5px;
-    }
-    #penguin .brow.left { left: 3px; transform: rotate(-8deg); }
-    #penguin .brow.right { right: 3px; transform: rotate(8deg); }
-    #penguin .beak {
-      position: absolute;
-      bottom: 5px; left: 9px;
-      width: 0; height: 0;
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 7px solid #c07820;
-    }
-    #penguin .flipper {
-      position: absolute;
-      width: 12px; height: 24px;
-      background: #0a0a0a;
-      border-radius: 40% 40% 35% 35%;
-      bottom: 22px;
-    }
-    #penguin .flipper.left {
-      left: -4px;
-      transform: rotate(-18deg);
-      transform-origin: top center;
-    }
-    #penguin .flipper.right {
-      right: -4px;
-      transform: rotate(18deg);
-      transform-origin: top center;
-    }
-    #penguin.running .flipper.left { animation: flipperL 0.28s ease-in-out infinite; }
-    #penguin.running .flipper.right { animation: flipperR 0.28s ease-in-out infinite; }
-    @keyframes flipperL {
-      0%, 100% { transform: rotate(-18deg); }
-      50% { transform: rotate(-36deg); }
-    }
-    @keyframes flipperR {
-      0%, 100% { transform: rotate(18deg); }
-      50% { transform: rotate(36deg); }
-    }
-    #penguin .foot {
-      position: absolute;
-      bottom: 0;
-      width: 13px; height: 8px;
-      background: #c07820;
-      border-radius: 4px 4px 2px 2px;
-    }
-    #penguin .foot.left { left: 9px; }
-    #penguin .foot.right { right: 9px; }
-    #penguin.running { animation: bodyBob 0.28s ease-in-out infinite; }
-    @keyframes bodyBob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-    }
-    #penguin.shielded::after {
-      content: '';
-      position: absolute;
-      left: -12px; top: -8px;
-      width: 72px; height: 86px;
-      border-radius: 50%;
-      border: 3px solid rgba(70,200,240,0.8);
-      box-shadow: 0 0 16px rgba(70,200,240,0.6);
-      animation: shieldPulse 0.85s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes shieldPulse {
-      0%, 100% { opacity: 0.8; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.05); }
-    }
-    #penguin.magnetized::before {
-      content: '';
-      position: absolute;
-      left: -18px; top: -14px;
-      width: 84px; height: 98px;
-      border-radius: 50%;
-      border: 2px dashed rgba(180,100,255,0.7);
-      box-shadow: 0 0 18px rgba(160,80,255,0.45);
-      animation: magnetAura 1.1s linear infinite;
-      pointer-events: none;
-    }
-    @keyframes magnetAura {
-      0% { transform: rotate(0deg); opacity: 0.7; }
-      100% { transform: rotate(360deg); opacity: 0.9; }
-    }
-
-    .particle {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 16;
-    }
-
-    .fish {
-      position: absolute;
-      bottom: 112px;
-      width: 40px; height: 19px;
-      z-index: 8;
-    }
-    .fish .body {
-      position: absolute;
-      width: 28px; height: 15px;
-      background: #2a6a9a;
-      border-radius: 50%;
-      left: 0; top: 2px;
-    }
-    .fish .tail {
-      position: absolute;
-      right: 0; top: 0;
-      width: 0; height: 0;
-      border-top: 9.5px solid transparent;
-      border-bottom: 9.5px solid transparent;
-      border-left: 13px solid #1a4a70;
-    }
-    .fish .eye {
-      position: absolute;
-      width: 4.5px; height: 4.5px;
-      background: #e0e0e0;
-      border-radius: 50%;
-      left: 7px; top: 5px;
-    }
-    .fish .eye::after {
-      content: '';
-      position: absolute;
-      width: 2.2px; height: 2.2px;
-      background: #111;
-      border-radius: 50%;
-      top: 1px; left: 1px;
-    }
-    .fish.gold .body { background: #e8b020; }
-    .fish.gold .tail { border-left-color: #c09018; }
-    .fish.gold { filter: drop-shadow(0 0 7px rgba(255,200,50,0.75)); }
-
-    .crystal {
-      position: absolute;
-      bottom: 115px;
-      width: 22px; height: 28px;
-      z-index: 8;
-    }
-    .crystal .shape {
-      width: 0; height: 0;
-      border-left: 11px solid transparent;
-      border-right: 11px solid transparent;
-      border-bottom: 28px solid #70e0ff;
-      filter: drop-shadow(0 0 8px rgba(100,220,255,0.7));
-      animation: crystalPulse 1.2s ease-in-out infinite;
-    }
-    @keyframes crystalPulse {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.1); opacity: 1; }
-    }
-
-    .orca {
-      position: absolute;
-      bottom: 108px;
-      width: 78px; height: 34px;
-      z-index: 9;
-    }
-    .orca .body {
-      position: absolute;
-      width: 58px; height: 24px;
-      background: #0a0a0a;
-      border-radius: 50% 35% 35% 50%;
-      left: 0; top: 6px;
-    }
-    .orca .belly {
-      position: absolute;
-      width: 28px; height: 13px;
-      background: #d0d0d0;
-      border-radius: 50%;
-      left: 9px; top: 14px;
-    }
-    .orca .fin {
-      position: absolute;
-      top: 0; left: 26px;
-      width: 0; height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 15px solid #0a0a0a;
-    }
-    .orca .tail {
-      position: absolute;
-      right: 0; top: 3px;
-      width: 0; height: 0;
-      border-top: 12px solid transparent;
-      border-bottom: 12px solid transparent;
-      border-left: 16px solid #0a0a0a;
-    }
-    .orca .eye {
-      position: absolute;
-      width: 4.5px; height: 4.5px;
-      background: #e0e0e0;
-      border-radius: 50%;
-      left: 13px; top: 11px;
-    }
-    .orca .eye::after {
-      content: '';
-      position: absolute;
-      width: 2.2px; height: 2.2px;
-      background: #111;
-      border-radius: 50%;
-      top: 1px; left: 1px;
-    }
-
-    .icicle {
-      position: absolute;
-      width: 16px; height: 36px;
-      z-index: 10;
-    }
-    .icicle .shape {
-      width: 0; height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-top: 36px solid #a8d4e8;
-      filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));
-    }
-
-    .iceblock {
-      position: absolute;
-      bottom: 110px;
-      width: 54px;
-      height: 42px;
-      z-index: 9;
-      background: linear-gradient(160deg, #a8d4e8 0%, #7eb8d0 40%, #5a9bb8 100%);
-      border-radius: 6px 6px 4px 4px;
-      border: 2px solid #c8e8f8;
-      box-shadow: 0 6px 0 #3a6a80, 0 8px 12px rgba(0,0,0,0.4), inset 0 3px 8px rgba(255,255,255,0.45);
-    }
-    .iceblock::before {
-      content: '';
-      position: absolute;
-      top: 6px; left: 8px;
-      width: 16px; height: 10px;
-      background: rgba(255,255,255,0.35);
-      border-radius: 4px;
-      transform: rotate(-15deg);
-    }
-
-    .platform {
-      position: absolute;
-      height: 24px;
-      background: linear-gradient(to bottom, #2e4a5c, #1a2e3c);
-      border-radius: 3px;
-      border: 1px solid #3a5a6e;
-      box-shadow: 0 5px 0 #08141c, 0 7px 12px rgba(0,0,0,0.45);
-      z-index: 7;
-    }
-    .platform.moving {
-      border-color: #5a8aaa;
-      box-shadow: 0 5px 0 #08141c, 0 0 12px rgba(80,160,200,0.35);
-    }
-
-    .shield-item {
-      position: absolute;
-      bottom: 118px;
-      width: 30px; height: 30px;
-      z-index: 8;
-    }
-    .shield-item .core {
-      position: absolute;
-      width: 20px; height: 20px;
-      background: radial-gradient(circle, #90e8ff 15%, #1a80a8 80%);
-      border-radius: 50%;
-      left: 5px; top: 5px;
-      box-shadow: 0 0 12px rgba(70,200,240,0.85);
-      animation: shieldItemPulse 1s ease-in-out infinite;
-    }
-    @keyframes shieldItemPulse {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.15); opacity: 1; }
-    }
-
-    .magnet-item {
-      position: absolute;
-      bottom: 118px;
-      width: 32px; height: 32px;
-      z-index: 8;
-    }
-    .magnet-item .core {
-      position: absolute;
-      width: 22px; height: 22px;
-      left: 5px; top: 5px;
-      background: radial-gradient(circle, #e0a0ff 10%, #8a40c8 70%, #5a2088 100%);
-      border-radius: 50%;
-      box-shadow: 0 0 14px rgba(180,80,255,0.85);
-      animation: magnetPulse 0.9s ease-in-out infinite;
-    }
-    .magnet-item .core::after {
-      content: 'M';
-      position: absolute;
-      left: 0; right: 0; top: 2px;
-      text-align: center;
-      font-size: 12px;
-      font-weight: 800;
-      color: #fff;
-    }
-    @keyframes magnetPulse {
-      0%, 100% { transform: scale(1); opacity: 0.9; }
-      50% { transform: scale(1.18); opacity: 1; }
-    }
-
-    .popup {
-      position: absolute;
-      font-size: 17px;
-      font-weight: 700;
-      color: #70c0e0;
-      z-index: 15;
-      pointer-events: none;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.7);
-      animation: popup 0.6s forwards;
-    }
-    .popup.gold { color: #ffd040; font-size: 19px; }
-    .popup.shield { color: #60e0ff; font-size: 18px; }
-    .popup.crystal { color: #80f0ff; font-size: 18px; }
-    .popup.combo { color: #70e0a0; font-size: 18px; }
-    .popup.magnet { color: #d080ff; font-size: 18px; }
-    @keyframes popup {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-32px); opacity: 0; }
-    }
-
-    #level-up {
-      position: absolute;
-      top: 42%; left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.88);
-      color: #70c0e0;
-      font-size: 28px;
-      font-weight: 800;
-      padding: 16px 32px;
-      border-radius: 8px;
-      z-index: 25;
-      display: none;
-      text-align: center;
-      border: 1px solid #2a4a5a;
-    }
-
-    #message, #ranking-screen, #name-screen, #pause-screen {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(to bottom, rgba(1,4,12,0.94) 0%, rgba(4,14,24,0.96) 100%);
-      display: none;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      z-index: 30;
-      text-align: center;
-      padding: 30px 24px;
+      padding: 20px;
+      overflow-x: hidden;
     }
-    #message { display: flex; }
 
-    .logo {
-      font-size: 48px;
-      font-weight: 800;
-      color: #d8e8f4;
-      letter-spacing: 4px;
-      text-shadow: 0 0 24px rgba(80,160,220,0.35), 0 4px 0 #061018;
-      margin-bottom: 6px;
+    h1 {
+      color: #01579B;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 0 #fff;
+      font-size: 2.2rem;
     }
-    .subtitle {
-      font-size: 13px;
-      color: #5a8aa8;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
+
     .info {
-      font-size: 13px;
-      color: #6a8fa8;
-      line-height: 1.7;
-      margin-bottom: 28px;
-      max-width: 340px;
-    }
-    .btn {
-      background: linear-gradient(to bottom, #163a52, #0e2a3c);
-      color: #c8dcec;
-      border: 1px solid #2a5a78;
-      padding: 14px 36px;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.15s;
-      letter-spacing: 1px;
-      margin: 6px;
-    }
-    .btn:hover {
-      background: linear-gradient(to bottom, #1e4a68, #163a52);
-      transform: translateY(-1px);
-    }
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid #2a4a60;
-      color: #8ab0c8;
+      background: rgba(255,255,255,0.8);
+      padding: 8px 20px;
+      border-radius: 20px;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: #0277BD;
     }
 
-    .ranking-list {
-      width: 100%;
-      max-width: 340px;
-      margin: 16px 0 24px;
-      text-align: left;
-    }
-    .rank-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
-      margin-bottom: 6px;
-      background: rgba(0,0,0,0.35);
-      border: 1px solid #1a2c3a;
-      border-radius: 6px;
-      font-size: 14px;
-    }
-    .rank-row.top1 { border-color: #c9a227; background: rgba(80,60,10,0.3); }
-    .rank-row.top2 { border-color: #8a9aaa; }
-    .rank-row.top3 { border-color: #8a5a30; }
-    .rank-pos { width: 28px; font-weight: 800; color: #70b0d0; }
-    .rank-name {
-      flex: 1;
-      color: #c8d8e8;
-      font-weight: 600;
-      padding: 0 10px;
+    #pista {
+      position: relative;
+      width: 95%;
+      max-width: 900px;
+      height: 420px;
+      background: linear-gradient(#E1F5FE, #B3E5FC);
+      border: 8px solid #0288D1;
+      border-radius: 20px;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
-    .rank-score { color: #80d0a0; font-weight: 700; }
 
-    #name-input {
-      background: rgba(0,0,0,0.5);
-      border: 1px solid #2a4a60;
-      color: #d0e4f4;
-      padding: 12px 16px;
-      border-radius: 6px;
-      font-size: 16px;
-      width: 220px;
-      text-align: center;
-      margin-bottom: 18px;
-      outline: none;
-    }
-    #name-input:focus { border-color: #4a8ab0; }
-
-    #controls {
+    /* Linhas da pista */
+    .linha {
       position: absolute;
-      bottom: 18px;
-      left: 0; right: 0;
-      display: none;
-      justify-content: space-between;
-      padding: 0 14px;
-      z-index: 25;
-      pointer-events: none;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.6);
     }
-    #controls button {
-      pointer-events: auto;
-      width: 64px; height: 64px;
-      border-radius: 50%;
-      background: rgba(10,22,34,0.85);
-      border: 2px solid #2a4a60;
-      color: #a0c0d8;
-      font-size: 22px;
-      font-weight: 700;
+
+    /* Linha de chegada */
+    #chegada {
+      position: absolute;
+      right: 40px;
+      top: 0;
+      width: 12px;
+      height: 100%;
+      background: repeating-linear-gradient(
+        to bottom,
+        #fff 0px,
+        #fff 20px,
+        #333 20px,
+        #333 40px
+      );
+      z-index: 5;
+    }
+
+    .pinguim {
+      position: absolute;
+      left: 20px;
+      font-size: 48px;
+      transition: left 0.08s linear;
+      z-index: 10;
+      filter: drop-shadow(2px 3px 2px rgba(0,0,0,0.2));
+    }
+
+    #jogador {
+      top: 40px;
+    }
+
+    #p1 { top: 130px; }
+    #p2 { top: 220px; }
+    #p3 { top: 310px; }
+
+    /* Nome dos pinguins */
+    .nome {
+      position: absolute;
+      left: 80px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #01579B;
+      background: rgba(255,255,255,0.7);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    #nome-jogador { top: 95px; }
+    #nome-p1 { top: 185px; }
+    #nome-p2 { top: 275px; }
+    #nome-p3 { top: 365px; }
+
+    .controles {
+      margin-top: 20px;
       display: flex;
+      gap: 15px;
       align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      user-select: none;
-      touch-action: manipulation;
     }
-    #controls button:active,
-    #controls button.pressed {
-      background: rgba(30,60,85,0.95);
-      transform: scale(0.93);
-    }
-    #btn-jump { width: 72px; height: 72px; font-size: 26px; }
 
-    #gamepad-status {
-      position: absolute;
-      bottom: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 11px;
-      color: #4a7a90;
-      z-index: 21;
-      pointer-events: none;
-      display: none;
-      background: rgba(0,0,0,0.4);
-      padding: 3px 10px;
-      border-radius: 4px;
+    button {
+      background: #0288D1;
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 0 #01579B;
+      transition: all 0.1s;
+    }
+
+    button:hover {
+      background: #03A9F4;
+    }
+
+    button:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #01579B;
+    }
+
+    button:disabled {
+      background: #90A4AE;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    #mensagem {
+      margin-top: 18px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #01579B;
+      min-height: 40px;
+      text-align: center;
+    }
+
+    .vencedor {
+      color: #2E7D32;
+      animation: pulsar 0.6s infinite alternate;
+    }
+
+    @keyframes pulsar {
+      from { transform: scale(1); }
+      to { transform: scale(1.15); }
+    }
+
+    .dica {
+      margin-top: 12px;
+      color: #546E7A;
+      font-size: 0.95rem;
     }
   </style>
 </head>
 <body>
-  <div id="game-wrapper">
-    <div id="game">
-      <div class="aurora aurora1"></div>
-      <div class="aurora aurora2"></div>
-      <div id="hud">
-        <div id="score">Pontos: 0</div>
-        <div id="level">Nível 1</div>
-        <div id="combo">Combo x1</div>
-        <div id="lives">♥ ♥ ♥</div>
-        <div id="hiscore">Rec: 0</div>
-      </div>
-      <button id="pause-btn">❚❚</button>
-      <div id="level-up">NÍVEL 2</div>
 
-      <div id="penguin">
-        <div class="flipper left"></div>
-        <div class="flipper right"></div>
-        <div class="body"></div>
-        <div class="belly"></div>
-        <div class="head">
-          <div class="brow left"></div>
-          <div class="brow right"></div>
-          <div class="eye left"></div>
-          <div class="eye right"></div>
-          <div class="beak"></div>
-        </div>
-        <div class="foot left"></div>
-        <div class="foot right"></div>
-      </div>
-      <div id="ground"></div>
+  <h1>Corrida de Pinguins</h1>
+  <div class="info">Você é o pinguim de cima! Use → ou Espaço para correr</div>
 
-      <div id="controls">
-        <button id="btn-left">◀</button>
-        <button id="btn-slide">▼</button>
-        <button id="btn-jump">▲</button>
-        <button id="btn-right">▶</button>
-      </div>
+  <div id="pista">
+    <!-- Linhas da pista -->
+    <div class="linha" style="top: 105px;"></div>
+    <div class="linha" style="top: 195px;"></div>
+    <div class="linha" style="top: 285px;"></div>
 
-      <div id="gamepad-status">Controle conectado ✓</div>
+    <!-- Linha de chegada -->
+    <div id="chegada"></div>
 
-      <div id="message">
-        <div class="logo">ICE RACE</div>
-        <div class="subtitle">Pinguim Runner</div>
-        <div class="info">
-          Escudo • Ímã • Bloco de Gelo<br>
-          Plataformas que ficam mais difíceis<br>
-          <br>
-          <strong style="color:#8ab8d0">Teclado:</strong> Setas / WASD + Espaço<br>
-          <strong style="color:#8ab8d0">Controle:</strong> Analógico / D-Pad + A / X<br>
-          P ou Start para Pausar
-        </div>
-        <button class="btn" id="start-btn">JOGAR</button>
-        <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
-      </div>
+    <!-- Pinguins -->
+    <div class="pinguim" id="jogador">🐧</div>
+    <div class="pinguim" id="p1">🐧</div>
+    <div class="pinguim" id="p2">🐧</div>
+    <div class="pinguim" id="p3">🐧</div>
 
-      <div id="pause-screen">
-        <div class="logo" style="font-size:36px;">PAUSADO</div>
-        <div class="subtitle">Jogo pausado</div>
-        <button class="btn" id="resume-btn">CONTINUAR</button>
-        <button class="btn btn-secondary" id="menu-btn">MENU PRINCIPAL</button>
-      </div>
-
-      <div id="ranking-screen">
-        <div class="logo" style="font-size:32px;">RANKING</div>
-        <div class="subtitle">Top 10</div>
-        <div class="ranking-list" id="ranking-list"></div>
-        <button class="btn" id="back-btn">VOLTAR</button>
-      </div>
-
-      <div id="name-screen">
-        <div class="logo" style="font-size:28px;">NOVO RECORDE!</div>
-        <div class="info" id="new-score-text">Pontos: 0</div>
-        <input type="text" id="name-input" placeholder="Seu nome" maxlength="12" autocomplete="off">
-        <button class="btn" id="save-name-btn">SALVAR</button>
-      </div>
-    </div>
+    <!-- Nomes -->
+    <div class="nome" id="nome-jogador">Você</div>
+    <div class="nome" id="nome-p1">Pinguim Azul</div>
+    <div class="nome" id="nome-p2">Pinguim Rosa</div>
+    <div class="nome" id="nome-p3">Pinguim Verde</div>
   </div>
 
+  <div class="controles">
+    <button id="btn-comecar">Começar Corrida!</button>
+  </div>
+
+  <div id="mensagem"></div>
+  <div class="dica">Dica: quanto mais rápido você apertar, mais rápido o pinguim corre!</div>
+
   <script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    let musicNodes = [], musicGain = null, musicPlaying = false, musicInterval = null;
+    const jogador = document.getElementById('jogador');
+    const p1 = document.getElementById('p1');
+    const p2 = document.getElementById('p2');
+    const p3 = document.getElementById('p3');
+    const btn = document.getElementById('btn-comecar');
+    const mensagem = document.getElementById('mensagem');
 
-    function startRaceMusic() {
-      if (musicPlaying) return;
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      musicGain = audioCtx.createGain();
-      musicGain.gain.value = 0;
-      musicGain.connect(audioCtx.destination);
-      musicGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 1.8);
-      const bass = audioCtx.createOscillator();
-      bass.type = 'triangle'; bass.frequency.value = 55;
-      const bassGain = audioCtx.createGain(); bassGain.gain.value = 0.32;
-      bass.connect(bassGain); bassGain.connect(musicGain); bass.start();
-      const pad = audioCtx.createOscillator();
-      pad.type = 'sine'; pad.frequency.value = 110;
-      const padGain = audioCtx.createGain(); padGain.gain.value = 0.11;
-      pad.connect(padGain); padGain.connect(musicGain); pad.start();
-      const bufferSize = 2 * audioCtx.sampleRate;
-      const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = noiseBuffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = noiseBuffer; noise.loop = true;
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'bandpass'; filter.frequency.value = 400; filter.Q.value = 0.6;
-      const noiseGain = audioCtx.createGain(); noiseGain.gain.value = 0.04;
-      noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(musicGain); noise.start();
-      musicNodes = [bass, pad, noise, musicGain];
-      musicPlaying = true;
-      const notes = [220, 247, 262, 294, 330, 294, 262, 247];
-      let noteIndex = 0;
-      musicInterval = setInterval(() => {
-        if (!musicPlaying) return;
-        const osc = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = notes[noteIndex % notes.length];
-        g.gain.setValueAtTime(0.06, audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
-        osc.connect(g); g.connect(musicGain);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.45);
-        noteIndex++;
-      }, 480);
+    const posicaoMaxima = 780; // distância até a linha de chegada
+    let correndo = false;
+    let intervalos = [];
+
+    // Velocidades dos adversários (quanto maior, mais rápido)
+    const velocidades = {
+      p1: 4 + Math.random() * 3,
+      p2: 4 + Math.random() * 3,
+      p3: 4 + Math.random() * 3
+    };
+
+    function reiniciar() {
+      // Para todos os intervalos
+      intervalos.forEach(clearInterval);
+      intervalos = [];
+
+      // Volta os pinguins para o início
+      jogador.style.left = '20px';
+      p1.style.left = '20px';
+      p2.style.left = '20px';
+      p3.style.left = '20px';
+
+      mensagem.textContent = '';
+      mensagem.className = '';
+      btn.disabled = false;
+      correndo = false;
+
+      // Novas velocidades aleatórias
+      velocidades.p1 = 4 + Math.random() * 3.5;
+      velocidades.p2 = 4 + Math.random() * 3.5;
+      velocidades.p3 = 4 + Math.random() * 3.5;
     }
-    function stopRaceMusic() {
-      if (!musicPlaying) return;
-      musicPlaying = false;
-      if (musicInterval) clearInterval(musicInterval);
-      if (musicGain) {
-        musicGain.gain.cancelScheduledValues(audioCtx.currentTime);
-        musicGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 1.3);
+
+    function moverIA(pinguim, velocidade) {
+      const id = setInterval(() => {
+        if (!correndo) return;
+
+        let pos = parseFloat(pinguim.style.left) || 20;
+        pos += velocidade;
+        pinguim.style.left = pos + 'px';
+
+        if (pos >= posicaoMaxima) {
+          finalizarCorrida(pinguim);
+        }
+      }, 50);
+      intervalos.push(id);
+    }
+
+    function finalizarCorrida(vencedor) {
+      if (!correndo) return;
+      correndo = false;
+
+      intervalos.forEach(clearInterval);
+      intervalos = [];
+
+      btn.disabled = false;
+
+      if (vencedor === jogador) {
+        mensagem.textContent = '🎉 Você venceu! Parabéns! 🎉';
+        mensagem.className = 'vencedor';
+      } else if (vencedor === p1) {
+        mensagem.textContent = 'Pinguim Azul venceu! Tente de novo!';
+      } else if (vencedor === p2) {
+        mensagem.textContent = 'Pinguim Rosa venceu! Tente de novo!';
+      } else {
+        mensagem.textContent = 'Pinguim Verde venceu! Tente de novo!';
       }
+    }
+
+    // Movimento do jogador
+    document.addEventListener('keydown', (e) => {
+      if (!correndo) return;
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        let pos = parseFloat(jogador.style.left) || 20;
+        pos += 12; // velocidade do jogador
+        jogador.style.left = pos + 'px';
+
+        if (pos >= posicaoMaxima) {
+          finalizarCorrida(jogador);
+        }
+      }
+    });
+
+    // Botão de começar
+    btn.addEventListener('click', () => {
+      reiniciar();
+      correndo = true;
+      btn.disabled = true;
+      mensagem.textContent = 'Valendo! Corra!';
+
+      // Inicia os adversários
       setTimeout(() => {
-        musicNodes.forEach(n => { try { n.stop(); } catch(e){} });
-        musicNodes = []; musicGain = null;
-      }, 1500);
-    }
-    function pauseMusic() {
-      if (musicGain && musicPlaying) musicGain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
-    }
-    function resumeMusic() {
-      if (musicGain && musicPlaying) musicGain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.4);
-    }
-
-    function playSound(type) {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      const now = audioCtx.currentTime;
-      if (type === 'jump') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(220, now);
-        osc.frequency.exponentialRampToValueAtTime(380, now + 0.1);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-        osc.start(now); osc.stop(now + 0.12);
-      } else if (type === 'collect') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(520, now);
-        osc.frequency.exponentialRampToValueAtTime(780, now + 0.08);
-        gain.gain.setValueAtTime(0.07, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-        osc.start(now); osc.stop(now + 0.1);
-      } else if (type === 'gold' || type === 'crystal') {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(650, now);
-        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.14);
-        gain.gain.setValueAtTime(0.09, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
-        osc.start(now); osc.stop(now + 0.2);
-      } else if (type === 'shield' || type === 'magnet') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400, now);
-        osc.frequency.setValueAtTime(700, now + 0.12);
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now); osc.stop(now + 0.3);
-      } else if (type === 'hit') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(120, now);
-        osc.frequency.exponentialRampToValueAtTime(40, now + 0.2);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-        osc.start(now); osc.stop(now + 0.25);
-      } else if (type === 'gameover') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.exponentialRampToValueAtTime(80, now + 0.4);
-        gain.gain.setValueAtTime(0.1, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-        osc.start(now); osc.stop(now + 0.45);
-      } else if (type === 'start' || type === 'levelup') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.setValueAtTime(450, now + 0.1);
-        osc.frequency.setValueAtTime(600, now + 0.2);
-        gain.gain.setValueAtTime(0.07, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
-        osc.start(now); osc.stop(now + 0.3);
-      }
-    }
-
-    let particles = [];
-    function spawnParticles(x, y, color, count = 10) {
-      for (let i = 0; i < count; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = 3 + Math.random() * 5;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.background = color;
-        p.style.left = x + 'px';
-        p.style.top = y + 'px';
-        game.appendChild(p);
-        particles.push({
-          el: p, x, y,
-          vx: (Math.random() - 0.5) * 8,
-          vy: (Math.random() - 0.8) * 9,
-          life: 1,
-          decay: 0.025 + Math.random() * 0.02
-        });
-      }
-    }
-    function updateParticles() {
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.life -= p.decay;
-        p.el.style.left = p.x + 'px';
-        p.el.style.top = p.y + 'px';
-        p.el.style.opacity = Math.max(0, p.life);
-        if (p.life <= 0) { p.el.remove(); particles.splice(i, 1); }
-      }
-    }
-    function shakeScreen(intensity = 7, duration = 280) {
-      const start = performance.now();
-      function animate(now) {
-        const elapsed = now - start;
-        if (elapsed > duration) { game.style.transform = ''; return; }
-        const progress = elapsed / duration;
-        const currentIntensity = intensity * (1 - progress);
-        const x = (Math.random() - 0.5) * currentIntensity * 2;
-        const y = (Math.random() - 0.5) * currentIntensity * 2;
-        game.style.transform = `translate(${x}px, ${y}px)`;
-        requestAnimationFrame(animate);
-      }
-      requestAnimationFrame(animate);
-    }
-
-    let ranking = JSON.parse(localStorage.getItem('iceRaceRanking') || '[]');
-    function saveRanking() { localStorage.setItem('iceRaceRanking', JSON.stringify(ranking)); }
-    function addToRanking(name, score) {
-      ranking.push({ name: name || 'Jogador', score: Math.floor(score), date: Date.now() });
-      ranking.sort((a, b) => b.score - a.score);
-      ranking = ranking.slice(0, 10);
-      saveRanking();
-    }
-    function isHighScore(score) {
-      if (ranking.length < 10) return true;
-      return score > ranking[ranking.length - 1].score;
-    }
-    function renderRanking() {
-      const list = document.getElementById('ranking-list');
-      if (ranking.length === 0) {
-        list.innerHTML = '<div style="color:#6a8fa8;text-align:center;padding:20px;">Nenhum recorde ainda</div>';
-        return;
-      }
-      list.innerHTML = ranking.map((r, i) => `
-        <div class="rank-row ${i===0?'top1':i===1?'top2':i===2?'top3':''}">
-          <span class="rank-pos">${i+1}º</span>
-          <span class="rank-name">${r.name}</span>
-          <span class="rank-score">${r.score}</span>
-        </div>
-      `).join('');
-    }
-    function showRanking() {
-      document.getElementById('message').style.display = 'none';
-      document.getElementById('name-screen').style.display = 'none';
-      document.getElementById('pause-screen').style.display = 'none';
-      renderRanking();
-      document.getElementById('ranking-screen').style.display = 'flex';
-    }
-    function hideRanking() {
-      document.getElementById('ranking-screen').style.display = 'none';
-      document.getElementById('message').style.display = 'flex';
-    }
-
-    const game = document.getElementById('game');
-    const gameWrapper = document.getElementById('game-wrapper');
-    const penguin = document.getElementById('penguin');
-    const scoreEl = document.getElementById('score');
-    const livesEl = document.getElementById('lives');
-    const levelEl = document.getElementById('level');
-    const hiscoreEl = document.getElementById('hiscore');
-    const comboEl = document.getElementById('combo');
-    const message = document.getElementById('message');
-    const levelUpEl = document.getElementById('level-up');
-    const controls = document.getElementById('controls');
-    const pauseBtn = document.getElementById('pause-btn');
-    const pauseScreen = document.getElementById('pause-screen');
-    const gamepadStatus = document.getElementById('gamepad-status');
-
-    let score = 0, lives = 3, level = 1;
-    let highScore = parseInt(localStorage.getItem('iceRaceHigh') || '0');
-    let penguinX = 150, penguinY = 0, velocityX = 0, velocityY = 0;
-    let gameRunning = false, paused = false;
-    let invincible = false, shieldActive = false, magnetActive = false;
-    let shieldTimeout = null, magnetTimeout = null;
-    let onGround = true, isSliding = false;
-    let jumpHeld = false, coyoteTime = 0, jumpBuffer = 0;
-    let combo = 0, comboTimer = 0;
-    const COMBO_MAX_TIME = 90;
-    const AUTO_FORCE = 0.28, ACCEL = 0.55, FRICTION = 0.88, MAX_SPEED_BASE = 4.8;
-    const COYOTE_MAX = 8, BUFFER_MAX = 10, JUMP_FORCE = -15.5;
-    const GRAVITY_UP = 0.55, GRAVITY_DOWN = 1.15, MAX_FALL = 18;
-    let fishTimer, orcaTimer, platformTimer, shieldTimer, crystalTimer, icicleTimer, iceblockTimer, magnetTimer;
-    let animId, distance = 0, nextLevelScore = 420;
-    let pendingScore = 0;
-    hiscoreEl.textContent = 'Rec: ' + highScore;
-
-    // Gamepad state
-    let gpLeft = false, gpRight = false, gpJump = false, gpSlide = false;
-    let lastStartPressed = false;
-    let gamepadConnected = false;
-
-    // Fit to PC screen
-    function fitToScreen() {
-      const scale = Math.min(
-        (window.innerWidth - 16) / 560,
-        (window.innerHeight - 16) / 840
-      ) * 0.98;
-      gameWrapper.style.transform = `scale(${Math.max(0.4, scale)})`;
-    }
-    window.addEventListener('resize', fitToScreen);
-    fitToScreen();
-
-    // Gamepad connection
-    window.addEventListener('gamepadconnected', (e) => {
-      gamepadConnected = true;
-      gamepadStatus.style.display = 'block';
-      gamepadStatus.textContent = 'Controle conectado ✓';
+        moverIA(p1, velocidades.p1);
+        moverIA(p2, velocidades.p2);
+        moverIA(p3, velocidades.p3);
+      }, 300);
     });
-    window.addEventListener('gamepaddisconnected', () => {
-      gamepadConnected = false;
-      gamepadStatus.style.display = 'none';
-      gpLeft = gpRight = gpJump = gpSlide = false;
-    });
-
-    function pollGamepad() {
-      const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-      let found = false;
-      for (let i = 0; i < gamepads.length; i++) {
-        const gp = gamepads[i];
-        if (!gp) continue;
-        found = true;
-        const dead = 0.25;
-
-        // Left stick or D-Pad
-        const axisX = gp.axes[0] || 0;
-        gpLeft = axisX < -dead || (gp.buttons[14] && gp.buttons[14].pressed);
-        gpRight = axisX > dead || (gp.buttons[15] && gp.buttons[15].pressed);
-
-        // Jump: A (0), Cross, or D-Pad Up (12), or R2/L2 sometimes
-        gpJump = (gp.buttons[0] && gp.buttons[0].pressed) ||
-                 (gp.buttons[12] && gp.buttons[12].pressed) ||
-                 (gp.buttons[2] && gp.buttons[2].pressed); // X / Square also jump
-
-        // Slide: B (1), Circle, or D-Pad Down (13)
-        gpSlide = (gp.buttons[1] && gp.buttons[1].pressed) ||
-                  (gp.buttons[13] && gp.buttons[13].pressed);
-
-        // Start / Options for pause (button 9 usually)
-        const startPressed = (gp.buttons[9] && gp.buttons[9].pressed) ||
-                             (gp.buttons[8] && gp.buttons[8].pressed);
-        if (startPressed && !lastStartPressed && gameRunning) {
-          togglePause();
-        }
-        lastStartPressed = startPressed;
-        break; // use first connected gamepad
-      }
-      if (found && !gamepadConnected) {
-        gamepadConnected = true;
-        gamepadStatus.style.display = 'block';
-      }
-      if (!found) {
-        gpLeft = gpRight = gpJump = gpSlide = false;
-      }
-    }
-
-    for (let i = 0; i < 45; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      const size = 1 + Math.random() * 2.2;
-      star.style.width = size + 'px';
-      star.style.height = size + 'px';
-      star.style.left = Math.random() * 560 + 'px';
-      star.style.top = Math.random() * 520 + 'px';
-      star.style.opacity = 0.3 + Math.random() * 0.6;
-      game.appendChild(star);
-    }
-    for (let i = 0; i < 50; i++) {
-      const flake = document.createElement('div');
-      flake.className = 'snow';
-      const size = 1.5 + Math.random() * 3.2;
-      flake.style.width = size + 'px';
-      flake.style.height = size + 'px';
-      flake.style.left = Math.random() * 560 + 'px';
-      flake.style.animation = `snowFall ${6 + Math.random() * 8}s linear infinite`;
-      flake.style.animationDelay = Math.random() * 10 + 's';
-      flake.style.opacity = 0.25 + Math.random() * 0.4;
-      game.appendChild(flake);
-    }
-
-    const keys = {};
-    document.addEventListener('keydown', e => {
-      keys[e.key] = true;
-      if ((e.key === 'p' || e.key === 'P' || e.key === 'Escape') && gameRunning) {
-        togglePause(); e.preventDefault(); return;
-      }
-      if (paused) return;
-      if ((e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w' || e.key === 'W') && gameRunning) {
-        jumpBuffer = BUFFER_MAX; jumpHeld = true;
-      }
-      if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && gameRunning && onGround) {
-        isSliding = true;
-        penguin.classList.add('sliding');
-        penguin.classList.remove('running');
-      }
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','w','W','a','A','s','S','d','D'].includes(e.key)) e.preventDefault();
-    });
-    document.addEventListener('keyup', e => {
-      keys[e.key] = false;
-      if (e.key === 'ArrowUp' || e.key === ' ' || e.key === 'w' || e.key === 'W') jumpHeld = false;
-      if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
-        isSliding = false;
-        penguin.classList.remove('sliding');
-        if (onGround && !paused) penguin.classList.add('running');
-      }
-    });
-
-    game.addEventListener('pointerdown', e => {
-      if (!gameRunning || paused) return;
-      if (e.target.closest('#controls') || e.target.closest('#pause-btn')) return;
-      jumpBuffer = BUFFER_MAX; jumpHeld = true;
-    });
-    game.addEventListener('pointerup', () => jumpHeld = false);
-
-    function setupButton(btn, onDown, onUp) {
-      const start = e => { e.preventDefault(); e.stopPropagation(); btn.classList.add('pressed'); onDown(); };
-      const end = e => { e.preventDefault(); e.stopPropagation(); btn.classList.remove('pressed'); onUp(); };
-      btn.addEventListener('pointerdown', start);
-      btn.addEventListener('pointerup', end);
-      btn.addEventListener('pointerleave', end);
-      btn.addEventListener('pointercancel', end);
-    }
-    setupButton(document.getElementById('btn-left'), () => keys['ArrowLeft'] = true, () => keys['ArrowLeft'] = false);
-    setupButton(document.getElementById('btn-right'), () => keys['ArrowRight'] = true, () => keys['ArrowRight'] = false);
-    setupButton(document.getElementById('btn-jump'), () => { jumpBuffer = BUFFER_MAX; jumpHeld = true; }, () => jumpHeld = false);
-    setupButton(document.getElementById('btn-slide'),
-      () => { if (onGround && !paused) { isSliding = true; penguin.classList.add('sliding'); penguin.classList.remove('running'); } },
-      () => { isSliding = false; penguin.classList.remove('sliding'); if (onGround && !paused) penguin.classList.add('running'); }
-    );
-
-    function togglePause() {
-      if (!gameRunning) return;
-      paused = !paused;
-      if (paused) {
-        cancelAnimationFrame(animId);
-        clearInterval(fishTimer); clearInterval(orcaTimer); clearInterval(platformTimer);
-        clearInterval(shieldTimer); clearInterval(crystalTimer); clearInterval(icicleTimer);
-        clearInterval(iceblockTimer); clearInterval(magnetTimer);
-        pauseMusic();
-        pauseScreen.style.display = 'flex';
-        pauseBtn.style.display = 'none';
-        controls.style.display = 'none';
-      } else {
-        pauseScreen.style.display = 'none';
-        pauseBtn.style.display = 'flex';
-        controls.style.display = 'flex';
-        resumeMusic();
-        startSpawners();
-        loop();
-      }
-    }
-
-    function goToMenu() {
-      paused = false; gameRunning = false;
-      cancelAnimationFrame(animId);
-      clearInterval(fishTimer); clearInterval(orcaTimer); clearInterval(platformTimer);
-      clearInterval(shieldTimer); clearInterval(crystalTimer); clearInterval(icicleTimer);
-      clearInterval(iceblockTimer); clearInterval(magnetTimer);
-      stopRaceMusic();
-      pauseScreen.style.display = 'none';
-      pauseBtn.style.display = 'none';
-      controls.style.display = 'none';
-      document.querySelectorAll('.fish,.orca,.platform,.popup,.shield-item,.crystal,.icicle,.particle,.iceblock,.magnet-item').forEach(el => el.remove());
-      particles = [];
-      penguin.classList.remove('shielded','running','sliding','magnetized');
-      message.style.display = 'flex';
-    }
-
-    function startSpawners() {
-      fishTimer = setInterval(createFish, 1100);
-      orcaTimer = setInterval(createOrca, 2000);
-      platformTimer = setInterval(createPlatform, Math.max(900, 1500 - level * 40));
-      shieldTimer = setInterval(createShield, 9500);
-      crystalTimer = setInterval(createCrystal, 4200);
-      icicleTimer = setInterval(createIcicle, 2800);
-      iceblockTimer = setInterval(createIceBlock, 3200);
-      magnetTimer = setInterval(createMagnet, 11000);
-    }
-
-    function tryJump() {
-      if ((onGround || coyoteTime > 0) && jumpBuffer > 0 && !isSliding) {
-        velocityY = JUMP_FORCE;
-        onGround = false; coyoteTime = 0; jumpBuffer = 0;
-        penguin.classList.remove('running','sliding');
-        isSliding = false;
-        playSound('jump');
-        return true;
-      }
-      return false;
-    }
-
-    function activateShield() {
-      shieldActive = true;
-      penguin.classList.add('shielded');
-      if (shieldTimeout) clearTimeout(shieldTimeout);
-      shieldTimeout = setTimeout(() => {
-        shieldActive = false;
-        penguin.classList.remove('shielded');
-      }, 6000);
-    }
-
-    function activateMagnet() {
-      magnetActive = true;
-      penguin.classList.add('magnetized');
-      if (magnetTimeout) clearTimeout(magnetTimeout);
-      magnetTimeout = setTimeout(() => {
-        magnetActive = false;
-        penguin.classList.remove('magnetized');
-      }, 7000);
-    }
-
-    function addCombo() {
-      combo++;
-      comboTimer = COMBO_MAX_TIME;
-      comboEl.style.display = 'block';
-      comboEl.textContent = 'Combo x' + Math.min(combo, 8);
-    }
-    function getComboMultiplier() {
-      return Math.min(1 + Math.floor(combo / 2), 5);
-    }
-
-    function updatePenguin() {
-      // Poll gamepad every frame
-      pollGamepad();
-
-      // Apply gamepad jump
-      if (gpJump) {
-        jumpBuffer = BUFFER_MAX;
-        jumpHeld = true;
-      }
-
-      // Apply gamepad slide
-      if (gpSlide && onGround && !paused) {
-        isSliding = true;
-        penguin.classList.add('sliding');
-        penguin.classList.remove('running');
-      } else if (!gpSlide && !(keys['ArrowDown'] || keys['s'] || keys['S'])) {
-        if (isSliding) {
-          isSliding = false;
-          penguin.classList.remove('sliding');
-          if (onGround && !paused) penguin.classList.add('running');
-        }
-      }
-
-      velocityX += AUTO_FORCE;
-      if (keys['ArrowLeft'] || keys['a'] || keys['A'] || gpLeft) velocityX -= ACCEL;
-      if (keys['ArrowRight'] || keys['d'] || keys['D'] || gpRight) velocityX += ACCEL * 0.7;
-      velocityX *= FRICTION;
-      const maxSpeed = MAX_SPEED_BASE + (level - 1) * 0.35;
-      if (velocityX > maxSpeed) velocityX = maxSpeed;
-      if (velocityX < -maxSpeed * 0.7) velocityX = -maxSpeed * 0.7;
-      penguinX += velocityX;
-      if (penguinX < 45) { penguinX = 45; velocityX = 0; }
-      if (penguinX > 420) { penguinX = 420; velocityX *= 0.5; }
-
-      distance += Math.max(0.1, velocityX * 0.4);
-      score = Math.floor(distance);
-      if (score >= nextLevelScore && level < 10) {
-        level++;
-        nextLevelScore += 480 + level * 60;
-        levelEl.textContent = 'Nível ' + level;
-        showLevelUp();
-        playSound('levelup');
-      }
-
-      if (comboTimer > 0) {
-        comboTimer--;
-        if (comboTimer <= 0) { combo = 0; comboEl.style.display = 'none'; }
-      }
-
-      if (jumpBuffer > 0) jumpBuffer--;
-      if (coyoteTime > 0) coyoteTime--;
-      tryJump();
-
-      if (velocityY < 0) {
-        if (!jumpHeld) velocityY += GRAVITY_UP * 2.8;
-        else velocityY += GRAVITY_UP;
-      } else {
-        velocityY += GRAVITY_DOWN;
-      }
-      if (velocityY > MAX_FALL) velocityY = MAX_FALL;
-      penguinY += velocityY;
-
-      let landed = false;
-      if (penguinY >= 0) {
-        penguinY = 0; velocityY = 0;
-        if (!onGround) {
-          onGround = true;
-          if (!isSliding) penguin.classList.add('running');
-        }
-        coyoteTime = COYOTE_MAX;
-        landed = true;
-      } else {
-        onGround = false;
-      }
-
-      if (!landed) {
-        document.querySelectorAll('.platform').forEach(plat => {
-          const platX = parseFloat(plat.style.left) || 0;
-          const platW = parseFloat(plat.style.width) || 0;
-          const platBottom = parseFloat(plat.style.bottom) || 110;
-          const platTop = platBottom + 24;
-          const pLeft = penguinX, pRight = penguinX + 48;
-          const pBottom = 110 - penguinY;
-          if (pRight > platX + 4 && pLeft < platX + platW - 4) {
-            if (velocityY >= 0 && pBottom <= platTop + 6 && pBottom >= platTop - 30) {
-              penguinY = 110 - platTop;
-              velocityY = 0; onGround = true; coyoteTime = COYOTE_MAX;
-              if (!isSliding) penguin.classList.add('running');
-              landed = true;
-            }
-          }
-        });
-      }
-
-      penguin.style.left = penguinX + 'px';
-      penguin.style.bottom = (110 - penguinY) + 'px';
-      const tilt = Math.max(-6, Math.min(6, velocityX * 1.1));
-      penguin.style.transform = `rotate(${tilt}deg)`;
-
-      if (invincible && !shieldActive) {
-        penguin.style.opacity = (Math.floor(Date.now() / 90) % 2) ? '0.3' : '1';
-      } else {
-        penguin.style.opacity = '1';
-      }
-      scoreEl.textContent = 'Pontos: ' + Math.floor(score);
-    }
-
-    function showLevelUp() {
-      levelUpEl.textContent = 'NÍVEL ' + level;
-      levelUpEl.style.display = 'block';
-      setTimeout(() => levelUpEl.style.display = 'none', 1400);
-    }
-
-    function showPopup(x, y, txt, extraClass = '') {
-      const p = document.createElement('div');
-      p.className = 'popup' + (extraClass ? ' ' + extraClass : '');
-      p.textContent = txt;
-      p.style.left = x + 'px';
-      p.style.top = y + 'px';
-      game.appendChild(p);
-      setTimeout(() => p.remove(), 600);
-    }
-
-    function createFish() {
-      if (!gameRunning || paused) return;
-      const isGold = Math.random() < 0.12;
-      const fish = document.createElement('div');
-      fish.className = 'fish' + (isGold ? ' gold' : '');
-      fish.innerHTML = `<div class="body"></div><div class="tail"></div><div class="eye"></div>`;
-      fish.style.left = '590px';
-      game.appendChild(fish);
-      let x = 590;
-      const spd = (3.6 + Math.random() * 1.5) * (1 + level * 0.09);
-      function move() {
-        if (!gameRunning || paused) { fish.remove(); return; }
-        if (magnetActive) {
-          const dx = (penguinX + 24) - x;
-          if (Math.abs(dx) < 230) x += dx * 0.09;
-        }
-        x -= spd;
-        fish.style.left = x + 'px';
-        const hitHeight = isSliding ? 30 : 18;
-        if (penguinY < hitHeight && x < penguinX + 50 && x + 38 > penguinX) {
-          const mult = getComboMultiplier();
-          const pts = (isGold ? 50 : 20) * mult;
-          score += pts;
-          addCombo();
-          playSound(isGold ? 'gold' : 'collect');
-          showPopup(penguinX + 8, 520, '+' + pts + (mult > 1 ? ' x' + mult : ''), isGold ? 'gold' : (mult > 1 ? 'combo' : ''));
-          const py = 840 - (110 - penguinY) - 40;
-          spawnParticles(penguinX + 20, py, isGold ? '#ffd040' : '#4a9ad4', isGold ? 14 : 9);
-          fish.remove();
-          return;
-        }
-        if (x < -50) { fish.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createCrystal() {
-      if (!gameRunning || paused) return;
-      const crystal = document.createElement('div');
-      crystal.className = 'crystal';
-      crystal.innerHTML = `<div class="shape"></div>`;
-      crystal.style.left = '590px';
-      const heightOffset = Math.random() < 0.4 ? 40 + Math.random() * 80 : 0;
-      crystal.style.bottom = (115 + heightOffset) + 'px';
-      game.appendChild(crystal);
-      let x = 590;
-      const spd = (3.5 + Math.random() * 1.3) * (1 + level * 0.08);
-      function move() {
-        if (!gameRunning || paused) { crystal.remove(); return; }
-        if (magnetActive) {
-          const dx = (penguinX + 24) - x;
-          if (Math.abs(dx) < 230) x += dx * 0.09;
-        }
-        x -= spd;
-        crystal.style.left = x + 'px';
-        const crystalBottom = 115 + heightOffset;
-        const penguinBottom = 110 - penguinY;
-        if (Math.abs(penguinBottom - crystalBottom) < 40 && x < penguinX + 50 && x + 24 > penguinX) {
-          const mult = getComboMultiplier();
-          const pts = 40 * mult;
-          score += pts;
-          addCombo();
-          playSound('crystal');
-          showPopup(penguinX + 4, 510, '+' + pts, 'crystal');
-          const py = 840 - (110 - penguinY) - 50;
-          spawnParticles(penguinX + 20, py, '#70e0ff', 12);
-          crystal.remove();
-          return;
-        }
-        if (x < -40) { crystal.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createOrca() {
-      if (!gameRunning || paused) return;
-      const orca = document.createElement('div');
-      orca.className = 'orca';
-      orca.innerHTML = `<div class="fin"></div><div class="body"></div><div class="belly"></div><div class="tail"></div><div class="eye"></div>`;
-      orca.style.left = '610px';
-      game.appendChild(orca);
-      let x = 610;
-      const spd = (4.5 + Math.random() * 1.8) * (1 + level * 0.11);
-      function move() {
-        if (!gameRunning || paused) { orca.remove(); return; }
-        x -= spd;
-        orca.style.left = x + 'px';
-        const canHit = isSliding ? (penguinY > -5) : (penguinY > -24);
-        if (!invincible && !shieldActive && canHit && x < penguinX + 64 && x + 70 > penguinX) hit();
-        if (x < -100) { orca.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createIcicle() {
-      if (!gameRunning || paused) return;
-      const icicle = document.createElement('div');
-      icicle.className = 'icicle';
-      icicle.innerHTML = `<div class="shape"></div>`;
-      const startX = 180 + Math.random() * 280;
-      icicle.style.left = startX + 'px';
-      icicle.style.top = '-40px';
-      game.appendChild(icicle);
-      let y = -40;
-      const fallSpeed = 5.5 + Math.random() * 2.5 + level * 0.3;
-      function move() {
-        if (!gameRunning || paused) { icicle.remove(); return; }
-        y += fallSpeed;
-        icicle.style.top = y + 'px';
-        const penguinTop = 840 - (110 - penguinY) - 72;
-        const penguinBottom = 840 - (110 - penguinY);
-        if (!invincible && !shieldActive &&
-            y + 36 > penguinTop && y < penguinBottom &&
-            startX + 16 > penguinX && startX < penguinX + 48) {
-          hit();
-          icicle.remove();
-          return;
-        }
-        if (y > 750) { icicle.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createIceBlock() {
-      if (!gameRunning || paused) return;
-      if (level < 2 && Math.random() > 0.4) return;
-      const block = document.createElement('div');
-      block.className = 'iceblock';
-      block.style.left = '590px';
-      game.appendChild(block);
-      let x = 590;
-      const spd = (4.2 + Math.random() * 1.6) * (1 + level * 0.1);
-      function move() {
-        if (!gameRunning || paused) { block.remove(); return; }
-        x -= spd;
-        block.style.left = x + 'px';
-        if (!invincible && !shieldActive &&
-            penguinY < 34 &&
-            x < penguinX + 46 && x + 54 > penguinX) {
-          hit();
-        }
-        if (x < -70) { block.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createPlatform() {
-      if (!gameRunning || paused) return;
-      const plat = document.createElement('div');
-      plat.className = 'platform';
-
-      const minW = Math.max(42, 95 - level * 6);
-      const maxW = Math.max(65, 170 - level * 9);
-      const width = minW + Math.random() * (maxW - minW);
-      const maxHeight = 120 + level * 18;
-      const heightAboveGround = 35 + Math.random() * maxHeight;
-      const bottom = 110 + heightAboveGround;
-
-      plat.style.width = width + 'px';
-      plat.style.left = '590px';
-      plat.style.bottom = bottom + 'px';
-      game.appendChild(plat);
-
-      let x = 590;
-      const spd = (3.5 + Math.random() * 1.2) * (1 + level * 0.11);
-
-      const isMoving = level >= 4 && Math.random() < 0.25 + (level * 0.04);
-      let moveDir = 1, moveOffset = 0;
-      const moveRange = 35 + level * 4;
-      const moveSpeed = 0.9 + level * 0.08;
-      if (isMoving) plat.classList.add('moving');
-
-      function move() {
-        if (!gameRunning || paused) { plat.remove(); return; }
-        x -= spd;
-        plat.style.left = x + 'px';
-        if (isMoving) {
-          moveOffset += moveDir * moveSpeed;
-          if (moveOffset > moveRange) moveDir = -1;
-          if (moveOffset < -moveRange) moveDir = 1;
-          plat.style.bottom = (bottom + moveOffset) + 'px';
-        }
-        if (x < -180) { plat.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createShield() {
-      if (!gameRunning || paused) return;
-      const item = document.createElement('div');
-      item.className = 'shield-item';
-      item.innerHTML = `<div class="core"></div>`;
-      item.style.left = '590px';
-      game.appendChild(item);
-      let x = 590;
-      const spd = (3.4 + Math.random() * 1.2) * (1 + level * 0.08);
-      function move() {
-        if (!gameRunning || paused) { item.remove(); return; }
-        x -= spd;
-        item.style.left = x + 'px';
-        if (penguinY < 22 && x < penguinX + 50 && x + 30 > penguinX) {
-          activateShield();
-          playSound('shield');
-          showPopup(penguinX + 4, 510, 'ESCUDO!', 'shield');
-          const py = 840 - (110 - penguinY) - 40;
-          spawnParticles(penguinX + 20, py, '#60e0ff', 14);
-          item.remove();
-          return;
-        }
-        if (x < -40) { item.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function createMagnet() {
-      if (!gameRunning || paused) return;
-      const item = document.createElement('div');
-      item.className = 'magnet-item';
-      item.innerHTML = `<div class="core"></div>`;
-      item.style.left = '590px';
-      game.appendChild(item);
-      let x = 590;
-      const spd = (3.3 + Math.random() * 1.1) * (1 + level * 0.08);
-      function move() {
-        if (!gameRunning || paused) { item.remove(); return; }
-        x -= spd;
-        item.style.left = x + 'px';
-        if (penguinY < 24 && x < penguinX + 50 && x + 32 > penguinX) {
-          activateMagnet();
-          playSound('magnet');
-          showPopup(penguinX + 4, 510, 'ÍMÃ!', 'magnet');
-          const py = 840 - (110 - penguinY) - 40;
-          spawnParticles(penguinX + 20, py, '#c070ff', 14);
-          item.remove();
-          return;
-        }
-        if (x < -40) { item.remove(); return; }
-        requestAnimationFrame(move);
-      }
-      requestAnimationFrame(move);
-    }
-
-    function hit() {
-      lives--;
-      updateLives();
-      invincible = true;
-      combo = 0; comboTimer = 0;
-      comboEl.style.display = 'none';
-      playSound('hit');
-      shakeScreen(8, 320);
-      setTimeout(() => invincible = false, 1500);
-      if (lives <= 0) gameOver();
-    }
-
-    function updateLives() {
-      livesEl.textContent = '♥ '.repeat(lives).trim() + (lives < 3 ? ' ♡'.repeat(3 - lives) : '');
-    }
-
-    function gameOver() {
-      gameRunning = false; paused = false;
-      clearInterval(fishTimer); clearInterval(orcaTimer); clearInterval(platformTimer);
-      clearInterval(shieldTimer); clearInterval(crystalTimer); clearInterval(icicleTimer);
-      clearInterval(iceblockTimer); clearInterval(magnetTimer);
-      cancelAnimationFrame(animId);
-      if (shieldTimeout) clearTimeout(shieldTimeout);
-      if (magnetTimeout) clearTimeout(magnetTimeout);
-      shieldActive = false; magnetActive = false; isSliding = false;
-      penguin.classList.remove('shielded','running','sliding','magnetized');
-      controls.style.display = 'none';
-      pauseBtn.style.display = 'none';
-      pauseScreen.style.display = 'none';
-      stopRaceMusic();
-      playSound('gameover');
-      particles.forEach(p => p.el.remove());
-      particles = [];
-
-      const finalScore = Math.floor(score);
-      if (finalScore > highScore) {
-        highScore = finalScore;
-        localStorage.setItem('iceRaceHigh', highScore);
-        hiscoreEl.textContent = 'Rec: ' + highScore;
-      }
-
-      if (isHighScore(finalScore)) {
-        pendingScore = finalScore;
-        document.getElementById('new-score-text').textContent = 'Pontos: ' + finalScore;
-        document.getElementById('name-input').value = '';
-        document.getElementById('name-screen').style.display = 'flex';
-      } else {
-        showGameOverScreen(finalScore);
-      }
-    }
-
-    function showGameOverScreen(finalScore) {
-      message.innerHTML = `
-        <div class="logo" style="font-size:34px;">GAME OVER</div>
-        <div class="info" style="margin-bottom:20px;">
-          Pontos: <strong style="color:#c8d8e8">${finalScore}</strong><br>
-          Nível: <strong style="color:#c8d8e8">${level}</strong><br>
-          Recorde: ${highScore}
-        </div>
-        <button class="btn" id="start-btn">JOGAR NOVAMENTE</button>
-        <button class="btn btn-secondary" id="ranking-btn">RANKING</button>
-      `;
-      message.style.display = 'flex';
-      document.getElementById('start-btn').addEventListener('click', startGame);
-      document.getElementById('ranking-btn').addEventListener('click', showRanking);
-    }
-
-    function loop() {
-      if (!gameRunning || paused) return;
-      updatePenguin();
-      updateParticles();
-      animId = requestAnimationFrame(loop);
-    }
-
-    function startGame() {
-      document.querySelectorAll('.fish,.orca,.platform,.popup,.shield-item,.crystal,.icicle,.particle,.iceblock,.magnet-item').forEach(el => el.remove());
-      particles = [];
-      score = 0; distance = 0; lives = 3; level = 1;
-      nextLevelScore = 420; invincible = false; shieldActive = false; magnetActive = false;
-      isSliding = false; combo = 0; comboTimer = 0; paused = false;
-      if (shieldTimeout) clearTimeout(shieldTimeout);
-      if (magnetTimeout) clearTimeout(magnetTimeout);
-      penguin.classList.remove('shielded','sliding','magnetized');
-      onGround = true; velocityX = 0; velocityY = 0;
-      coyoteTime = 0; jumpBuffer = 0; jumpHeld = false;
-      keys['ArrowLeft'] = false; keys['ArrowRight'] = false;
-      gpLeft = gpRight = gpJump = gpSlide = false;
-      scoreEl.textContent = 'Pontos: 0';
-      levelEl.textContent = 'Nível 1';
-      comboEl.style.display = 'none';
-      updateLives();
-      penguinX = 150; penguinY = 0;
-      message.style.display = 'none';
-      document.getElementById('ranking-screen').style.display = 'none';
-      document.getElementById('name-screen').style.display = 'none';
-      pauseScreen.style.display = 'none';
-      controls.style.display = 'flex';
-      pauseBtn.style.display = 'flex';
-      gameRunning = true;
-      penguin.classList.add('running');
-      playSound('start');
-      startRaceMusic();
-      startSpawners();
-      loop();
-    }
-
-    document.getElementById('start-btn').addEventListener('click', startGame);
-    document.getElementById('ranking-btn').addEventListener('click', showRanking);
-    document.getElementById('back-btn').addEventListener('click', hideRanking);
-    document.getElementById('save-name-btn').addEventListener('click', () => {
-      const name = document.getElementById('name-input').value.trim() || 'Jogador';
-      addToRanking(name, pendingScore);
-      document.getElementById('name-screen').style.display = 'none';
-      showGameOverScreen(pendingScore);
-    });
-    document.getElementById('name-input').addEventListener('keydown', e => {
-      if (e.key === 'Enter') document.getElementById('save-name-btn').click();
-    });
-
-    pauseBtn.addEventListener('click', togglePause);
-    document.getElementById('resume-btn').addEventListener('click', togglePause);
-    document.getElementById('menu-btn').addEventListener('click', goToMenu);
-
-    // Initial gamepad check
-    setTimeout(() => {
-      const gps = navigator.getGamepads ? navigator.getGamepads() : [];
-      for (let g of gps) {
-        if (g) {
-          gamepadConnected = true;
-          gamepadStatus.style.display = 'block';
-          break;
-        }
-      }
-    }, 500);
   </script>
 </body>
 </html>
