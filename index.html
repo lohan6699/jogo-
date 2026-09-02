@@ -205,15 +205,35 @@
       font-size: 2.6rem;
       margin-bottom: 8px;
     }
+
+    .sound-btn {
+      display: block;
+      margin: 0 auto 12px;
+      border: none;
+      background: #eaf3ff;
+      color: #123a6b;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .sound-btn.off {
+      background: #ffe3ea;
+      color: #8b1233;
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <div id="menu" class="screen active">
+        <button class="sound-btn" id="soundBtnMenu" onclick="toggleSound()">🔊 Som ligado</button>
         <div class="title-emoji">🧮✨</div>
         <h1>Super Matemática</h1>
         <p class="subtitle">Treine contas de um jeito divertido!</p>
+        <p class="hint" id="recordsText">Recordes: Fácil 0 · Médio 0 · Difícil 0</p>
         <div class="level-grid">
           <button class="btn btn-good" onclick="startGame('facil')">Fácil — Soma (12s)</button>
           <button class="btn btn-warn" onclick="startGame('medio')">Médio — Soma e Subtração (10s)</button>
@@ -232,7 +252,8 @@
           4. Clique na resposta certa antes do tempo acabar.<br>
           5. Cada acerto vale 10 pontos.<br>
           6. Se o tempo acabar, a pergunta passa.<br>
-          7. Tem som de acerto, erro e tempo.
+          7. Use o botão de som para ligar ou desligar a música e os efeitos.<br>
+          8. O jogo guarda o recorde de cada nível.
         </p>
         <button class="btn btn-primary" onclick="showScreen('menu')">Voltar</button>
       </div>
@@ -243,6 +264,7 @@
           <span class="pill time" id="timePill">⏱ <span id="timeLeft">10</span>s</span>
           <span class="pill">Pontos: <span id="score">0</span></span>
         </div>
+        <button class="sound-btn" id="soundBtnGame" onclick="toggleSound()">🔊 Som ligado</button>
         <div class="timer-track">
           <div class="timer-bar" id="timerBar"></div>
         </div>
@@ -257,6 +279,8 @@
         <div class="result-score" id="finalScore">0</div>
         <div class="stars" id="stars"></div>
         <p class="hint" id="resultMsg"></p>
+        <p class="hint" id="recordMsg"></p>
+        <button class="sound-btn" id="soundBtnResult" onclick="toggleSound()">🔊 Som ligado</button>
         <button class="btn btn-good" onclick="showScreen('menu')">Jogar de novo</button>
       </div>
     </div>
@@ -265,6 +289,39 @@
   <script>
     const TOTAL = 10;
     const TIME_BY_LEVEL = { facil: 12, medio: 10, dificil: 8 };
+    const LEVEL_NAME = { facil: "Fácil", medio: "Médio", dificil: "Difícil" };
+
+    function loadRecords() {
+      try {
+        return JSON.parse(localStorage.getItem("superMathRecords") || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function saveRecords(records) {
+      localStorage.setItem("superMathRecords", JSON.stringify(records));
+    }
+
+    function getRecord(lvl) {
+      const records = loadRecords();
+      return Number(records[lvl] || 0);
+    }
+
+    function setRecord(lvl, value) {
+      const records = loadRecords();
+      records[lvl] = value;
+      saveRecords(records);
+    }
+
+    function updateRecordsText() {
+      const el = document.getElementById("recordsText");
+      if (!el) return;
+      el.textContent =
+        "Recordes: Fácil " + getRecord("facil") +
+        " · Médio " + getRecord("medio") +
+        " · Difícil " + getRecord("dificil");
+    }
 
     let level = "facil";
     let current = 0;
@@ -276,6 +333,84 @@
     let timerId = null;
     let audioCtx = null;
     let lastTickSecond = null;
+    let soundOn = localStorage.getItem("superMathSound") !== "off";
+    let musicTimer = null;
+    let musicStep = 0;
+    const MELODY = [
+      523.25, 659.25, 783.99, 659.25,
+      523.25, 659.25, 587.33, 392.00,
+      523.25, 659.25, 783.99, 880.00,
+      783.99, 659.25, 523.25, 0
+    ];
+    const BASS = [
+      261.63, 0, 0, 0,
+      196.00, 0, 0, 0,
+      261.63, 0, 0, 0,
+      174.61, 0, 196.00, 0
+    ];
+
+    function updateSoundButtons() {
+      const label = soundOn ? "🔊 Som ligado" : "🔇 Som desligado";
+      ["soundBtnMenu", "soundBtnGame", "soundBtnResult"].forEach(id => {
+        const btn = document.getElementById(id);
+        if (!btn) return;
+        btn.textContent = label;
+        btn.classList.toggle("off", !soundOn);
+      });
+    }
+
+    function toggleSound() {
+      soundOn = !soundOn;
+      localStorage.setItem("superMathSound", soundOn ? "on" : "off");
+      updateSoundButtons();
+      if (soundOn) {
+        getAudio();
+        playClick();
+        startMusic();
+      } else {
+        stopMusic();
+      }
+    }
+
+    function playMusicNote(freq, dur, volume, type) {
+      if (!soundOn || !freq) return;
+      const ctx = getAudio();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type || "triangle";
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + dur + 0.02);
+    }
+
+    function startMusic() {
+      if (musicTimer || !soundOn) return;
+      const ctx = getAudio();
+      if (!ctx) return;
+      musicStep = 0;
+      musicTimer = setInterval(() => {
+        if (!soundOn) {
+          stopMusic();
+          return;
+        }
+        playMusicNote(MELODY[musicStep], 0.22, 0.035, "triangle");
+        playMusicNote(BASS[musicStep], 0.28, 0.025, "sine");
+        musicStep = (musicStep + 1) % MELODY.length;
+      }, 280);
+    }
+
+    function stopMusic() {
+      if (musicTimer) {
+        clearInterval(musicTimer);
+        musicTimer = null;
+      }
+    }
 
     function getAudio() {
       if (!audioCtx) {
@@ -288,6 +423,7 @@
     }
 
     function tone(freq, start, dur, type, gainValue) {
+      if (!soundOn) return;
       const ctx = getAudio();
       if (!ctx) return;
       const osc = ctx.createOscillator();
@@ -425,6 +561,7 @@
     function startGame(chosen) {
       getAudio();
       playClick();
+      startMusic();
       stopTimer();
       level = chosen;
       current = 0;
@@ -528,9 +665,23 @@
       }
       document.getElementById("stars").textContent = stars;
       document.getElementById("resultMsg").textContent = msg;
+
+      const best = getRecord(level);
+      const recordEl = document.getElementById("recordMsg");
+      if (score > best) {
+        setRecord(level, score);
+        recordEl.textContent = "Novo recorde no " + LEVEL_NAME[level] + "!";
+      } else {
+        recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
+      }
+      updateRecordsText();
+
       showScreen("result");
       playWin();
     }
+
+    updateSoundButtons();
+    updateRecordsText();
   </script>
 </body>
 </html>
