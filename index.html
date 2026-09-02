@@ -15,11 +15,7 @@
       --ink: #1b263b;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       min-height: 100vh;
@@ -32,11 +28,7 @@
       padding: 16px;
     }
 
-    .wrap {
-      width: 100%;
-      max-width: 520px;
-    }
-
+    .wrap { width: 100%; max-width: 520px; }
     .card {
       background: var(--card);
       color: var(--ink);
@@ -45,19 +37,8 @@
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     }
 
-    h1 {
-      text-align: center;
-      font-size: 2rem;
-      color: #123a6b;
-      margin-bottom: 6px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #4a6280;
-      margin-bottom: 22px;
-    }
-
+    h1 { text-align: center; font-size: 2rem; color: #123a6b; margin-bottom: 6px; }
+    .subtitle { text-align: center; color: #4a6280; margin-bottom: 22px; }
     .screen { display: none; }
     .screen.active { display: block; }
 
@@ -71,21 +52,13 @@
       font-weight: bold;
       cursor: pointer;
       margin-top: 10px;
-      transition: transform 0.12s ease, filter 0.12s ease;
     }
-
-    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
-    .btn:active { transform: translateY(1px); }
 
     .btn-primary { background: #118ab2; color: white; }
     .btn-good { background: var(--good); color: #06362b; }
     .btn-warn { background: var(--accent); color: #4a3600; }
     .btn-ghost { background: #e8eef6; color: #123a6b; }
-
-    .level-grid {
-      display: grid;
-      gap: 10px;
-    }
+    .level-grid { display: grid; gap: 10px; }
 
     .hud {
       display: flex;
@@ -103,22 +76,10 @@
       padding: 8px 12px;
       font-size: 0.95rem;
     }
-
-    .pill.combo {
-      background: #ffe8c8;
-      color: #7a4d00;
-    }
-
-    .pill.combo.hot {
-      background: #ffd166;
-      color: #4a3600;
-    }
-
-    .pill.time {
-      background: #fff3cd;
-      color: #7a4d00;
-    }
-
+    .pill.combo { background: #ffe8c8; color: #7a4d00; }
+    .pill.combo.hot { background: #ffd166; color: #4a3600; }
+    .pill.lives { background: #ffe3ea; color: #8b1233; }
+    .pill.time { background: #fff3cd; color: #7a4d00; }
     .pill.time.urgent {
       background: #ffd6de;
       color: #8b1233;
@@ -137,33 +98,16 @@
       overflow: hidden;
       margin-bottom: 10px;
     }
-
     .timer-bar {
       height: 100%;
       width: 100%;
       background: linear-gradient(90deg, #06d6a0, #ffd166);
       border-radius: 999px;
-      transform-origin: left center;
-      transition: width 0.2s linear, background 0.2s linear;
     }
+    .timer-bar.urgent { background: linear-gradient(90deg, #ffd166, #ef476f); }
 
-    .timer-bar.urgent {
-      background: linear-gradient(90deg, #ffd166, #ef476f);
-    }
-
-    .question {
-      text-align: center;
-      font-size: 2.4rem;
-      margin: 18px 0 22px;
-      color: #0d2b4a;
-    }
-
-    .options {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
+    .question { text-align: center; font-size: 2.4rem; margin: 18px 0 22px; color: #0d2b4a; }
+    .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .opt {
       background: #f3f7fc;
       border: 3px solid #d5e4f5;
@@ -174,47 +118,17 @@
       cursor: pointer;
       color: #123a6b;
     }
-
-    .opt:hover { border-color: #118ab2; }
     .opt.correct { background: #d8fff3; border-color: var(--good); }
     .opt.wrong { background: #ffe3ea; border-color: var(--bad); }
-    .opt:disabled { cursor: default; opacity: 0.9; }
+    .opt:disabled { cursor: default; }
 
-    .feedback {
-      min-height: 28px;
-      text-align: center;
-      margin-top: 14px;
-      font-weight: bold;
-    }
-
+    .feedback { min-height: 28px; text-align: center; margin-top: 14px; font-weight: bold; }
     .feedback.ok { color: #067a5c; }
     .feedback.no { color: #b4234a; }
-
-    .result-score {
-      text-align: center;
-      font-size: 3rem;
-      margin: 10px 0;
-      color: #118ab2;
-    }
-
-    .stars {
-      text-align: center;
-      font-size: 2rem;
-      margin-bottom: 16px;
-    }
-
-    .hint {
-      text-align: center;
-      color: #4a6280;
-      font-size: 0.95rem;
-      margin-top: 8px;
-    }
-
-    .title-emoji {
-      text-align: center;
-      font-size: 2.6rem;
-      margin-bottom: 8px;
-    }
+    .result-score { text-align: center; font-size: 3rem; margin: 10px 0; color: #118ab2; }
+    .stars { text-align: center; font-size: 2rem; margin-bottom: 16px; }
+    .hint { text-align: center; color: #4a6280; font-size: 0.95rem; margin-top: 8px; }
+    .title-emoji { text-align: center; font-size: 2.6rem; margin-bottom: 8px; }
 
     .sound-btn {
       display: block;
@@ -228,11 +142,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    .sound-btn.off {
-      background: #ffe3ea;
-      color: #8b1233;
-    }
+    .sound-btn.off { background: #ffe3ea; color: #8b1233; }
 
     .tabuada-grid {
       display: grid;
@@ -240,11 +150,7 @@
       gap: 8px;
       margin-top: 10px;
     }
-
-    .tabuada-grid .btn {
-      margin-top: 0;
-      padding: 12px 8px;
-    }
+    .tabuada-grid .btn { margin-top: 0; padding: 12px 8px; }
   </style>
 </head>
 <body>
@@ -270,14 +176,14 @@
         <p class="subtitle" style="text-align:left; line-height:1.5;">
           1. Escolha um nível.<br>
           2. Responda 10 perguntas.<br>
-          3. Cada conta tem um tempo:<br>
-          &nbsp;&nbsp;Fácil 12s · Médio 10s · Difícil 8s.<br>
+          3. Cada conta tem um tempo.<br>
           4. Clique na resposta certa antes do tempo acabar.<br>
           5. Cada acerto vale 10 pontos, e o combo aumenta o bônus.<br>
-          6. Se o tempo acabar, a pergunta passa.<br>
-          7. Use o botão de som para ligar ou desligar a música e os efeitos.<br>
+          6. Se o tempo acabar, a pergunta passa e você perde 1 vida.<br>
+          7. Use o botão de som para ligar ou desligar a música.<br>
           8. O jogo guarda o recorde de cada nível.<br>
-          9. No modo Tabuada você escolhe o número para treinar.
+          9. No modo Tabuada você escolhe o número para treinar.<br>
+          10. Você tem 3 vidas. Errar ou deixar o tempo acabar tira 1 vida.
         </p>
         <button class="btn btn-primary" onclick="showScreen('menu')">Voltar</button>
       </div>
@@ -306,11 +212,10 @@
           <span class="pill time" id="timePill">⏱ <span id="timeLeft">10</span>s</span>
           <span class="pill">Pontos: <span id="score">0</span></span>
           <span class="pill combo" id="comboPill">Combo: 0</span>
+          <span class="pill lives" id="livesPill">❤️❤️❤️</span>
         </div>
         <button class="sound-btn" id="soundBtnGame" onclick="toggleSound()">🔊 Som ligado</button>
-        <div class="timer-track">
-          <div class="timer-bar" id="timerBar"></div>
-        </div>
+        <div class="timer-track"><div class="timer-bar" id="timerBar"></div></div>
         <div class="question" id="question">7 + 5 = ?</div>
         <div class="options" id="options"></div>
         <div class="feedback" id="feedback"></div>
@@ -336,28 +241,18 @@
     const TIME_BY_LEVEL_EXTRA = { tabuada: 10 };
 
     function loadRecords() {
-      try {
-        return JSON.parse(localStorage.getItem("superMathRecords") || "{}");
-      } catch (e) {
-        return {};
-      }
+      try { return JSON.parse(localStorage.getItem("superMathRecords") || "{}"); }
+      catch (e) { return {}; }
     }
-
     function saveRecords(records) {
       localStorage.setItem("superMathRecords", JSON.stringify(records));
     }
-
-    function getRecord(lvl) {
-      const records = loadRecords();
-      return Number(records[lvl] || 0);
-    }
-
+    function getRecord(lvl) { return Number(loadRecords()[lvl] || 0); }
     function setRecord(lvl, value) {
       const records = loadRecords();
       records[lvl] = value;
       saveRecords(records);
     }
-
     function updateRecordsText() {
       const el = document.getElementById("recordsText");
       if (!el) return;
@@ -375,6 +270,7 @@
     let combo = 0;
     let bestCombo = 0;
     let correctCount = 0;
+    let lives = 3;
     let answer = 0;
     let locked = false;
     let timeLeft = 10;
@@ -412,13 +308,8 @@
       soundOn = !soundOn;
       localStorage.setItem("superMathSound", soundOn ? "on" : "off");
       updateSoundButtons();
-      if (soundOn) {
-        getAudio();
-        playClick();
-        startMusic();
-      } else {
-        stopMusic();
-      }
+      if (soundOn) { getAudio(); playClick(); startMusic(); }
+      else stopMusic();
     }
 
     function playMusicNote(freq, dur, volume, type) {
@@ -440,14 +331,10 @@
 
     function startMusic() {
       if (musicTimer || !soundOn) return;
-      const ctx = getAudio();
-      if (!ctx) return;
+      if (!getAudio()) return;
       musicStep = 0;
       musicTimer = setInterval(() => {
-        if (!soundOn) {
-          stopMusic();
-          return;
-        }
+        if (!soundOn) { stopMusic(); return; }
         playMusicNote(MELODY[musicStep], 0.22, 0.035, "triangle");
         playMusicNote(BASS[musicStep], 0.28, 0.025, "sine");
         musicStep = (musicStep + 1) % MELODY.length;
@@ -455,10 +342,7 @@
     }
 
     function stopMusic() {
-      if (musicTimer) {
-        clearInterval(musicTimer);
-        musicTimer = null;
-      }
+      if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
     }
 
     function getAudio() {
@@ -493,55 +377,36 @@
       tone(659.25, 0.1, 0.12, "triangle", 0.12);
       tone(783.99, 0.2, 0.22, "triangle", 0.14);
     }
-
     function playWrong() {
       tone(320, 0, 0.16, "square", 0.06);
       tone(220, 0.14, 0.22, "square", 0.05);
     }
-
     function playTimeUp() {
       tone(440, 0, 0.12, "sawtooth", 0.05);
       tone(330, 0.14, 0.12, "sawtooth", 0.05);
       tone(196, 0.28, 0.28, "sawtooth", 0.06);
     }
-
-    function playClick() {
-      tone(700, 0, 0.06, "sine", 0.06);
-    }
-
+    function playClick() { tone(700, 0, 0.06, "sine", 0.06); }
     function playWin() {
       tone(523.25, 0, 0.12, "triangle", 0.12);
       tone(659.25, 0.12, 0.12, "triangle", 0.12);
       tone(783.99, 0.24, 0.12, "triangle", 0.12);
       tone(1046.5, 0.36, 0.32, "triangle", 0.14);
     }
-
-    function playTick() {
-      tone(880, 0, 0.05, "sine", 0.05);
-    }
+    function playTick() { tone(880, 0, 0.05, "sine", 0.05); }
 
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
     }
-
-    function rand(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function stopTimer() {
-      if (timerId) {
-        clearInterval(timerId);
-        timerId = null;
-      }
-    }
+    function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
 
     function updateTimerUI() {
       const pill = document.getElementById("timePill");
       const bar = document.getElementById("timerBar");
       document.getElementById("timeLeft").textContent = timeLeft;
-      const pct = Math.max(0, (timeLeft / maxTime) * 100);
-      bar.style.width = pct + "%";
+      bar.style.width = Math.max(0, (timeLeft / maxTime) * 100) + "%";
       const urgent = timeLeft <= 3;
       pill.classList.toggle("urgent", urgent);
       bar.classList.toggle("urgent", urgent);
@@ -560,96 +425,57 @@
           lastTickSecond = timeLeft;
           playTick();
         }
-        if (timeLeft <= 0) {
-          timeUp();
-        }
+        if (timeLeft <= 0) timeUp();
       }, 1000);
     }
 
     function makeQuestion() {
       let a, b, text, result;
-
       if (level === "facil") {
-        a = rand(1, 12);
-        b = rand(1, 12);
-        result = a + b;
-        text = `${a} + ${b} = ?`;
+        a = rand(1, 12); b = rand(1, 12); result = a + b; text = a + " + " + b + " = ?";
       } else if (level === "medio") {
         if (Math.random() < 0.5) {
-          a = rand(2, 20);
-          b = rand(1, 15);
-          result = a + b;
-          text = `${a} + ${b} = ?`;
+          a = rand(2, 20); b = rand(1, 15); result = a + b; text = a + " + " + b + " = ?";
         } else {
-          a = rand(8, 25);
-          b = rand(1, a);
-          result = a - b;
-          text = `${a} − ${b} = ?`;
+          a = rand(8, 25); b = rand(1, a); result = a - b; text = a + " − " + b + " = ?";
         }
       } else if (level === "tabuada") {
         a = tabuadaN === 0 ? rand(2, 10) : tabuadaN;
-        b = rand(1, 10);
-        result = a * b;
-        text = `${a} × ${b} = ?`;
+        b = rand(1, 10); result = a * b; text = a + " × " + b + " = ?";
       } else {
-        a = rand(2, 10);
-        b = rand(2, 10);
-        result = a * b;
-        text = `${a} × ${b} = ?`;
+        a = rand(2, 10); b = rand(2, 10); result = a * b; text = a + " × " + b + " = ?";
       }
-
       const options = new Set([result]);
       while (options.size < 4) {
         const noise = rand(-6, 8);
         const fake = result + (noise === 0 ? 3 : noise);
         if (fake >= 0) options.add(fake);
       }
-
-      return {
-        text,
-        answer: result,
-        options: Array.from(options).sort(() => Math.random() - 0.5)
-      };
+      return { text, answer: result, options: Array.from(options).sort(() => Math.random() - 0.5) };
     }
 
-    function startTabuada(n) {
-      tabuadaN = n;
-      startGame("tabuada");
-    }
+    function startTabuada(n) { tabuadaN = n; startGame("tabuada"); }
 
     function startGame(chosen) {
-      getAudio();
-      playClick();
-      startMusic();
-      stopTimer();
+      getAudio(); playClick(); startMusic(); stopTimer();
       level = chosen;
-      current = 0;
-      score = 0;
-      combo = 0;
-      bestCombo = 0;
-      correctCount = 0;
+      current = 0; score = 0; combo = 0; bestCombo = 0; correctCount = 0; lives = 3;
       document.getElementById("score").textContent = "0";
-      updateComboUI();
+      updateComboUI(); updateLivesUI();
       showScreen("game");
       nextQuestion();
     }
 
     function nextQuestion() {
-      if (current >= TOTAL) {
-        finishGame();
-        return;
-      }
-
+      if (current >= TOTAL) { finishGame(); return; }
       locked = false;
       current += 1;
       const q = makeQuestion();
       answer = q.answer;
-
       document.getElementById("qNum").textContent = current;
       document.getElementById("question").textContent = q.text;
       document.getElementById("feedback").textContent = "";
       document.getElementById("feedback").className = "feedback";
-
       const box = document.getElementById("options");
       box.innerHTML = "";
       q.options.forEach(opt => {
@@ -659,13 +485,11 @@
         btn.onclick = () => choose(opt, btn);
         box.appendChild(btn);
       });
-
       startTimer();
     }
 
     function revealAnswer(wrongBtn) {
-      const buttons = document.querySelectorAll(".opt");
-      buttons.forEach(b => {
+      document.querySelectorAll(".opt").forEach(b => {
         b.disabled = true;
         if (Number(b.textContent) === answer) b.classList.add("correct");
       });
@@ -678,10 +502,17 @@
       el.textContent = "Combo: " + combo;
       el.classList.toggle("hot", combo >= 3);
     }
+    function resetCombo() { combo = 0; updateComboUI(); }
 
-    function resetCombo() {
-      combo = 0;
-      updateComboUI();
+    function updateLivesUI() {
+      const el = document.getElementById("livesPill");
+      if (!el) return;
+      el.textContent = "❤️".repeat(lives) + "🖤".repeat(Math.max(0, 3 - lives));
+    }
+    function loseLife() {
+      lives = Math.max(0, lives - 1);
+      updateLivesUI();
+      return lives <= 0;
     }
 
     function choose(value, btn) {
@@ -689,29 +520,27 @@
       locked = true;
       stopTimer();
       revealAnswer(value === answer ? null : btn);
-
       const fb = document.getElementById("feedback");
       if (value === answer) {
         combo += 1;
         if (combo > bestCombo) bestCombo = combo;
         correctCount += 1;
-        const bonus = (combo - 1) * 5;
-        const gained = 10 + bonus;
+        const gained = 10 + (combo - 1) * 5;
         score += gained;
         document.getElementById("score").textContent = score;
         updateComboUI();
-        fb.textContent = combo > 1
-          ? "Combo x" + combo + "! +" + gained
-          : "Muito bem! +10";
+        fb.textContent = combo > 1 ? "Combo x" + combo + "! +" + gained : "Muito bem! +10";
         fb.className = "feedback ok";
         playCorrect();
       } else {
         resetCombo();
-        fb.textContent = "Quase! A resposta era " + answer;
+        const ended = loseLife();
+        fb.textContent = ended ? "Sem vidas! A resposta era " + answer : "Quase! A resposta era " + answer;
         fb.className = "feedback no";
         playWrong();
+        setTimeout(ended ? finishGame : nextQuestion, ended ? 1100 : 900);
+        return;
       }
-
       setTimeout(nextQuestion, 900);
     }
 
@@ -724,10 +553,13 @@
       revealAnswer();
       const fb = document.getElementById("feedback");
       resetCombo();
-      fb.textContent = "Tempo esgotado! A resposta era " + answer;
+      const ended = loseLife();
+      fb.textContent = ended
+        ? "Tempo esgotado e sem vidas! A resposta era " + answer
+        : "Tempo esgotado! A resposta era " + answer;
       fb.className = "feedback no";
       playTimeUp();
-      setTimeout(nextQuestion, 1100);
+      setTimeout(ended ? finishGame : nextQuestion, 1100);
     }
 
     function finishGame() {
@@ -735,25 +567,14 @@
       document.getElementById("finalScore").textContent = score + " pontos";
       let stars = "⭐";
       let msg = "Continue treinando!";
-      if (correctCount >= 10) {
-        stars = "⭐⭐⭐⭐⭐";
-        msg = "Incrível! Você acertou tudo!";
-      } else if (correctCount >= 8) {
-        stars = "⭐⭐⭐⭐";
-        msg = "Excelente!";
-      } else if (correctCount >= 6) {
-        stars = "⭐⭐⭐";
-        msg = "Muito bom!";
-      } else if (correctCount >= 4) {
-        stars = "⭐⭐";
-        msg = "Bom começo!";
-      }
-      if (bestCombo >= 3) {
-        msg += " Melhor combo: x" + bestCombo + ".";
-      }
+      if (correctCount >= 10) { stars = "⭐⭐⭐⭐⭐"; msg = "Incrível! Você acertou tudo!"; }
+      else if (correctCount >= 8) { stars = "⭐⭐⭐⭐"; msg = "Excelente!"; }
+      else if (correctCount >= 6) { stars = "⭐⭐⭐"; msg = "Muito bom!"; }
+      else if (correctCount >= 4) { stars = "⭐⭐"; msg = "Bom começo!"; }
+      if (lives <= 0) msg = "Fim das vidas! " + msg;
+      if (bestCombo >= 3) msg += " Melhor combo: x" + bestCombo + ".";
       document.getElementById("stars").textContent = stars;
       document.getElementById("resultMsg").textContent = msg;
-
       const best = getRecord(level);
       const recordEl = document.getElementById("recordMsg");
       if (score > best) {
@@ -763,7 +584,6 @@
         recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
       }
       updateRecordsText();
-
       showScreen("result");
       playWin();
     }
