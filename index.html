@@ -104,6 +104,16 @@
       font-size: 0.95rem;
     }
 
+    .pill.combo {
+      background: #ffe8c8;
+      color: #7a4d00;
+    }
+
+    .pill.combo.hot {
+      background: #ffd166;
+      color: #4a3600;
+    }
+
     .pill.time {
       background: #fff3cd;
       color: #7a4d00;
@@ -223,6 +233,18 @@
       background: #ffe3ea;
       color: #8b1233;
     }
+
+    .tabuada-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tabuada-grid .btn {
+      margin-top: 0;
+      padding: 12px 8px;
+    }
   </style>
 </head>
 <body>
@@ -233,11 +255,12 @@
         <div class="title-emoji">🧮✨</div>
         <h1>Super Matemática</h1>
         <p class="subtitle">Treine contas de um jeito divertido!</p>
-        <p class="hint" id="recordsText">Recordes: Fácil 0 · Médio 0 · Difícil 0</p>
+        <p class="hint" id="recordsText">Recordes: Fácil 0 · Médio 0 · Difícil 0 · Tabuada 0</p>
         <div class="level-grid">
           <button class="btn btn-good" onclick="startGame('facil')">Fácil — Soma (12s)</button>
           <button class="btn btn-warn" onclick="startGame('medio')">Médio — Soma e Subtração (10s)</button>
           <button class="btn btn-primary" onclick="startGame('dificil')">Difícil — Multiplicação (8s)</button>
+          <button class="btn btn-warn" onclick="showScreen('tabuada')">Tabuada (10s)</button>
           <button class="btn btn-ghost" onclick="showScreen('howto')">Como jogar</button>
         </div>
       </div>
@@ -250,12 +273,31 @@
           3. Cada conta tem um tempo:<br>
           &nbsp;&nbsp;Fácil 12s · Médio 10s · Difícil 8s.<br>
           4. Clique na resposta certa antes do tempo acabar.<br>
-          5. Cada acerto vale 10 pontos.<br>
+          5. Cada acerto vale 10 pontos, e o combo aumenta o bônus.<br>
           6. Se o tempo acabar, a pergunta passa.<br>
           7. Use o botão de som para ligar ou desligar a música e os efeitos.<br>
-          8. O jogo guarda o recorde de cada nível.
+          8. O jogo guarda o recorde de cada nível.<br>
+          9. No modo Tabuada você escolhe o número para treinar.
         </p>
         <button class="btn btn-primary" onclick="showScreen('menu')">Voltar</button>
+      </div>
+
+      <div id="tabuada" class="screen">
+        <h1>Modo Tabuada</h1>
+        <p class="subtitle">Escolha qual tabuada treinar</p>
+        <div class="tabuada-grid">
+          <button class="btn btn-good" onclick="startTabuada(2)">2</button>
+          <button class="btn btn-good" onclick="startTabuada(3)">3</button>
+          <button class="btn btn-good" onclick="startTabuada(4)">4</button>
+          <button class="btn btn-warn" onclick="startTabuada(5)">5</button>
+          <button class="btn btn-warn" onclick="startTabuada(6)">6</button>
+          <button class="btn btn-warn" onclick="startTabuada(7)">7</button>
+          <button class="btn btn-primary" onclick="startTabuada(8)">8</button>
+          <button class="btn btn-primary" onclick="startTabuada(9)">9</button>
+          <button class="btn btn-primary" onclick="startTabuada(10)">10</button>
+        </div>
+        <button class="btn btn-good" onclick="startTabuada(0)">Misturada (2 a 10)</button>
+        <button class="btn btn-ghost" onclick="showScreen('menu')">Voltar</button>
       </div>
 
       <div id="game" class="screen">
@@ -263,6 +305,7 @@
           <span class="pill">Pergunta <span id="qNum">1</span>/10</span>
           <span class="pill time" id="timePill">⏱ <span id="timeLeft">10</span>s</span>
           <span class="pill">Pontos: <span id="score">0</span></span>
+          <span class="pill combo" id="comboPill">Combo: 0</span>
         </div>
         <button class="sound-btn" id="soundBtnGame" onclick="toggleSound()">🔊 Som ligado</button>
         <div class="timer-track">
@@ -289,7 +332,8 @@
   <script>
     const TOTAL = 10;
     const TIME_BY_LEVEL = { facil: 12, medio: 10, dificil: 8 };
-    const LEVEL_NAME = { facil: "Fácil", medio: "Médio", dificil: "Difícil" };
+    const LEVEL_NAME = { facil: "Fácil", medio: "Médio", dificil: "Difícil", tabuada: "Tabuada" };
+    const TIME_BY_LEVEL_EXTRA = { tabuada: 10 };
 
     function loadRecords() {
       try {
@@ -320,12 +364,17 @@
       el.textContent =
         "Recordes: Fácil " + getRecord("facil") +
         " · Médio " + getRecord("medio") +
-        " · Difícil " + getRecord("dificil");
+        " · Difícil " + getRecord("dificil") +
+        " · Tabuada " + getRecord("tabuada");
     }
 
     let level = "facil";
+    let tabuadaN = 0;
     let current = 0;
     let score = 0;
+    let combo = 0;
+    let bestCombo = 0;
+    let correctCount = 0;
     let answer = 0;
     let locked = false;
     let timeLeft = 10;
@@ -500,7 +549,7 @@
 
     function startTimer() {
       stopTimer();
-      maxTime = TIME_BY_LEVEL[level];
+      maxTime = TIME_BY_LEVEL[level] || TIME_BY_LEVEL_EXTRA[level] || 10;
       timeLeft = maxTime;
       lastTickSecond = null;
       updateTimerUI();
@@ -537,6 +586,11 @@
           result = a - b;
           text = `${a} − ${b} = ?`;
         }
+      } else if (level === "tabuada") {
+        a = tabuadaN === 0 ? rand(2, 10) : tabuadaN;
+        b = rand(1, 10);
+        result = a * b;
+        text = `${a} × ${b} = ?`;
       } else {
         a = rand(2, 10);
         b = rand(2, 10);
@@ -558,6 +612,11 @@
       };
     }
 
+    function startTabuada(n) {
+      tabuadaN = n;
+      startGame("tabuada");
+    }
+
     function startGame(chosen) {
       getAudio();
       playClick();
@@ -566,7 +625,11 @@
       level = chosen;
       current = 0;
       score = 0;
+      combo = 0;
+      bestCombo = 0;
+      correctCount = 0;
       document.getElementById("score").textContent = "0";
+      updateComboUI();
       showScreen("game");
       nextQuestion();
     }
@@ -609,6 +672,18 @@
       if (wrongBtn) wrongBtn.classList.add("wrong");
     }
 
+    function updateComboUI() {
+      const el = document.getElementById("comboPill");
+      if (!el) return;
+      el.textContent = "Combo: " + combo;
+      el.classList.toggle("hot", combo >= 3);
+    }
+
+    function resetCombo() {
+      combo = 0;
+      updateComboUI();
+    }
+
     function choose(value, btn) {
       if (locked) return;
       locked = true;
@@ -617,12 +692,21 @@
 
       const fb = document.getElementById("feedback");
       if (value === answer) {
-        score += 10;
+        combo += 1;
+        if (combo > bestCombo) bestCombo = combo;
+        correctCount += 1;
+        const bonus = (combo - 1) * 5;
+        const gained = 10 + bonus;
+        score += gained;
         document.getElementById("score").textContent = score;
-        fb.textContent = "Muito bem! ⭐";
+        updateComboUI();
+        fb.textContent = combo > 1
+          ? "Combo x" + combo + "! +" + gained
+          : "Muito bem! +10";
         fb.className = "feedback ok";
         playCorrect();
       } else {
+        resetCombo();
         fb.textContent = "Quase! A resposta era " + answer;
         fb.className = "feedback no";
         playWrong();
@@ -639,6 +723,7 @@
       updateTimerUI();
       revealAnswer();
       const fb = document.getElementById("feedback");
+      resetCombo();
       fb.textContent = "Tempo esgotado! A resposta era " + answer;
       fb.className = "feedback no";
       playTimeUp();
@@ -650,18 +735,21 @@
       document.getElementById("finalScore").textContent = score + " pontos";
       let stars = "⭐";
       let msg = "Continue treinando!";
-      if (score >= 100) {
+      if (correctCount >= 10) {
         stars = "⭐⭐⭐⭐⭐";
         msg = "Incrível! Você acertou tudo!";
-      } else if (score >= 80) {
+      } else if (correctCount >= 8) {
         stars = "⭐⭐⭐⭐";
         msg = "Excelente!";
-      } else if (score >= 60) {
+      } else if (correctCount >= 6) {
         stars = "⭐⭐⭐";
         msg = "Muito bom!";
-      } else if (score >= 40) {
+      } else if (correctCount >= 4) {
         stars = "⭐⭐";
         msg = "Bom começo!";
+      }
+      if (bestCombo >= 3) {
+        msg += " Melhor combo: x" + bestCombo + ".";
       }
       document.getElementById("stars").textContent = stars;
       document.getElementById("resultMsg").textContent = msg;
