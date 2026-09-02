@@ -1,365 +1,463 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Snowboard Adventure</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Matemática</title>
   <style>
+    :root {
+      --bg1: #1a4d8c;
+      --bg2: #0d2b4a;
+      --accent: #ffd166;
+      --good: #06d6a0;
+      --bad: #ef476f;
+      --card: #ffffff;
+      --ink: #1b263b;
+    }
+
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
-      background: linear-gradient(#87CEEB, #E0F7FA);
-      font-family: 'Segoe UI', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       min-height: 100vh;
-      padding: 15px;
-      overflow: hidden;
-      user-select: none;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #2a6fbb 0%, var(--bg2) 55%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+    }
+
+    .card {
+      background: var(--card);
+      color: var(--ink);
+      border-radius: 24px;
+      padding: 28px 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
     }
 
     h1 {
-      color: #01579B;
-      margin-bottom: 8px;
-      text-shadow: 2px 2px 0 white;
-      font-size: 2rem;
-    }
-
-    .painel {
-      display: flex;
-      gap: 30px;
-      margin-bottom: 12px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #0277BD;
-      background: rgba(255,255,255,0.85);
-      padding: 8px 25px;
-      border-radius: 30px;
-    }
-
-    #jogo {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      height: 640px;
-      background: linear-gradient(#B3E5FC 0%, #E1F5FE 40%, #FFFFFF 100%);
-      border: 6px solid #0288D1;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-    }
-
-    /* Neve caindo */
-    .floco {
-      position: absolute;
-      color: white;
-      font-size: 14px;
-      opacity: 0.8;
-      pointer-events: none;
-      animation: cair linear infinite;
-    }
-
-    @keyframes cair {
-      from { transform: translateY(-20px); }
-      to { transform: translateY(700px); }
-    }
-
-    /* Snowboarder */
-    #player {
-      position: absolute;
-      font-size: 52px;
-      z-index: 20;
-      transition: left 0.05s linear;
-      filter: drop-shadow(0 4px 3px rgba(0,0,0,0.3));
-    }
-
-    /* Obstáculos */
-    .obstaculo {
-      position: absolute;
-      font-size: 42px;
-      z-index: 10;
-    }
-
-    /* Tela de início / game over */
-    #tela {
-      position: absolute;
-      inset: 0;
-      background: rgba(1, 87, 155, 0.85);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 50;
-      color: white;
       text-align: center;
-      padding: 20px;
+      font-size: 2rem;
+      color: #123a6b;
+      margin-bottom: 6px;
     }
 
-    #tela h2 {
-      font-size: 2.2rem;
-      margin-bottom: 10px;
+    .subtitle {
+      text-align: center;
+      color: #4a6280;
+      margin-bottom: 22px;
     }
 
-    #tela p {
-      font-size: 1.15rem;
-      margin-bottom: 25px;
-      max-width: 280px;
-      line-height: 1.4;
-    }
+    .screen { display: none; }
+    .screen.active { display: block; }
 
-    button {
-      background: #FF6F00;
-      color: white;
+    .btn {
+      display: block;
+      width: 100%;
       border: none;
-      padding: 14px 40px;
-      font-size: 1.3rem;
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 1.1rem;
       font-weight: bold;
-      border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 5px 0 #E65100;
-      transition: all 0.1s;
+      margin-top: 10px;
+      transition: transform 0.12s ease, filter 0.12s ease;
     }
 
-    button:hover {
-      background: #FF8F00;
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary { background: #118ab2; color: white; }
+    .btn-good { background: var(--good); color: #06362b; }
+    .btn-warn { background: var(--accent); color: #4a3600; }
+    .btn-ghost { background: #e8eef6; color: #123a6b; }
+
+    .level-grid {
+      display: grid;
+      gap: 10px;
     }
 
-    button:active {
-      transform: translateY(4px);
-      box-shadow: 0 1px 0 #E65100;
+    .hud {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+      font-weight: bold;
+      flex-wrap: wrap;
     }
 
-    .dica {
-      margin-top: 14px;
-      color: #546E7A;
+    .pill {
+      background: #eaf3ff;
+      color: #123a6b;
+      border-radius: 999px;
+      padding: 8px 12px;
       font-size: 0.95rem;
     }
 
-    #recorde {
+    .pill.time {
+      background: #fff3cd;
+      color: #7a4d00;
+    }
+
+    .pill.time.urgent {
+      background: #ffd6de;
+      color: #8b1233;
+      animation: pulse 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+
+    .timer-track {
+      height: 10px;
+      background: #e8eef6;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .timer-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #06d6a0, #ffd166);
+      border-radius: 999px;
+      transform-origin: left center;
+      transition: width 0.2s linear, background 0.2s linear;
+    }
+
+    .timer-bar.urgent {
+      background: linear-gradient(90deg, #ffd166, #ef476f);
+    }
+
+    .question {
+      text-align: center;
+      font-size: 2.4rem;
+      margin: 18px 0 22px;
+      color: #0d2b4a;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .opt {
+      background: #f3f7fc;
+      border: 3px solid #d5e4f5;
+      border-radius: 16px;
+      padding: 18px 10px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      color: #123a6b;
+    }
+
+    .opt:hover { border-color: #118ab2; }
+    .opt.correct { background: #d8fff3; border-color: var(--good); }
+    .opt.wrong { background: #ffe3ea; border-color: var(--bad); }
+    .opt:disabled { cursor: default; opacity: 0.9; }
+
+    .feedback {
+      min-height: 28px;
+      text-align: center;
+      margin-top: 14px;
+      font-weight: bold;
+    }
+
+    .feedback.ok { color: #067a5c; }
+    .feedback.no { color: #b4234a; }
+
+    .result-score {
+      text-align: center;
+      font-size: 3rem;
+      margin: 10px 0;
+      color: #118ab2;
+    }
+
+    .stars {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .hint {
+      text-align: center;
+      color: #4a6280;
+      font-size: 0.95rem;
       margin-top: 8px;
-      font-size: 1rem;
-      opacity: 0.9;
+    }
+
+    .title-emoji {
+      text-align: center;
+      font-size: 2.6rem;
+      margin-bottom: 8px;
     }
   </style>
 </head>
 <body>
+  <div class="wrap">
+    <div class="card">
+      <div id="menu" class="screen active">
+        <div class="title-emoji">🧮✨</div>
+        <h1>Super Matemática</h1>
+        <p class="subtitle">Treine contas de um jeito divertido!</p>
+        <div class="level-grid">
+          <button class="btn btn-good" onclick="startGame('facil')">Fácil — Soma (12s)</button>
+          <button class="btn btn-warn" onclick="startGame('medio')">Médio — Soma e Subtração (10s)</button>
+          <button class="btn btn-primary" onclick="startGame('dificil')">Difícil — Multiplicação (8s)</button>
+          <button class="btn btn-ghost" onclick="showScreen('howto')">Como jogar</button>
+        </div>
+      </div>
 
-  <h1>Snowboard</h1>
+      <div id="howto" class="screen">
+        <h1>Como jogar</h1>
+        <p class="subtitle" style="text-align:left; line-height:1.5;">
+          1. Escolha um nível.<br>
+          2. Responda 10 perguntas.<br>
+          3. Cada conta tem um tempo:<br>
+          &nbsp;&nbsp;Fácil 12s · Médio 10s · Difícil 8s.<br>
+          4. Clique na resposta certa antes do tempo acabar.<br>
+          5. Cada acerto vale 10 pontos.<br>
+          6. Se o tempo acabar, a pergunta passa.
+        </p>
+        <button class="btn btn-primary" onclick="showScreen('menu')">Voltar</button>
+      </div>
 
-  <div class="painel">
-    <div>Pontos: <span id="pontos">0</span></div>
-    <div>Recorde: <span id="recorde-valor">0</span></div>
-  </div>
+      <div id="game" class="screen">
+        <div class="hud">
+          <span class="pill">Pergunta <span id="qNum">1</span>/10</span>
+          <span class="pill time" id="timePill">⏱ <span id="timeLeft">10</span>s</span>
+          <span class="pill">Pontos: <span id="score">0</span></span>
+        </div>
+        <div class="timer-track">
+          <div class="timer-bar" id="timerBar"></div>
+        </div>
+        <div class="question" id="question">7 + 5 = ?</div>
+        <div class="options" id="options"></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
 
-  <div id="jogo">
-    <div id="player">🏂</div>
-    <div id="tela">
-      <h2>Snowboard!</h2>
-      <p>Desça a montanha desviando das árvores e pedras.<br>Use ← → ou A D para se mover.</p>
-      <button id="btn-comecar">Começar</button>
-      <div id="recorde"></div>
+      <div id="result" class="screen">
+        <div class="title-emoji">🏆</div>
+        <h1>Fim de jogo!</h1>
+        <div class="result-score" id="finalScore">0</div>
+        <div class="stars" id="stars"></div>
+        <p class="hint" id="resultMsg"></p>
+        <button class="btn btn-good" onclick="showScreen('menu')">Jogar de novo</button>
+      </div>
     </div>
   </div>
 
-  <div class="dica">Dica: a velocidade aumenta com o tempo. Boa sorte!</div>
-
   <script>
-    const jogo = document.getElementById('jogo');
-    const player = document.getElementById('player');
-    const tela = document.getElementById('tela');
-    const btn = document.getElementById('btn-comecar');
-    const pontosEl = document.getElementById('pontos');
-    const recordeEl = document.getElementById('recorde-valor');
-    const recordeTexto = document.getElementById('recorde');
+    const TOTAL = 10;
+    const TIME_BY_LEVEL = { facil: 12, medio: 10, dificil: 8 };
 
-    // Configurações
-    const LARGURA = 480;
-    const ALTURA = 640;
-    let playerX = LARGURA / 2 - 26;
-    let pontos = 0;
-    let recorde = localStorage.getItem('snowboardRecorde') || 0;
-    let velocidade = 3.5;
-    let gameAtivo = false;
-    let obstaculos = [];
-    let flocos = [];
-    let teclas = {};
-    let ultimoObstaculo = 0;
-    let animacao;
+    let level = "facil";
+    let current = 0;
+    let score = 0;
+    let answer = 0;
+    let locked = false;
+    let timeLeft = 10;
+    let maxTime = 10;
+    let timerId = null;
 
-    recordeEl.textContent = recorde;
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
 
-    // Posição inicial do player
-    player.style.left = playerX + 'px';
-    player.style.top = '480px';
+    function rand(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 
-    // Controles
-    document.addEventListener('keydown', e => {
-      teclas[e.key.toLowerCase()] = true;
-      if (['arrowleft','arrowright','a','d'].includes(e.key.toLowerCase())) {
-        e.preventDefault();
+    function stopTimer() {
+      if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
       }
-    });
-    document.addEventListener('keyup', e => {
-      teclas[e.key.toLowerCase()] = false;
-    });
-
-    // Criar flocos de neve
-    function criarFloco() {
-      const floco = document.createElement('div');
-      floco.className = 'floco';
-      floco.textContent = '❄';
-      floco.style.left = Math.random() * LARGURA + 'px';
-      floco.style.animationDuration = (3 + Math.random() * 4) + 's';
-      floco.style.fontSize = (10 + Math.random() * 12) + 'px';
-      floco.style.opacity = 0.5 + Math.random() * 0.5;
-      jogo.appendChild(floco);
-      flocos.push(floco);
-
-      setTimeout(() => {
-        floco.remove();
-        flocos = flocos.filter(f => f !== floco);
-      }, 7000);
     }
 
-    // Criar obstáculo
-    function criarObstaculo() {
-      const obs = document.createElement('div');
-      obs.className = 'obstaculo';
-      
-      // 70% árvore, 30% pedra
-      const tipo = Math.random() < 0.7 ? '🌲' : '🪨';
-      obs.textContent = tipo;
-      
-      const x = 20 + Math.random() * (LARGURA - 80);
-      obs.style.left = x + 'px';
-      obs.style.top = '-60px';
-      
-      jogo.appendChild(obs);
-      obstaculos.push({
-        el: obs,
-        x: x,
-        y: -60,
-        largura: 42,
-        altura: 42
-      });
+    function updateTimerUI() {
+      const pill = document.getElementById("timePill");
+      const bar = document.getElementById("timerBar");
+      document.getElementById("timeLeft").textContent = timeLeft;
+      const pct = Math.max(0, (timeLeft / maxTime) * 100);
+      bar.style.width = pct + "%";
+      const urgent = timeLeft <= 3;
+      pill.classList.toggle("urgent", urgent);
+      bar.classList.toggle("urgent", urgent);
     }
 
-    // Verificar colisão
-    function colidiu(a, b) {
-      return (
-        a.x < b.x + b.largura - 15 &&
-        a.x + 40 > b.x + 10 &&
-        a.y < b.y + b.altura - 10 &&
-        a.y + 45 > b.y + 10
-      );
+    function startTimer() {
+      stopTimer();
+      maxTime = TIME_BY_LEVEL[level];
+      timeLeft = maxTime;
+      updateTimerUI();
+      timerId = setInterval(() => {
+        timeLeft -= 1;
+        updateTimerUI();
+        if (timeLeft <= 0) {
+          timeUp();
+        }
+      }, 1000);
     }
 
-    // Game Over
-    function gameOver() {
-      gameAtivo = false;
-      cancelAnimationFrame(animacao);
+    function makeQuestion() {
+      let a, b, text, result;
 
-      if (pontos > recorde) {
-        recorde = pontos;
-        localStorage.setItem('snowboardRecorde', recorde);
-        recordeEl.textContent = recorde;
-        recordeTexto.textContent = `Novo recorde: ${recorde}!`;
+      if (level === "facil") {
+        a = rand(1, 12);
+        b = rand(1, 12);
+        result = a + b;
+        text = `${a} + ${b} = ?`;
+      } else if (level === "medio") {
+        if (Math.random() < 0.5) {
+          a = rand(2, 20);
+          b = rand(1, 15);
+          result = a + b;
+          text = `${a} + ${b} = ?`;
+        } else {
+          a = rand(8, 25);
+          b = rand(1, a);
+          result = a - b;
+          text = `${a} − ${b} = ?`;
+        }
       } else {
-        recordeTexto.textContent = `Recorde atual: ${recorde}`;
+        a = rand(2, 10);
+        b = rand(2, 10);
+        result = a * b;
+        text = `${a} × ${b} = ?`;
       }
 
-      tela.querySelector('h2').textContent = 'Game Over!';
-      tela.querySelector('p').innerHTML = `Você fez <strong>${pontos}</strong> pontos!<br>Tente novamente.`;
-      btn.textContent = 'Jogar de Novo';
-      tela.style.display = 'flex';
+      const options = new Set([result]);
+      while (options.size < 4) {
+        const noise = rand(-6, 8);
+        const fake = result + (noise === 0 ? 3 : noise);
+        if (fake >= 0) options.add(fake);
+      }
+
+      return {
+        text,
+        answer: result,
+        options: Array.from(options).sort(() => Math.random() - 0.5)
+      };
     }
 
-    // Loop principal
-    function atualizar(timestamp) {
-      if (!gameAtivo) return;
-
-      // Movimento do player
-      if (teclas['arrowleft'] || teclas['a']) {
-        playerX = Math.max(10, playerX - 7);
-      }
-      if (teclas['arrowright'] || teclas['d']) {
-        playerX = Math.min(LARGURA - 60, playerX + 7);
-      }
-      player.style.left = playerX + 'px';
-
-      // Aumentar velocidade e pontos
-      pontos += 1;
-      pontosEl.textContent = pontos;
-      velocidade = 3.5 + Math.floor(pontos / 400) * 0.6;
-
-      // Criar obstáculos
-      if (timestamp - ultimoObstaculo > 900 - Math.min(pontos / 20, 400)) {
-        criarObstaculo();
-        ultimoObstaculo = timestamp;
-      }
-
-      // Mover obstáculos
-      for (let i = obstaculos.length - 1; i >= 0; i--) {
-        const o = obstaculos[i];
-        o.y += velocidade;
-        o.el.style.top = o.y + 'px';
-
-        // Colisão
-        const playerBox = {
-          x: playerX,
-          y: 480,
-          largura: 50,
-          altura: 50
-        };
-
-        if (colidiu(playerBox, o)) {
-          gameOver();
-          return;
-        }
-
-        // Remover se saiu da tela
-        if (o.y > ALTURA + 50) {
-          o.el.remove();
-          obstaculos.splice(i, 1);
-        }
-      }
-
-      // Flocos ocasionais
-      if (Math.random() < 0.08) criarFloco();
-
-      animacao = requestAnimationFrame(atualizar);
+    function startGame(chosen) {
+      stopTimer();
+      level = chosen;
+      current = 0;
+      score = 0;
+      document.getElementById("score").textContent = "0";
+      showScreen("game");
+      nextQuestion();
     }
 
-    // Iniciar / Reiniciar
-    function iniciar() {
-      // Limpar tudo
-      obstaculos.forEach(o => o.el.remove());
-      obstaculos = [];
-      flocos.forEach(f => f.remove());
-      flocos = [];
+    function nextQuestion() {
+      if (current >= TOTAL) {
+        finishGame();
+        return;
+      }
 
-      pontos = 0;
-      pontosEl.textContent = 0;
-      velocidade = 3.5;
-      playerX = LARGURA / 2 - 26;
-      player.style.left = playerX + 'px';
-      ultimoObstaculo = 0;
+      locked = false;
+      current += 1;
+      const q = makeQuestion();
+      answer = q.answer;
 
-      tela.style.display = 'none';
-      gameAtivo = true;
-      animacao = requestAnimationFrame(atualizar);
+      document.getElementById("qNum").textContent = current;
+      document.getElementById("question").textContent = q.text;
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("feedback").className = "feedback";
+
+      const box = document.getElementById("options");
+      box.innerHTML = "";
+      q.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "opt";
+        btn.textContent = opt;
+        btn.onclick = () => choose(opt, btn);
+        box.appendChild(btn);
+      });
+
+      startTimer();
     }
 
-    btn.addEventListener('click', iniciar);
+    function revealAnswer(wrongBtn) {
+      const buttons = document.querySelectorAll(".opt");
+      buttons.forEach(b => {
+        b.disabled = true;
+        if (Number(b.textContent) === answer) b.classList.add("correct");
+      });
+      if (wrongBtn) wrongBtn.classList.add("wrong");
+    }
 
-    // Criar alguns flocos iniciais
-    for (let i = 0; i < 12; i++) {
-      setTimeout(criarFloco, i * 300);
+    function choose(value, btn) {
+      if (locked) return;
+      locked = true;
+      stopTimer();
+      revealAnswer(value === answer ? null : btn);
+
+      const fb = document.getElementById("feedback");
+      if (value === answer) {
+        score += 10;
+        document.getElementById("score").textContent = score;
+        fb.textContent = "Muito bem! ⭐";
+        fb.className = "feedback ok";
+      } else {
+        fb.textContent = "Quase! A resposta era " + answer;
+        fb.className = "feedback no";
+      }
+
+      setTimeout(nextQuestion, 900);
+    }
+
+    function timeUp() {
+      if (locked) return;
+      locked = true;
+      stopTimer();
+      timeLeft = 0;
+      updateTimerUI();
+      revealAnswer();
+      const fb = document.getElementById("feedback");
+      fb.textContent = "Tempo esgotado! A resposta era " + answer;
+      fb.className = "feedback no";
+      setTimeout(nextQuestion, 1100);
+    }
+
+    function finishGame() {
+      stopTimer();
+      document.getElementById("finalScore").textContent = score + " pontos";
+      let stars = "⭐";
+      let msg = "Continue treinando!";
+      if (score >= 100) {
+        stars = "⭐⭐⭐⭐⭐";
+        msg = "Incrível! Você acertou tudo!";
+      } else if (score >= 80) {
+        stars = "⭐⭐⭐⭐";
+        msg = "Excelente!";
+      } else if (score >= 60) {
+        stars = "⭐⭐⭐";
+        msg = "Muito bom!";
+      } else if (score >= 40) {
+        stars = "⭐⭐";
+        msg = "Bom começo!";
+      }
+      document.getElementById("stars").textContent = stars;
+      document.getElementById("resultMsg").textContent = msg;
+      showScreen("result");
     }
   </script>
 </body>
