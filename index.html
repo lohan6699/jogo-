@@ -4,115 +4,213 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Super Matemática</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg1: #1a4d8c;
-      --bg2: #0d2b4a;
-      --accent: #ffd166;
-      --good: #06d6a0;
-      --bad: #ef476f;
-      --card: #ffffff;
-      --ink: #1b263b;
+      --space-deep: #0a1230;
+      --space-mid: #16204a;
+      --nebula: #5b3e8f;
+      --flame: #ff6b47;
+      --flame-dark: #d8502f;
+      --gold: #ffc93c;
+      --gold-dark: #c98f10;
+      --mint: #2ce6ac;
+      --mint-dark: #0c9d72;
+      --rose: #ff4d6d;
+      --rose-dark: #c22a49;
+      --sky: #3aa0ff;
+      --sky-dark: #1c6fc2;
+      --card: #fffdf8;
+      --panel: #f4f0ff;
+      --ink: #16204a;
+      --ink-soft: #5a6690;
+      --line: #e4e0f5;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
     body {
       min-height: 100vh;
-      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #2a6fbb 0%, var(--bg2) 55%);
+      font-family: "Nunito", "Segoe UI", sans-serif;
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 15%, rgba(91,62,143,0.55), transparent 60%),
+        radial-gradient(ellipse 50% 35% at 85% 80%, rgba(58,160,255,0.25), transparent 60%),
+        linear-gradient(160deg, var(--space-mid) 0%, var(--space-deep) 65%);
     }
-    .wrap { width: 100%; max-width: 520px; }
-    .wrap.battle-wide { max-width: 720px; }
+    /* twinkling starfield, purely decorative */
+    body::before, body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, #ffffff 100%, transparent 0),
+        radial-gradient(2px 2px at 80% 10%, #ffffff 100%, transparent 0),
+        radial-gradient(1.5px 1.5px at 55% 35%, #ffffff 100%, transparent 0),
+        radial-gradient(1.5px 1.5px at 30% 70%, #ffffff 100%, transparent 0),
+        radial-gradient(2px 2px at 90% 60%, #ffffff 100%, transparent 0),
+        radial-gradient(1.5px 1.5px at 65% 85%, #ffffff 100%, transparent 0),
+        radial-gradient(1.5px 1.5px at 15% 90%, #ffffff 100%, transparent 0),
+        radial-gradient(2px 2px at 45% 12%, #ffffff 100%, transparent 0);
+      opacity: 0.55;
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    body::after { opacity: 0.25; animation-delay: 1.4s; transform: scale(1.4) translate(5%, -5%); }
+    @keyframes twinkle { from { opacity: 0.2; } to { opacity: 0.65; } }
+
+    .wrap { width: 100%; max-width: 520px; position: relative; z-index: 1; }
+    .wrap.battle-wide { max-width: 760px; }
+
     .card {
       background: var(--card);
       color: var(--ink);
-      border-radius: 24px;
-      padding: 28px 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      border-radius: 28px;
+      padding: 30px 24px 26px;
+      box-shadow: 0 25px 60px rgba(4, 8, 30, 0.55), 0 0 0 1px rgba(255,255,255,0.06);
+      position: relative;
     }
-    h1 { text-align: center; font-size: 2rem; color: #123a6b; margin-bottom: 6px; }
-    .subtitle { text-align: center; color: #4a6280; margin-bottom: 22px; }
+
+    h1 {
+      font-family: "Baloo 2", sans-serif;
+      text-align: center;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.2px;
+      margin-bottom: 4px;
+    }
+    .subtitle { text-align: center; color: var(--ink-soft); margin-bottom: 20px; font-weight: 600; }
     .screen { display: none; }
     .screen.active { display: block; }
+
     .btn {
-      display: block; width: 100%; border: none; border-radius: 14px;
-      padding: 14px 16px; font-size: 1.1rem; font-weight: bold;
-      cursor: pointer; margin-top: 10px;
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; border: none; border-radius: 16px;
+      padding: 15px 18px; font-family: "Nunito", sans-serif; font-size: 1.05rem; font-weight: 800;
+      cursor: pointer; margin-top: 10px; text-align: left;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.16);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
-    .btn-primary { background: #118ab2; color: white; }
-    .btn-good { background: var(--good); color: #06362b; }
-    .btn-warn { background: var(--accent); color: #4a3600; }
-    .btn-ghost { background: #e8eef6; color: #123a6b; }
+    .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.16); }
+    .btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+    .btn .icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; }
+    .btn-primary { background: var(--sky); color: white; box-shadow: 0 4px 0 var(--sky-dark); }
+    .btn-good { background: var(--mint); color: #063d2c; box-shadow: 0 4px 0 var(--mint-dark); }
+    .btn-warn { background: var(--gold); color: #4a3600; box-shadow: 0 4px 0 var(--gold-dark); }
+    .btn-flame { background: var(--flame); color: white; box-shadow: 0 4px 0 var(--flame-dark); }
+    .btn-ghost { background: var(--panel); color: var(--ink); box-shadow: 0 4px 0 var(--line); justify-content: center; }
+
     .level-grid { display: grid; gap: 10px; }
-    .hud { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 14px; font-weight: bold; flex-wrap: wrap; }
-    .pill { background: #eaf3ff; color: #123a6b; border-radius: 999px; padding: 8px 12px; font-size: 0.95rem; }
+    .hud { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 14px; font-weight: 800; flex-wrap: wrap; }
+    .pill { background: var(--panel); color: var(--ink); border-radius: 999px; padding: 7px 13px; font-size: 0.9rem; }
     .pill.combo { background: #ffe8c8; color: #7a4d00; }
-    .pill.combo.hot { background: #ffd166; color: #4a3600; }
-    .pill.lives { background: #ffe3ea; color: #8b1233; }
+    .pill.combo.hot { background: var(--gold); color: #4a3600; }
+    .pill.lives { background: #ffe1e8; color: #8b1233; }
     .pill.time { background: #fff3cd; color: #7a4d00; }
     .pill.time.urgent { background: #ffd6de; color: #8b1233; animation: pulse 0.6s ease-in-out infinite alternate; }
-    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.06); } }
-    .timer-track { height: 10px; background: #e8eef6; border-radius: 999px; overflow: hidden; margin-bottom: 10px; }
-    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #06d6a0, #ffd166); border-radius: 999px; }
-    .timer-bar.urgent { background: linear-gradient(90deg, #ffd166, #ef476f); }
-    .question { text-align: center; font-size: 2.4rem; margin: 18px 0 22px; color: #0d2b4a; }
+    @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+    .timer-track { height: 11px; background: var(--panel); border-radius: 999px; overflow: hidden; margin-bottom: 12px; }
+    .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, var(--mint), var(--gold)); border-radius: 999px; transition: width 0.25s linear; }
+    .timer-bar.urgent { background: linear-gradient(90deg, var(--gold), var(--rose)); }
+
+    .question {
+      font-family: "Baloo 2", sans-serif;
+      text-align: center; font-size: 2.6rem; font-weight: 700;
+      margin: 16px 0 20px; color: var(--ink);
+    }
     .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .opt {
-      background: #f3f7fc; border: 3px solid #d5e4f5; border-radius: 16px;
-      padding: 18px 10px; font-size: 1.4rem; font-weight: bold; cursor: pointer; color: #123a6b;
+      background: var(--panel); border: 3px solid var(--line); border-radius: 16px;
+      padding: 18px 10px; font-family: "Baloo 2", sans-serif; font-size: 1.5rem; font-weight: 700;
+      cursor: pointer; color: var(--ink);
+      transition: transform 0.08s ease, border-color 0.12s ease, background 0.12s ease;
     }
-    .opt.correct { background: #d8fff3; border-color: var(--good); }
-    .opt.wrong { background: #ffe3ea; border-color: var(--bad); }
+    .opt:hover:not(:disabled) { border-color: var(--sky); }
+    .opt:active:not(:disabled) { transform: scale(0.96); }
+    .opt:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+    .opt.correct { background: #d6fff0; border-color: var(--mint); }
+    .opt.wrong { background: #ffe1e8; border-color: var(--rose); }
     .opt:disabled { cursor: default; }
-    .feedback { min-height: 28px; text-align: center; margin-top: 14px; font-weight: bold; }
-    .feedback.ok { color: #067a5c; }
-    .feedback.no { color: #b4234a; }
-    .result-score { text-align: center; font-size: 3rem; margin: 10px 0; color: #118ab2; }
-    .stars { text-align: center; font-size: 2rem; margin-bottom: 16px; }
-    .hint { text-align: center; color: #4a6280; font-size: 0.95rem; margin-top: 8px; }
-    .title-emoji { text-align: center; font-size: 2.6rem; margin-bottom: 8px; }
-    .sound-btn {
-      display: block; margin: 0 auto 12px; border: none; background: #eaf3ff;
-      color: #123a6b; border-radius: 999px; padding: 8px 14px; font-weight: bold; cursor: pointer;
+
+    .feedback { min-height: 28px; text-align: center; margin-top: 14px; font-weight: 800; }
+    .feedback.ok { color: var(--mint-dark); }
+    .feedback.no { color: var(--rose-dark); }
+
+    .result-score {
+      font-family: "Baloo 2", sans-serif;
+      text-align: center; font-size: 3rem; font-weight: 700; margin: 8px 0; color: var(--sky-dark);
     }
-    .sound-btn.off { background: #ffe3ea; color: #8b1233; }
-    .tabuada-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
-    .tabuada-grid .btn { margin-top: 0; padding: 12px 8px; }
+    .stars { text-align: center; font-size: 2.1rem; margin-bottom: 14px; letter-spacing: 4px; }
+    .hint { text-align: center; color: var(--ink-soft); font-size: 0.95rem; margin-top: 8px; font-weight: 600; }
+    .title-emoji { text-align: center; font-size: 2.8rem; margin-bottom: 6px; }
+
+    .sound-btn {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin: 0 auto 14px; border: none; background: var(--panel);
+      color: var(--ink); border-radius: 999px; padding: 8px 16px; font-weight: 800; font-size: 0.9rem; cursor: pointer;
+    }
+    .sound-btn.off { background: #ffe1e8; color: #8b1233; }
+    .sound-btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
+    .tabuada-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; margin-bottom: 4px; }
+    .tabuada-num {
+      aspect-ratio: 1; border-radius: 50%; border: none; cursor: pointer;
+      font-family: "Baloo 2", sans-serif; font-size: 1.4rem; font-weight: 700; color: white;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.18);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+    }
+    .tabuada-num:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.18); }
+    .tabuada-num:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
     .battle-board { display: none; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
     .battle-board.on { display: grid; }
-    .battle-col { border-radius: 16px; padding: 12px; }
-    .battle-col.p1 { background: #e7f4ff; }
-    .battle-col.p2 { background: #fff4e0; }
-    .battle-title { text-align: center; font-weight: bold; margin-bottom: 8px; }
+    .battle-col { border-radius: 18px; padding: 12px; }
+    .battle-col.p1 { background: #e7f4ff; border: 2px solid #cfe9ff; }
+    .battle-col.p2 { background: #fff4e0; border: 2px solid #ffe4b0; }
+    .battle-title { font-family: "Baloo 2", sans-serif; text-align: center; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
     .solo-options.off { display: none; }
+
+    .progress-dots { display: flex; justify-content: center; gap: 6px; margin: 2px 0 4px; flex-wrap: wrap; }
+    .progress-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+    .progress-dots span.done { background: var(--mint); }
+    .progress-dots span.current { background: var(--sky); transform: scale(1.3); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="wrap" id="wrap">
     <div class="card">
       <div id="menu" class="screen active">
         <button class="sound-btn" id="soundBtnMenu" onclick="toggleSound()">🔊 Som ligado</button>
-        <div class="title-emoji">🧮✨</div>
+        <div class="title-emoji">🚀✨</div>
         <h1>Super Matemática</h1>
-        <p class="subtitle">Treine contas de um jeito divertido!</p>
-        <p class="hint" id="recordsText">Recordes: Fácil 0 · Médio 0 · Difícil 0 · Tabuada 0</p>
+        <p class="subtitle">Treine contas e vire um astronauta dos números!</p>
+        <p class="hint" id="recordsText">Carregando recordes…</p>
         <div class="level-grid">
-          <button class="btn btn-good" onclick="startGame('facil')">Fácil — Soma (12s)</button>
-          <button class="btn btn-warn" onclick="startGame('medio')">Médio — Soma e Subtração (10s)</button>
-          <button class="btn btn-primary" onclick="startGame('dificil')">Difícil — Multiplicação (8s)</button>
-          <button class="btn btn-warn" onclick="showScreen('tabuada')">Tabuada (10s)</button>
-          <button class="btn btn-primary" onclick="startBattle()">Batalha 2 jogadores</button>
-          <button class="btn btn-ghost" onclick="showScreen('howto')">Como jogar</button>
+          <button class="btn btn-good" onclick="startGame('facil')"><span class="icon">➕</span> Fácil — Soma (12s)</button>
+          <button class="btn btn-warn" onclick="startGame('medio')"><span class="icon">➖</span> Médio — Soma e Subtração (10s)</button>
+          <button class="btn btn-flame" onclick="startGame('dificil')"><span class="icon">✖️</span> Difícil — Multiplicação (8s)</button>
+          <button class="btn btn-primary" onclick="showScreen('tabuada')"><span class="icon">🔢</span> Tabuada (10s)</button>
+          <button class="btn btn-primary" onclick="startBattle()" style="background:var(--nebula); box-shadow:0 4px 0 #3c2966;"><span class="icon">⚔️</span> Batalha 2 jogadores</button>
+          <button class="btn btn-ghost" onclick="showScreen('howto')"><span class="icon">❓</span> Como jogar</button>
         </div>
       </div>
 
       <div id="howto" class="screen">
         <h1>Como jogar</h1>
-        <p class="subtitle" style="text-align:left; line-height:1.5;">
+        <p class="subtitle" style="text-align:left; line-height:1.6; font-weight:600;">
           1. Escolha um nível.<br>
           2. Responda 10 perguntas.<br>
           3. Cada conta tem um tempo.<br>
@@ -125,25 +223,25 @@
           10. Você tem 3 vidas. Errar ou deixar o tempo acabar tira 1 vida.<br>
           11. Na Batalha, os 2 jogam a mesma conta. Quem acertar primeiro ganha o ponto.
         </p>
-        <button class="btn btn-primary" onclick="showScreen('menu')">Voltar</button>
+        <button class="btn btn-primary" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
       </div>
 
       <div id="tabuada" class="screen">
         <h1>Modo Tabuada</h1>
         <p class="subtitle">Escolha qual tabuada treinar</p>
         <div class="tabuada-grid">
-          <button class="btn btn-good" onclick="startTabuada(2)">2</button>
-          <button class="btn btn-good" onclick="startTabuada(3)">3</button>
-          <button class="btn btn-good" onclick="startTabuada(4)">4</button>
-          <button class="btn btn-warn" onclick="startTabuada(5)">5</button>
-          <button class="btn btn-warn" onclick="startTabuada(6)">6</button>
-          <button class="btn btn-warn" onclick="startTabuada(7)">7</button>
-          <button class="btn btn-primary" onclick="startTabuada(8)">8</button>
-          <button class="btn btn-primary" onclick="startTabuada(9)">9</button>
-          <button class="btn btn-primary" onclick="startTabuada(10)">10</button>
+          <button class="tabuada-num" style="background:var(--mint); box-shadow:0 4px 0 var(--mint-dark);" onclick="startTabuada(2)">2</button>
+          <button class="tabuada-num" style="background:var(--mint); box-shadow:0 4px 0 var(--mint-dark);" onclick="startTabuada(3)">3</button>
+          <button class="tabuada-num" style="background:var(--mint); box-shadow:0 4px 0 var(--mint-dark);" onclick="startTabuada(4)">4</button>
+          <button class="tabuada-num" style="background:var(--gold); box-shadow:0 4px 0 var(--gold-dark); color:#4a3600;" onclick="startTabuada(5)">5</button>
+          <button class="tabuada-num" style="background:var(--gold); box-shadow:0 4px 0 var(--gold-dark); color:#4a3600;" onclick="startTabuada(6)">6</button>
+          <button class="tabuada-num" style="background:var(--gold); box-shadow:0 4px 0 var(--gold-dark); color:#4a3600;" onclick="startTabuada(7)">7</button>
+          <button class="tabuada-num" style="background:var(--flame); box-shadow:0 4px 0 var(--flame-dark);" onclick="startTabuada(8)">8</button>
+          <button class="tabuada-num" style="background:var(--flame); box-shadow:0 4px 0 var(--flame-dark);" onclick="startTabuada(9)">9</button>
+          <button class="tabuada-num" style="background:var(--flame); box-shadow:0 4px 0 var(--flame-dark);" onclick="startTabuada(10)">10</button>
         </div>
-        <button class="btn btn-good" onclick="startTabuada(0)">Misturada (2 a 10)</button>
-        <button class="btn btn-ghost" onclick="showScreen('menu')">Voltar</button>
+        <button class="btn btn-good" onclick="startTabuada(0)"><span class="icon">🎲</span> Misturada (2 a 10)</button>
+        <button class="btn btn-ghost" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
       </div>
 
       <div id="game" class="screen">
@@ -174,14 +272,14 @@
       </div>
 
       <div id="result" class="screen">
-        <div class="title-emoji">🏆</div>
+        <div class="title-emoji" id="resultEmoji">🏆</div>
         <h1>Fim de jogo!</h1>
         <div class="result-score" id="finalScore">0</div>
         <div class="stars" id="stars"></div>
         <p class="hint" id="resultMsg"></p>
         <p class="hint" id="recordMsg"></p>
         <button class="sound-btn" id="soundBtnResult" onclick="toggleSound()">🔊 Som ligado</button>
-        <button class="btn btn-good" onclick="showScreen('menu')">Jogar de novo</button>
+        <button class="btn btn-good" onclick="showScreen('menu')"><span class="icon">🔁</span> Jogar de novo</button>
       </div>
     </div>
   </div>
@@ -192,30 +290,48 @@
     const LEVEL_NAME = { facil: "Fácil", medio: "Médio", dificil: "Difícil", tabuada: "Tabuada" };
     const TIME_BY_LEVEL_EXTRA = { tabuada: 10 };
 
-    function loadRecords() {
-      try { return JSON.parse(localStorage.getItem("superMathRecords") || "{}"); }
-      catch (e) { return {}; }
+    // ---- Persistent records (uses window.storage; falls back to in-memory if unavailable) ----
+    let memoryRecordsFallback = {};
+    async function loadRecords() {
+      try {
+        const res = await window.storage.get("superMathRecords", false);
+        return res && res.value ? JSON.parse(res.value) : {};
+      } catch (e) {
+        return { ...memoryRecordsFallback };
+      }
     }
-    function saveRecords(records) { localStorage.setItem("superMathRecords", JSON.stringify(records)); }
-    function getRecord(lvl) { return Number(loadRecords()[lvl] || 0); }
-    function setRecord(lvl, value) {
-      const records = loadRecords();
+    async function saveRecords(records) {
+      memoryRecordsFallback = { ...records };
+      try {
+        const result = await window.storage.set("superMathRecords", JSON.stringify(records), false);
+        if (!result) console.error("Falha ao salvar recordes");
+      } catch (e) {
+        console.error("Erro ao salvar recordes:", e);
+      }
+    }
+    async function getRecord(lvl) {
+      const records = await loadRecords();
+      return Number(records[lvl] || 0);
+    }
+    async function setRecord(lvl, value) {
+      const records = await loadRecords();
       records[lvl] = value;
-      saveRecords(records);
+      await saveRecords(records);
     }
-    function updateRecordsText() {
+    async function updateRecordsText() {
       const el = document.getElementById("recordsText");
       if (!el) return;
-      el.textContent = "Recordes: Fácil " + getRecord("facil") +
-        " · Médio " + getRecord("medio") +
-        " · Difícil " + getRecord("dificil") +
-        " · Tabuada " + getRecord("tabuada");
+      const r = await loadRecords();
+      el.textContent = "Recordes: Fácil " + (r.facil || 0) +
+        " · Médio " + (r.medio || 0) +
+        " · Difícil " + (r.dificil || 0) +
+        " · Tabuada " + (r.tabuada || 0);
     }
 
     let level = "facil", tabuadaN = 0, current = 0, score = 0, combo = 0, bestCombo = 0, correctCount = 0, lives = 3;
     let isBattle = false, p1Score = 0, p2Score = 0, p1Locked = false, p2Locked = false;
     let answer = 0, locked = false, timeLeft = 10, maxTime = 10, timerId = null, audioCtx = null, lastTickSecond = null;
-    let soundOn = localStorage.getItem("superMathSound") !== "off";
+    let soundOn = true; // in-memory only; no browser storage used for this preference
     let musicTimer = null, musicStep = 0;
     const MELODY = [523.25,659.25,783.99,659.25,523.25,659.25,587.33,392,523.25,659.25,783.99,880,783.99,659.25,523.25,0];
     const BASS = [261.63,0,0,0,196,0,0,0,261.63,0,0,0,174.61,0,196,0];
@@ -231,7 +347,6 @@
     }
     function toggleSound() {
       soundOn = !soundOn;
-      localStorage.setItem("superMathSound", soundOn ? "on" : "off");
       updateSoundButtons();
       if (soundOn) { getAudio(); playClick(); startMusic(); } else stopMusic();
     }
@@ -287,9 +402,14 @@
     function playClick() { tone(700,0,0.06,"sine",0.06); }
     function playWin() { tone(523.25,0,0.12,"triangle",0.12); tone(659.25,0.12,0.12,"triangle",0.12); tone(783.99,0.24,0.12,"triangle",0.12); tone(1046.5,0.36,0.32,"triangle",0.14); }
     function playTick() { tone(880,0,0.05,"sine",0.05); }
+
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
+      // fix: leaving the game/result screen for the menu should reset the wide battle layout
+      if (id === "menu") {
+        document.getElementById("wrap").classList.remove("battle-wide");
+      }
     }
     function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
     function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
@@ -321,17 +441,22 @@
         a = tabuadaN === 0 ? rand(2,10) : tabuadaN; b = rand(1,10); result = a*b; text = a+" × "+b+" = ?";
       } else { a = rand(2,10); b = rand(2,10); result = a*b; text = a+" × "+b+" = ?"; }
       const options = new Set([result]);
-      while (options.size < 4) {
+      let guard = 0;
+      while (options.size < 4 && guard < 50) {
+        guard += 1;
         const noise = rand(-6,8);
         const fake = result + (noise === 0 ? 3 : noise);
         if (fake >= 0) options.add(fake);
       }
+      // fallback in the rare case the loop couldn't find enough distinct non-negative values
+      let filler = result + 11;
+      while (options.size < 4) { options.add(filler); filler += 1; }
       return { text, answer: result, options: Array.from(options).sort(() => Math.random() - 0.5) };
     }
     function startTabuada(n) { tabuadaN = n; startGame("tabuada"); }
     function startBattle() { startGame("medio", true); }
     function setBattleUI(on) {
-      document.querySelector(".wrap").classList.toggle("battle-wide", on);
+      document.getElementById("wrap").classList.toggle("battle-wide", on);
       document.getElementById("battleBoard").classList.toggle("on", on);
       document.getElementById("options").classList.toggle("off", on);
       document.querySelectorAll(".solo-hud").forEach(el => el.style.display = on ? "none" : "");
@@ -475,18 +600,20 @@
       fb.className = "feedback no"; playTimeUp();
       setTimeout(ended ? finishGame : nextQuestion, 1100);
     }
-    function finishGame() {
+    async function finishGame() {
       stopTimer();
       if (isBattle) {
         let winner = "Empate!";
         if (p1Score > p2Score) winner = "🔵 Jogador 1 venceu!";
         else if (p2Score > p1Score) winner = "🟠 Jogador 2 venceu!";
+        document.getElementById("resultEmoji").textContent = "⚔️";
         document.getElementById("finalScore").textContent = p1Score + " x " + p2Score;
-        document.getElementById("stars").textContent = "⚔️";
+        document.getElementById("stars").textContent = "";
         document.getElementById("resultMsg").textContent = winner;
         document.getElementById("recordMsg").textContent = "Batalha de 10 contas";
         showScreen("result"); playWin(); return;
       }
+      document.getElementById("resultEmoji").textContent = "🏆";
       document.getElementById("finalScore").textContent = score + " pontos";
       let stars = "⭐", msg = "Continue treinando!";
       if (correctCount >= 10) { stars = "⭐⭐⭐⭐⭐"; msg = "Incrível! Você acertou tudo!"; }
@@ -497,10 +624,21 @@
       if (bestCombo >= 3) msg += " Melhor combo: x" + bestCombo + ".";
       document.getElementById("stars").textContent = stars;
       document.getElementById("resultMsg").textContent = msg;
-      const best = getRecord(level), recordEl = document.getElementById("recordMsg");
-      if (score > best) { setRecord(level, score); recordEl.textContent = "Novo recorde no " + LEVEL_NAME[level] + "!"; }
-      else recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
-      updateRecordsText(); showScreen("result"); playWin();
+      const recordEl = document.getElementById("recordMsg");
+      recordEl.textContent = "Salvando recorde…";
+      showScreen("result"); playWin();
+      try {
+        const best = await getRecord(level);
+        if (score > best) {
+          await setRecord(level, score);
+          recordEl.textContent = "Novo recorde no " + LEVEL_NAME[level] + "!";
+        } else {
+          recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
+        }
+        await updateRecordsText();
+      } catch (e) {
+        recordEl.textContent = "Não foi possível salvar o recorde agora.";
+      }
     }
     updateSoundButtons();
     updateRecordsText();
