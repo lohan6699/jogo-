@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-textsize="normal">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
@@ -32,6 +32,10 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; }
+    html { font-size: 16px; transition: font-size 0.15s ease; }
+    html[data-textsize="grande"] { font-size: 19px; }
+    html[data-textsize="extra"] { font-size: 22px; }
+
     body {
       min-height: 100vh;
       font-family: "Nunito", "Segoe UI", sans-serif;
@@ -67,6 +71,19 @@
     }
     body::after { opacity: 0.25; animation-delay: 1.4s; transform: scale(1.4) translate(5%, -5%); }
     @keyframes twinkle { from { opacity: 0.2; } to { opacity: 0.65; } }
+
+    /* high-contrast overrides */
+    body.high-contrast { --card: #ffffff; --panel: #e9e9ef; --ink: #000000; --ink-soft: #202020; --line: #000000; }
+    body.high-contrast::before, body.high-contrast::after { opacity: 0 !important; }
+    body.high-contrast .opt { border-width: 4px; }
+    body.high-contrast .card { box-shadow: 0 0 0 3px #000, 0 25px 60px rgba(0,0,0,0.5); }
+    body.high-contrast .pill { border: 2px solid #000; }
+
+    /* skin accent overrides */
+    body[data-skin="roxo"] { --sky: var(--plasma); --sky-dark: var(--plasma-dark); }
+    body[data-skin="cometa"] { --sky: var(--gold); --sky-dark: var(--gold-dark); }
+    body[data-skin="planeta"] { --sky: var(--mint); --sky-dark: var(--mint-dark); }
+    body[data-skin="fogo"] { --sky: var(--flame); --sky-dark: var(--flame-dark); }
 
     .wrap { width: 100%; max-width: 520px; position: relative; z-index: 1; }
     .wrap.battle-wide { max-width: 760px; }
@@ -109,8 +126,23 @@
     .btn-warn { background: var(--gold); color: #4a3600; box-shadow: 0 4px 0 var(--gold-dark); }
     .btn-flame { background: var(--flame); color: white; box-shadow: 0 4px 0 var(--flame-dark); }
     .btn-ghost { background: var(--panel); color: var(--ink); box-shadow: 0 4px 0 var(--line); justify-content: center; }
-    .btn-row { display: flex; gap: 10px; }
-    .btn-row .btn { margin-top: 10px; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-row .btn { margin-top: 10px; flex: 1; justify-content: center; text-align: center; min-width: 100px; }
+    .btn.size-btn.active, .btn.toggle-active { background: var(--sky); color: white; box-shadow: 0 4px 0 var(--sky-dark); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:disabled:active { transform: none; box-shadow: 0 4px 0 rgba(0,0,0,0.16); }
+
+    .top-toggles { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 14px; }
+    .top-toggles .sound-btn { margin: 0; }
+
+    .profile-chip {
+      display: flex; align-items: center; gap: 8px; margin: 0 auto 12px;
+      border: none; background: var(--panel); color: var(--ink);
+      border-radius: 999px; padding: 8px 14px 8px 10px; font-weight: 800; cursor: pointer;
+      font-family: "Nunito", sans-serif; font-size: 0.95rem;
+    }
+    .profile-chip:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+    .coin-badge { background: #fff3cd; color: #7a4d00; border-radius: 999px; padding: 3px 10px; font-size: 0.85rem; }
 
     .level-grid { display: grid; gap: 10px; }
     .hud { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; font-weight: 800; flex-wrap: wrap; }
@@ -121,6 +153,7 @@
     .pill.lives { background: #ffe1e8; color: #8b1233; }
     .pill.time { background: #fff3cd; color: #7a4d00; }
     .pill.time.urgent { background: #ffd6de; color: #8b1233; animation: pulse 0.6s ease-in-out infinite alternate; }
+    .pill.practice { background: #e3f6ff; color: #0a5a82; }
     @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.08); } }
 
     .quit-btn {
@@ -158,7 +191,9 @@
     .opt:active:not(:disabled) { transform: scale(0.96); }
     .opt:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
     .opt.correct { background: #d6fff0; border-color: var(--mint); }
+    .opt.correct::after { content: " ✓"; }
     .opt.wrong { background: #ffe1e8; border-color: var(--rose); }
+    .opt.wrong::after { content: " ✗"; }
     .opt:disabled { cursor: default; }
     .opt .key-hint {
       position: absolute; top: 4px; left: 7px; font-size: 0.65rem; font-weight: 800;
@@ -203,17 +238,57 @@
     .battle-title { font-family: "Baloo 2", sans-serif; text-align: center; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
     .solo-options.off { display: none; }
 
-    .confetti-layer {
-      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50;
-    }
-    .confetti-piece {
-      position: absolute; top: -20px; font-size: 1.4rem;
-      animation: confettiFall linear forwards;
-    }
+    .confetti-layer { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+    .confetti-piece { position: absolute; top: -20px; font-size: 1.4rem; animation: confettiFall linear forwards; }
     @keyframes confettiFall {
       from { transform: translateY(0) rotate(0deg); opacity: 1; }
       to { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
     }
+
+    /* profiles */
+    .profile-row {
+      display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+      border-radius: 14px; background: var(--panel);
+    }
+    .profile-row .p-avatar { font-size: 1.6rem; flex-shrink: 0; }
+    .profile-row .p-info { flex: 1; min-width: 0; }
+    .profile-row .p-name { font-weight: 800; font-family: "Baloo 2", sans-serif; }
+    .profile-row .p-coins { font-size: 0.85rem; color: var(--ink-soft); }
+    .badge-active { font-size: 0.8rem; font-weight: 800; color: var(--mint-dark); background: #d6fff0; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; }
+    .row-btn {
+      border: none; border-radius: 999px; padding: 7px 14px; font-weight: 800; font-size: 0.85rem;
+      cursor: pointer; flex-shrink: 0; font-family: "Nunito", sans-serif;
+    }
+    .row-btn.use { background: var(--sky); color: white; }
+    .row-btn.remove { background: var(--panel); color: var(--rose-dark); border: 2px solid #ffd6de; }
+
+    .avatar-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-top: 6px; }
+    .avatar-opt {
+      aspect-ratio: 1; border-radius: 14px; border: 3px solid var(--line);
+      background: var(--panel); font-size: 1.4rem; cursor: pointer;
+    }
+    .avatar-opt.selected { border-color: var(--sky); background: #eaf4ff; }
+    .avatar-opt:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+    .name-input {
+      width: 100%; padding: 12px 14px; border-radius: 14px; border: 2px solid var(--line);
+      font-family: "Nunito", sans-serif; font-size: 1rem; margin-top: 4px; color: var(--ink);
+    }
+
+    /* achievements */
+    .ach-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--panel); }
+    .ach-row.locked { opacity: 0.5; filter: grayscale(0.5); }
+    .ach-emoji { font-size: 1.6rem; flex-shrink: 0; }
+    .ach-info { display: flex; flex-direction: column; min-width: 0; }
+    .ach-name { font-weight: 800; font-family: "Baloo 2", sans-serif; }
+    .ach-desc { font-size: 0.85rem; color: var(--ink-soft); }
+    .ach-check { margin-left: auto; font-size: 1.2rem; flex-shrink: 0; }
+
+    /* shop */
+    .shop-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--panel); }
+    .shop-emoji { font-size: 1.8rem; flex-shrink: 0; }
+    .shop-info { flex: 1; min-width: 0; }
+    .shop-name { font-weight: 800; font-family: "Baloo 2", sans-serif; }
+    .shop-cost { font-size: 0.85rem; color: var(--ink-soft); }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
@@ -224,8 +299,16 @@
   <div class="wrap" id="wrap">
     <div class="card">
       <div id="menu" class="screen active">
-        <button class="sound-btn" id="soundBtnMenu" onclick="toggleSound()">🔊 Som ligado</button>
-        <div class="title-emoji">🚀✨</div>
+        <button class="profile-chip" id="profileChip" onclick="showScreen('profiles')">
+          <span id="profileAvatar">🧑‍🚀</span>
+          <span id="profileName">Jogador 1</span>
+          <span class="coin-badge">🪙 <span id="profileCoins">0</span></span>
+        </button>
+        <div class="top-toggles">
+          <button class="sound-btn" id="soundBtnMenu" onclick="toggleSound()">🔊 Som ligado</button>
+          <button class="sound-btn" id="practiceBtnMenu" onclick="togglePractice()">🐢 Sem cronômetro: desligado</button>
+        </div>
+        <div class="title-emoji" id="menuTitleEmoji">🚀✨</div>
         <h1>Super Matemática</h1>
         <p class="subtitle">Treine contas e vire um astronauta dos números!</p>
         <p class="hint" id="recordsText">Carregando recordes…</p>
@@ -236,6 +319,9 @@
           <button class="btn" style="background:var(--plasma); color:white; box-shadow:0 4px 0 var(--plasma-dark);" onclick="startGame('divisao')"><span class="icon">➗</span> Divisão (9s)</button>
           <button class="btn btn-primary" onclick="showScreen('tabuada')"><span class="icon">🔢</span> Tabuada (10s)</button>
           <button class="btn btn-primary" onclick="showScreen('battlePick')" style="background:var(--nebula); box-shadow:0 4px 0 #3c2966;"><span class="icon">⚔️</span> Batalha 2 jogadores</button>
+          <button class="btn btn-ghost" onclick="showScreen('achievements')"><span class="icon">🏅</span> Conquistas</button>
+          <button class="btn btn-ghost" onclick="showScreen('shop')"><span class="icon">🛍️</span> Loja de naves</button>
+          <button class="btn btn-ghost" onclick="showScreen('accessibility')"><span class="icon">⚙️</span> Acessibilidade</button>
           <button class="btn btn-ghost" onclick="showScreen('howto')"><span class="icon">❓</span> Como jogar</button>
         </div>
       </div>
@@ -250,13 +336,73 @@
           5. Cada acerto vale 10 pontos, e o combo aumenta o bônus.<br>
           6. Se o tempo acabar, a pergunta passa.<br>
           7. Use o botão de som para ligar ou desligar a música — sua escolha fica salva.<br>
-          8. O jogo guarda o recorde de cada nível neste navegador.<br>
+          8. Cada perfil guarda seus próprios recordes.<br>
           9. No modo Tabuada você escolhe o número para treinar.<br>
           10. Você tem 3 vidas. Errar ou deixar o tempo acabar tira 1 vida.<br>
           11. Na Batalha, escolha a dificuldade e os 2 jogam a mesma conta — quem acertar primeiro ganha o ponto.<br>
-          12. O botão ✕ no topo do jogo leva de volta ao menu a qualquer momento.
+          12. O botão ✕ no topo do jogo leva de volta ao menu a qualquer momento.<br>
+          13. Em ⚙️ Acessibilidade você ajusta o tamanho do texto, liga o alto contraste e ativa o modo sem cronômetro.<br>
+          14. Jogando você ganha 🪙 moedas e pode desbloquear 🏅 conquistas e novas naves na 🛍️ Loja.<br>
+          15. Toque no seu nome no topo do menu para trocar ou criar um perfil.
         </p>
         <button class="btn btn-primary" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
+      </div>
+
+      <div id="accessibility" class="screen">
+        <h1>⚙️ Acessibilidade</h1>
+        <p class="subtitle">Ajuste o jogo do seu jeito</p>
+
+        <p class="hint" style="text-align:left; font-weight:800;">Tamanho do texto</p>
+        <div class="btn-row">
+          <button class="btn btn-ghost size-btn" data-size="normal" onclick="setTextSize('normal')">Normal</button>
+          <button class="btn btn-ghost size-btn" data-size="grande" onclick="setTextSize('grande')">Grande</button>
+          <button class="btn btn-ghost size-btn" data-size="extra" onclick="setTextSize('extra')">Extra grande</button>
+        </div>
+
+        <p class="hint" style="text-align:left; font-weight:800; margin-top:16px;">Contraste</p>
+        <button class="btn btn-ghost" id="contrastBtn" onclick="toggleHighContrast()">🌓 Alto contraste: desligado</button>
+        <p class="hint" style="margin-top:6px;">Aumenta o contraste das cores e das bordas dos botões. Respostas certas e erradas também mostram ✓ ou ✗, não só a cor.</p>
+
+        <p class="hint" style="text-align:left; font-weight:800; margin-top:16px;">Ritmo do jogo</p>
+        <button class="btn btn-ghost" id="practiceBtnAcc" onclick="togglePractice()">🐢 Sem cronômetro: desligado</button>
+        <p class="hint" style="margin-top:6px;">Sem cronômetro você responde no seu tempo, sem pressa — vale para os modos sozinho. A Batalha continua cronometrada.</p>
+
+        <button class="btn btn-primary" onclick="showScreen('menu')" style="margin-top:16px;"><span class="icon">↩️</span> Voltar</button>
+      </div>
+
+      <div id="profiles" class="screen">
+        <h1>👤 Perfis</h1>
+        <p class="subtitle">Cada perfil guarda seus recordes, moedas e conquistas</p>
+        <div id="profileList" style="display:flex; flex-direction:column; gap:10px;"></div>
+
+        <div id="newProfileForm" style="margin-top:16px; display:none;">
+          <p class="hint" style="text-align:left; font-weight:800;">Nome do novo perfil</p>
+          <input id="newProfileName" class="name-input" type="text" maxlength="16" placeholder="Ex: Maria">
+          <p class="hint" style="text-align:left; font-weight:800; margin-top:12px;">Escolha um avatar</p>
+          <div id="avatarPicker" class="avatar-grid"></div>
+          <div class="btn-row" style="margin-top:12px;">
+            <button class="btn btn-good" onclick="confirmNewProfile()"><span class="icon">✔️</span> Criar</button>
+            <button class="btn btn-ghost" onclick="cancelNewProfile()"><span class="icon">✖️</span> Cancelar</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="addProfileBtn" onclick="showNewProfileForm()" style="margin-top:16px;"><span class="icon">➕</span> Novo perfil</button>
+        <button class="btn btn-ghost" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
+      </div>
+
+      <div id="achievements" class="screen">
+        <h1>🏅 Conquistas</h1>
+        <p class="subtitle"><span id="achCount">0</span> de <span id="achTotal">0</span> desbloqueadas</p>
+        <div id="achList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <button class="btn btn-primary" onclick="showScreen('menu')" style="margin-top:16px;"><span class="icon">↩️</span> Voltar</button>
+      </div>
+
+      <div id="shop" class="screen">
+        <h1>🛍️ Loja de naves</h1>
+        <p class="subtitle">Suas moedas: <span id="shopCoins">0</span> 🪙</p>
+        <div id="shopList" style="display:flex; flex-direction:column; gap:10px;"></div>
+        <p class="hint" style="margin-top:10px;">Ganhe moedas acertando contas e desbloqueando conquistas.</p>
+        <button class="btn btn-primary" onclick="showScreen('menu')" style="margin-top:12px;"><span class="icon">↩️</span> Voltar</button>
       </div>
 
       <div id="tabuada" class="screen">
@@ -296,6 +442,7 @@
             <span class="pill">Pergunta <span id="qNum">1</span>/10</span>
           </div>
           <span class="pill time" id="timePill">⏱ <span id="timeLeft">10</span>s</span>
+          <span class="pill practice" id="practicePill" style="display:none">🐢 Sem pressa</span>
           <span class="pill solo-hud" id="scorePill">Pontos: <span id="score">0</span></span>
           <span class="pill combo solo-hud" id="comboPill">Combo: 0</span>
           <span class="pill lives solo-hud" id="livesPill">❤️❤️❤️</span>
@@ -303,7 +450,7 @@
           <span class="pill battle-hud" id="p2ScorePill" style="display:none">🟠 J2: 0</span>
         </div>
         <button class="sound-btn" id="soundBtnGame" onclick="toggleSound()">🔊 Som ligado</button>
-        <div class="timer-track"><div class="timer-bar" id="timerBar"></div></div>
+        <div class="timer-track" id="timerTrack"><div class="timer-bar" id="timerBar"></div></div>
         <div class="progress-dots" id="progressDots"></div>
         <div class="question" id="question">7 + 5 = ?</div>
         <div class="options solo-options" id="options"></div>
@@ -327,6 +474,7 @@
         <div class="stars" id="stars"></div>
         <p class="hint" id="resultMsg"></p>
         <p class="hint" id="recordMsg"></p>
+        <p class="hint" id="rewardMsg"></p>
         <button class="sound-btn" id="soundBtnResult" onclick="toggleSound()">🔊 Som ligado</button>
         <div class="btn-row">
           <button class="btn btn-good" id="playAgainBtn" onclick="playAgain()"><span class="icon">🔁</span> Jogar de novo</button>
@@ -344,61 +492,304 @@
     const LEVEL_NAME = { facil: "Fácil", medio: "Médio", dificil: "Difícil", divisao: "Divisão", tabuada: "Tabuada" };
     const TIME_BY_LEVEL_EXTRA = { tabuada: 10 };
 
-    // ---- Persistent records: localStorage, per-browser, wrapped defensively ----
-    const RECORDS_KEY = "superMathRecords";
-    const SOUND_KEY = "superMathSoundOn";
-    let memoryRecordsFallback = {};
+    const AVATAR_OPTIONS = ["🧑‍🚀","👩‍🚀","👦","👧","🤖","👽","🦸‍♀️","🦸‍♂️","🐱","🐶","🦊","🐼"];
+    const SKINS = [
+      { id: "classico", name: "Clássico", emoji: "🚀", cost: 0 },
+      { id: "roxo", name: "Nave Roxa", emoji: "🛸", cost: 20 },
+      { id: "cometa", name: "Cometa Dourado", emoji: "🌠", cost: 40 },
+      { id: "planeta", name: "Planeta Verde", emoji: "🪐", cost: 60 },
+      { id: "fogo", name: "Fênix de Fogo", emoji: "🔥", cost: 80 }
+    ];
+    const ACHIEVEMENTS = [
+      { id: "combo3", name: "Combo Voador", desc: "Consiga um combo de 3 acertos seguidos", emoji: "🔥", check: ctx => !ctx.isBattle && ctx.bestCombo >= 3 },
+      { id: "combo5", name: "Combo Estelar", desc: "Consiga um combo de 5 acertos seguidos", emoji: "🌟", check: ctx => !ctx.isBattle && ctx.bestCombo >= 5 },
+      { id: "zerou_facil", name: "Mestre do Fácil", desc: "Acerte as 10 perguntas do nível Fácil", emoji: "🥇", check: ctx => !ctx.isBattle && ctx.level === "facil" && ctx.correctCount >= 10 },
+      { id: "zerou_medio", name: "Mestre do Médio", desc: "Acerte as 10 perguntas do nível Médio", emoji: "🥈", check: ctx => !ctx.isBattle && ctx.level === "medio" && ctx.correctCount >= 10 },
+      { id: "zerou_dificil", name: "Mestre do Difícil", desc: "Acerte as 10 perguntas do nível Difícil", emoji: "🥉", check: ctx => !ctx.isBattle && ctx.level === "dificil" && ctx.correctCount >= 10 },
+      { id: "zerou_divisao", name: "Mestre da Divisão", desc: "Acerte as 10 perguntas de Divisão", emoji: "➗", check: ctx => !ctx.isBattle && ctx.level === "divisao" && ctx.correctCount >= 10 },
+      { id: "zerou_tabuada", name: "Rei da Tabuada", desc: "Acerte as 10 perguntas no modo Tabuada", emoji: "🔢", check: ctx => !ctx.isBattle && ctx.level === "tabuada" && ctx.correctCount >= 10 },
+      { id: "cem_pontos", name: "Cem à Vista", desc: "Alcance 100 pontos em uma única partida", emoji: "💯", check: ctx => !ctx.isBattle && ctx.score >= 100 },
+      { id: "duelista", name: "Duelista", desc: "Termine uma Batalha 2 jogadores sem empate", emoji: "⚔️", check: ctx => ctx.isBattle && ctx.battleWon }
+    ];
 
-    function loadRecords() {
+    // ---- Persistent settings: localStorage, per-browser, wrapped defensively ----
+    const OLD_RECORDS_KEY = "superMathRecords";
+    const SOUND_KEY = "superMathSoundOn";
+    const TEXTSIZE_KEY = "superMathTextSize";
+    const CONTRAST_KEY = "superMathHighContrast";
+    const PRACTICE_KEY = "superMathPractice";
+    const PROFILES_KEY = "superMathProfiles";
+    const ACTIVE_PROFILE_KEY = "superMathActiveProfile";
+
+    function loadSoundPref() {
+      try { const raw = localStorage.getItem(SOUND_KEY); return raw === null ? true : raw === "1"; }
+      catch (e) { return true; }
+    }
+    function saveSoundPref(on) { try { localStorage.setItem(SOUND_KEY, on ? "1" : "0"); } catch (e) {} }
+    function loadTextSize() { try { return localStorage.getItem(TEXTSIZE_KEY) || "normal"; } catch (e) { return "normal"; } }
+    function saveTextSize(v) { try { localStorage.setItem(TEXTSIZE_KEY, v); } catch (e) {} }
+    function loadHighContrast() { try { return localStorage.getItem(CONTRAST_KEY) === "1"; } catch (e) { return false; } }
+    function saveHighContrast(v) { try { localStorage.setItem(CONTRAST_KEY, v ? "1" : "0"); } catch (e) {} }
+    function loadPractice() { try { return localStorage.getItem(PRACTICE_KEY) === "1"; } catch (e) { return false; } }
+    function savePractice(v) { try { localStorage.setItem(PRACTICE_KEY, v ? "1" : "0"); } catch (e) {} }
+
+    // ---- Profiles ----
+    function generateId() { return "p_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 7); }
+    function normalizeProfile(p) {
+      if (!p.records) p.records = {};
+      if (!Array.isArray(p.achievements)) p.achievements = [];
+      if (typeof p.coins !== "number") p.coins = 0;
+      if (!p.skin) p.skin = "classico";
+      if (!Array.isArray(p.unlockedSkins)) p.unlockedSkins = ["classico"];
+      if (!p.name) p.name = "Jogador";
+      if (!p.avatar) p.avatar = "🧑‍🚀";
+      return p;
+    }
+    function loadProfilesRaw() {
       try {
-        const raw = localStorage.getItem(RECORDS_KEY);
-        return raw ? JSON.parse(raw) : { ...memoryRecordsFallback };
-      } catch (e) {
-        return { ...memoryRecordsFallback };
-      }
+        const raw = localStorage.getItem(PROFILES_KEY);
+        if (raw) return JSON.parse(raw).map(normalizeProfile);
+      } catch (e) {}
+      return null;
     }
-    function saveRecords(records) {
-      memoryRecordsFallback = { ...records };
+    function saveProfiles(list) { try { localStorage.setItem(PROFILES_KEY, JSON.stringify(list)); } catch (e) {} }
+    function persistProfiles() { saveProfiles(profiles); }
+    function migrateOldRecords() {
       try {
-        localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
-      } catch (e) {
-        console.error("Não foi possível salvar os recordes:", e);
-      }
+        const raw = localStorage.getItem(OLD_RECORDS_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return null;
     }
-    function getRecord(lvl) { return Number(loadRecords()[lvl] || 0); }
-    function setRecord(lvl, value) {
-      const records = loadRecords();
-      records[lvl] = value;
-      saveRecords(records);
+
+    let profiles = loadProfilesRaw();
+    if (!profiles || !profiles.length) {
+      const migrated = migrateOldRecords();
+      profiles = [normalizeProfile({
+        id: generateId(), name: "Jogador 1", avatar: "🧑‍🚀",
+        records: migrated || {}, coins: 0, achievements: [], skin: "classico", unlockedSkins: ["classico"]
+      })];
+      saveProfiles(profiles);
     }
+    let activeProfileId = (function () {
+      try { return localStorage.getItem(ACTIVE_PROFILE_KEY); } catch (e) { return null; }
+    })();
+    if (!activeProfileId || !profiles.some(p => p.id === activeProfileId)) {
+      activeProfileId = profiles[0].id;
+      try { localStorage.setItem(ACTIVE_PROFILE_KEY, activeProfileId); } catch (e) {}
+    }
+    function saveActiveProfileId(id) { activeProfileId = id; try { localStorage.setItem(ACTIVE_PROFILE_KEY, id); } catch (e) {} }
+    function getActiveProfile() { return profiles.find(p => p.id === activeProfileId) || profiles[0]; }
+
+    function getRecord(lvl) { return Number(getActiveProfile().records[lvl] || 0); }
+    function setRecord(lvl, value) { getActiveProfile().records[lvl] = value; persistProfiles(); }
+
     function updateRecordsText() {
       const el = document.getElementById("recordsText");
       if (!el) return;
-      const r = loadRecords();
+      const r = getActiveProfile().records;
       el.textContent = "Recordes: Fácil " + (r.facil || 0) +
         " · Médio " + (r.medio || 0) +
         " · Difícil " + (r.dificil || 0) +
         " · Divisão " + (r.divisao || 0) +
         " · Tabuada " + (r.tabuada || 0);
     }
-    function loadSoundPref() {
-      try {
-        const raw = localStorage.getItem(SOUND_KEY);
-        return raw === null ? true : raw === "1";
-      } catch (e) { return true; }
+    function updateProfileHeader() {
+      const p = getActiveProfile();
+      const av = document.getElementById("profileAvatar");
+      const nm = document.getElementById("profileName");
+      const co = document.getElementById("profileCoins");
+      if (av) av.textContent = p.avatar;
+      if (nm) nm.textContent = p.name;
+      if (co) co.textContent = p.coins;
     }
-    function saveSoundPref(on) {
-      try { localStorage.setItem(SOUND_KEY, on ? "1" : "0"); } catch (e) { /* ignore */ }
+
+    // ---- Profiles screen ----
+    let pendingAvatar = AVATAR_OPTIONS[0];
+    function renderProfileList() {
+      const box = document.getElementById("profileList");
+      box.innerHTML = "";
+      profiles.forEach(p => {
+        const row = document.createElement("div");
+        row.className = "profile-row";
+        const isActive = p.id === activeProfileId;
+        row.innerHTML =
+          '<span class="p-avatar">' + p.avatar + '</span>' +
+          '<div class="p-info"><div class="p-name"></div><div class="p-coins">🪙 ' + p.coins + ' moedas</div></div>';
+        row.querySelector(".p-name").textContent = p.name;
+        if (isActive) {
+          const badge = document.createElement("span");
+          badge.className = "badge-active";
+          badge.textContent = "Ativo";
+          row.appendChild(badge);
+        } else {
+          const useBtn = document.createElement("button");
+          useBtn.className = "row-btn use";
+          useBtn.textContent = "Usar";
+          useBtn.onclick = () => selectProfile(p.id);
+          row.appendChild(useBtn);
+          if (profiles.length > 1) {
+            const delBtn = document.createElement("button");
+            delBtn.className = "row-btn remove";
+            delBtn.textContent = "✕";
+            delBtn.title = "Remover perfil";
+            delBtn.onclick = () => deleteProfile(p.id);
+            row.appendChild(delBtn);
+          }
+        }
+        box.appendChild(row);
+      });
+    }
+    function selectProfile(id) {
+      saveActiveProfileId(id);
+      updateProfileHeader(); updateRecordsText(); applySkin(); renderProfileList();
+      showScreen("menu");
+    }
+    function deleteProfile(id) {
+      if (profiles.length <= 1) return;
+      const ok = window.confirm("Remover esse perfil? Os recordes, moedas e conquistas dele serão perdidos.");
+      if (!ok) return;
+      profiles = profiles.filter(p => p.id !== id);
+      persistProfiles();
+      if (activeProfileId === id) saveActiveProfileId(profiles[0].id);
+      renderProfileList(); updateProfileHeader(); updateRecordsText(); applySkin();
+    }
+    function renderAvatarPicker() {
+      const box = document.getElementById("avatarPicker");
+      box.innerHTML = "";
+      AVATAR_OPTIONS.forEach(av => {
+        const btn = document.createElement("button");
+        btn.className = "avatar-opt" + (av === pendingAvatar ? " selected" : "");
+        btn.textContent = av;
+        btn.type = "button";
+        btn.onclick = () => { pendingAvatar = av; renderAvatarPicker(); };
+        box.appendChild(btn);
+      });
+    }
+    function showNewProfileForm() {
+      pendingAvatar = AVATAR_OPTIONS[0];
+      document.getElementById("newProfileName").value = "";
+      renderAvatarPicker();
+      document.getElementById("newProfileForm").style.display = "block";
+      document.getElementById("addProfileBtn").style.display = "none";
+    }
+    function cancelNewProfile() {
+      document.getElementById("newProfileForm").style.display = "none";
+      document.getElementById("addProfileBtn").style.display = "flex";
+    }
+    function confirmNewProfile() {
+      const nameInput = document.getElementById("newProfileName");
+      const name = (nameInput.value || "").trim().slice(0, 16) || "Jogador " + (profiles.length + 1);
+      const profile = normalizeProfile({
+        id: generateId(), name, avatar: pendingAvatar,
+        records: {}, coins: 0, achievements: [], skin: "classico", unlockedSkins: ["classico"]
+      });
+      profiles.push(profile);
+      persistProfiles();
+      saveActiveProfileId(profile.id);
+      cancelNewProfile();
+      renderProfileList(); updateProfileHeader(); updateRecordsText(); applySkin();
+    }
+
+    // ---- Achievements screen ----
+    function renderAchievements() {
+      const profile = getActiveProfile();
+      const box = document.getElementById("achList");
+      box.innerHTML = "";
+      let unlockedCount = 0;
+      ACHIEVEMENTS.forEach(def => {
+        const unlocked = profile.achievements.includes(def.id);
+        if (unlocked) unlockedCount += 1;
+        const row = document.createElement("div");
+        row.className = "ach-row" + (unlocked ? "" : " locked");
+        row.innerHTML =
+          '<span class="ach-emoji">' + (unlocked ? def.emoji : "🔒") + '</span>' +
+          '<div class="ach-info"><div class="ach-name"></div><div class="ach-desc"></div></div>' +
+          '<span class="ach-check">' + (unlocked ? "✅" : "") + '</span>';
+        row.querySelector(".ach-name").textContent = def.name;
+        row.querySelector(".ach-desc").textContent = def.desc;
+        box.appendChild(row);
+      });
+      document.getElementById("achCount").textContent = unlockedCount;
+      document.getElementById("achTotal").textContent = ACHIEVEMENTS.length;
+    }
+    function checkAchievements(ctx) {
+      const profile = getActiveProfile();
+      ACHIEVEMENTS.forEach(def => {
+        if (!profile.achievements.includes(def.id) && def.check(ctx)) {
+          profile.achievements.push(def.id);
+          profile.coins += 10;
+        }
+      });
+    }
+
+    // ---- Shop screen ----
+    function applySkin() {
+      const p = getActiveProfile();
+      document.body.setAttribute("data-skin", p.skin);
+      const skin = SKINS.find(s => s.id === p.skin) || SKINS[0];
+      const el = document.getElementById("menuTitleEmoji");
+      if (el) el.textContent = skin.emoji + "✨";
+    }
+    function renderShop() {
+      const profile = getActiveProfile();
+      document.getElementById("shopCoins").textContent = profile.coins;
+      const box = document.getElementById("shopList");
+      box.innerHTML = "";
+      SKINS.forEach(skin => {
+        const owned = profile.unlockedSkins.includes(skin.id);
+        const selected = profile.skin === skin.id;
+        const row = document.createElement("div");
+        row.className = "shop-row";
+        row.innerHTML =
+          '<span class="shop-emoji">' + skin.emoji + '</span>' +
+          '<div class="shop-info"><div class="shop-name"></div><div class="shop-cost"></div></div>';
+        row.querySelector(".shop-name").textContent = skin.name;
+        row.querySelector(".shop-cost").textContent = skin.cost === 0 ? "Grátis" : skin.cost + " 🪙";
+        const btn = document.createElement("button");
+        btn.className = "row-btn use";
+        if (selected) {
+          btn.textContent = "Selecionada ✓";
+          btn.disabled = true;
+          btn.style.opacity = "0.6";
+        } else if (owned) {
+          btn.textContent = "Usar";
+          btn.onclick = () => selectSkin(skin.id);
+        } else {
+          btn.textContent = "Desbloquear";
+          btn.disabled = profile.coins < skin.cost;
+          btn.onclick = () => buySkin(skin.id);
+        }
+        row.appendChild(btn);
+        box.appendChild(row);
+      });
+    }
+    function selectSkin(id) {
+      const p = getActiveProfile();
+      p.skin = id; persistProfiles(); applySkin(); renderShop();
+    }
+    function buySkin(id) {
+      const p = getActiveProfile();
+      const skin = SKINS.find(s => s.id === id);
+      if (!skin || p.unlockedSkins.includes(id) || p.coins < skin.cost) return;
+      p.coins -= skin.cost;
+      p.unlockedSkins.push(id);
+      p.skin = id;
+      persistProfiles();
+      applySkin(); updateProfileHeader(); renderShop();
     }
 
     let level = "facil", tabuadaN = 0, current = 0, score = 0, combo = 0, bestCombo = 0, correctCount = 0, lives = 3;
     let isBattle = false, p1Score = 0, p2Score = 0, p1Locked = false, p2Locked = false;
     let answer = 0, locked = false, timeLeft = 10, maxTime = 10, timerId = null, audioCtx = null, lastTickSecond = null;
-    let dotResults = []; // per-question outcome for the progress dots: 'done' | 'missed'
+    let dotResults = [];
+    let noTimerThisRound = false;
     let soundOn = loadSoundPref();
+    let textSize = loadTextSize();
+    let highContrast = loadHighContrast();
+    let practiceMode = loadPractice();
     let musicTimer = null, musicStep = 0, musicGain = null, noiseBuffer = null;
 
-    // Two-bar cheerful chiptune phrase (0 = rest). C major, bright and bouncy.
     const MELODY = [
       523.25,659.25,783.99,659.25, 523.25,587.33,659.25,0,
       392.00,493.88,587.33,493.88, 392.00,440.00,493.88,0,
@@ -430,12 +821,32 @@
       updateSoundButtons();
       if (soundOn) { getAudio(); playClick(); startMusic(); } else stopMusic();
     }
+
+    function applyTextSize() {
+      document.documentElement.setAttribute("data-textsize", textSize);
+      document.querySelectorAll(".size-btn").forEach(b => b.classList.toggle("active", b.dataset.size === textSize));
+    }
+    function setTextSize(size) { textSize = size; saveTextSize(size); applyTextSize(); }
+    function applyHighContrast() {
+      document.body.classList.toggle("high-contrast", highContrast);
+      const btn = document.getElementById("contrastBtn");
+      if (btn) { btn.textContent = highContrast ? "🌓 Alto contraste: ligado" : "🌓 Alto contraste: desligado"; btn.classList.toggle("toggle-active", highContrast); }
+    }
+    function toggleHighContrast() { highContrast = !highContrast; saveHighContrast(highContrast); applyHighContrast(); }
+    function applyPracticeLabel() {
+      const label = practiceMode ? "🐢 Sem cronômetro: ligado" : "🐢 Sem cronômetro: desligado";
+      ["practiceBtnMenu","practiceBtnAcc"].forEach(id => {
+        const b = document.getElementById(id);
+        if (!b) return;
+        b.textContent = label;
+        b.classList.toggle("toggle-active", practiceMode);
+        if (b.classList.contains("sound-btn")) b.classList.toggle("off", practiceMode);
+      });
+    }
+    function togglePractice() { practiceMode = !practiceMode; savePractice(practiceMode); applyPracticeLabel(); }
+
     function getMusicBus(ctx) {
-      if (!musicGain) {
-        musicGain = ctx.createGain();
-        musicGain.gain.value = 0.0001;
-        musicGain.connect(ctx.destination);
-      }
+      if (!musicGain) { musicGain = ctx.createGain(); musicGain.gain.value = 0.0001; musicGain.connect(ctx.destination); }
       return musicGain;
     }
     function playMusicNote(freq, dur, volume, type, bus) {
@@ -546,13 +957,13 @@
       document.getElementById(id).classList.add("active");
       if (id === "menu") {
         document.getElementById("wrap").classList.remove("battle-wide");
-        updateRecordsText();
+        updateRecordsText(); updateProfileHeader();
       }
+      if (id === "profiles") renderProfileList();
+      if (id === "achievements") renderAchievements();
+      if (id === "shop") renderShop();
     }
-    function quitToMenu() {
-      stopTimer();
-      showScreen("menu");
-    }
+    function quitToMenu() { stopTimer(); showScreen("menu"); }
     function playAgain() {
       if (lastWasBattle) startBattle(lastBattleLevel);
       else if (lastLevel === "tabuada") startTabuada(lastTabuadaN);
@@ -612,6 +1023,11 @@
       document.querySelectorAll(".battle-hud").forEach(el => el.style.display = on ? "" : "none");
       updateBattleScores();
     }
+    function setPracticeUI(on) {
+      document.getElementById("timePill").style.display = on ? "none" : "";
+      document.getElementById("timerTrack").style.display = on ? "none" : "";
+      document.getElementById("practicePill").style.display = on ? "" : "none";
+    }
     function updateBattleScores() {
       const a = document.getElementById("p1ScorePill"), b = document.getElementById("p2ScorePill");
       if (a) a.textContent = "🔵 J1: " + p1Score;
@@ -621,10 +1037,7 @@
       const box = document.getElementById("progressDots");
       box.innerHTML = "";
       dotResults = new Array(TOTAL).fill(null);
-      for (let i = 0; i < TOTAL; i++) {
-        const dot = document.createElement("span");
-        box.appendChild(dot);
-      }
+      for (let i = 0; i < TOTAL; i++) box.appendChild(document.createElement("span"));
     }
     function renderProgressDots() {
       const box = document.getElementById("progressDots");
@@ -642,9 +1055,10 @@
       isBattle = !!battle; level = chosen;
       if (!isBattle) lastLevel = chosen;
       lastWasBattle = isBattle;
+      noTimerThisRound = practiceMode && !isBattle;
       current = 0; score = 0; combo = 0; bestCombo = 0; correctCount = 0; lives = 3; p1Score = 0; p2Score = 0;
       document.getElementById("score").textContent = "0";
-      updateComboUI(); updateLivesUI(); setBattleUI(isBattle); initProgressDots();
+      updateComboUI(); updateLivesUI(); setBattleUI(isBattle); setPracticeUI(noTimerThisRound); initProgressDots();
       showScreen("game"); nextQuestion();
     }
     function nextQuestion() {
@@ -660,21 +1074,21 @@
       const box = document.getElementById("options"); box.innerHTML = "";
       q.options.forEach((opt, i) => {
         const btn = document.createElement("button");
-        btn.className = "opt"; btn.dataset.key = String(i + 1);
+        btn.className = "opt"; btn.dataset.key = String(i + 1); btn.dataset.value = String(opt);
         btn.innerHTML = '<span class="key-hint">' + (i + 1) + '</span>' + opt;
         btn.onclick = () => choose(opt, btn);
         box.appendChild(btn);
       });
       fillBattleOptions("optionsP1", 1, q.options);
       fillBattleOptions("optionsP2", 2, q.options);
-      startTimer();
+      if (!noTimerThisRound) startTimer();
     }
     function fillBattleOptions(id, player, opts) {
       const box = document.getElementById(id); if (!box) return;
       box.innerHTML = "";
       opts.forEach(opt => {
         const btn = document.createElement("button");
-        btn.className = "opt"; btn.textContent = opt;
+        btn.className = "opt"; btn.dataset.value = String(opt); btn.textContent = opt;
         btn.onclick = () => chooseBattle(player, opt, btn);
         box.appendChild(btn);
       });
@@ -689,7 +1103,7 @@
         updateBattleScores();
         document.querySelectorAll("#battleBoard .opt").forEach(b => {
           b.disabled = true;
-          if (Number(b.textContent) === answer) b.classList.add("correct");
+          if (Number(b.dataset.value) === answer) b.classList.add("correct");
         });
         const fb = document.getElementById("feedback");
         fb.textContent = player === 1 ? "🔵 Jogador 1 pontuou!" : "🟠 Jogador 2 pontuou!";
@@ -706,7 +1120,7 @@
           locked = true; stopTimer();
           document.querySelectorAll("#battleBoard .opt").forEach(b => {
             b.disabled = true;
-            if (Number(b.textContent) === answer) b.classList.add("correct");
+            if (Number(b.dataset.value) === answer) b.classList.add("correct");
           });
           fb.textContent = "Os dois erraram! Era " + answer;
           setTimeout(nextQuestion, 1100);
@@ -716,7 +1130,7 @@
     function revealAnswer(wrongBtn) {
       document.querySelectorAll("#options .opt").forEach(b => {
         b.disabled = true;
-        if (Number(b.textContent.replace(/^\D+/, "")) === answer) b.classList.add("correct");
+        if (Number(b.dataset.value) === answer) b.classList.add("correct");
       });
       if (wrongBtn) wrongBtn.classList.add("wrong");
     }
@@ -757,12 +1171,12 @@
       setTimeout(nextQuestion, 900);
     }
     function timeUp() {
-      if (locked) return;
+      if (locked || noTimerThisRound) return;
       locked = true; stopTimer(); timeLeft = 0; updateTimerUI();
       if (isBattle) {
         document.querySelectorAll("#battleBoard .opt").forEach(b => {
           b.disabled = true;
-          if (Number(b.textContent) === answer) b.classList.add("correct");
+          if (Number(b.dataset.value) === answer) b.classList.add("correct");
         });
         const fb = document.getElementById("feedback");
         fb.textContent = "Tempo esgotado! Ninguém pontuou. Era " + answer;
@@ -795,22 +1209,49 @@
         setTimeout(() => piece.remove(), (duration + 0.6) * 1000);
       }
     }
+    function renderRewardSummary(coins, newlyIds) {
+      const el = document.getElementById("rewardMsg");
+      if (!el) return;
+      const parts = [];
+      if (coins > 0) parts.push("+" + coins + " 🪙 moedas");
+      if (newlyIds.length > 0) {
+        const names = newlyIds.map(id => {
+          const d = ACHIEVEMENTS.find(a => a.id === id);
+          return d ? d.emoji + " " + d.name : id;
+        });
+        parts.push("Nova conquista: " + names.join(", ") + "!");
+      }
+      el.textContent = parts.join(" · ");
+    }
 
     function finishGame() {
       stopTimer();
+      const profile = getActiveProfile();
+      const beforeAch = profile.achievements.slice();
+      let coinsGained = 0;
+
       if (isBattle) {
         let winner = "Empate!";
         if (p1Score > p2Score) winner = "🔵 Jogador 1 venceu!";
         else if (p2Score > p1Score) winner = "🟠 Jogador 2 venceu!";
+        const battleWon = p1Score !== p2Score;
+        if (battleWon) coinsGained += 5;
+        checkAchievements({ isBattle: true, battleWon, level });
         document.getElementById("resultEmoji").textContent = "⚔️";
         document.getElementById("finalScore").textContent = p1Score + " x " + p2Score;
         document.getElementById("stars").textContent = "";
         document.getElementById("resultMsg").textContent = winner;
         document.getElementById("recordMsg").textContent = "Batalha de 10 contas — " + LEVEL_NAME[level];
+        profile.coins += coinsGained;
+        persistProfiles(); updateProfileHeader();
+        renderRewardSummary(coinsGained, profile.achievements.filter(id => !beforeAch.includes(id)));
         showScreen("result"); playWin();
-        if (p1Score !== p2Score) launchConfetti(24);
+        if (battleWon) launchConfetti(24);
         return;
       }
+
+      coinsGained += correctCount;
+      checkAchievements({ isBattle: false, level, correctCount, score, bestCombo, lives });
       document.getElementById("resultEmoji").textContent = "🏆";
       document.getElementById("finalScore").textContent = score + " pontos";
       let stars = "⭐", msg = "Continue treinando!";
@@ -820,6 +1261,7 @@
       else if (correctCount >= 4) { stars = "⭐⭐"; msg = "Bom começo!"; }
       if (lives <= 0) msg = "Fim das vidas! " + msg;
       if (bestCombo >= 3) msg += " Melhor combo: x" + bestCombo + ".";
+      if (noTimerThisRound) msg += " (modo sem cronômetro)";
       document.getElementById("stars").textContent = stars;
       document.getElementById("resultMsg").textContent = msg;
       const recordEl = document.getElementById("recordMsg");
@@ -830,6 +1272,9 @@
       } else {
         recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
       }
+      profile.coins += coinsGained;
+      persistProfiles(); updateProfileHeader();
+      renderRewardSummary(coinsGained, profile.achievements.filter(id => !beforeAch.includes(id)));
       showScreen("result"); playWin();
       if (correctCount >= 10) launchConfetti(28);
     }
@@ -842,15 +1287,17 @@
       if (isBattle || locked) return;
       if (["1","2","3","4"].includes(e.key)) {
         const btn = document.querySelector('#options .opt[data-key="' + e.key + '"]');
-        if (btn && !btn.disabled) {
-          const value = Number(btn.textContent.replace(/^\D+/, ""));
-          choose(value, btn);
-        }
+        if (btn && !btn.disabled) choose(Number(btn.dataset.value), btn);
       }
     });
 
     updateSoundButtons();
     updateRecordsText();
+    updateProfileHeader();
+    applyTextSize();
+    applyHighContrast();
+    applyPracticeLabel();
+    applySkin();
   </script>
 </body>
 </html>
