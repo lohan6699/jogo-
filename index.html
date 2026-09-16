@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Super Matemática</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -109,9 +109,12 @@
     .btn-warn { background: var(--gold); color: #4a3600; box-shadow: 0 4px 0 var(--gold-dark); }
     .btn-flame { background: var(--flame); color: white; box-shadow: 0 4px 0 var(--flame-dark); }
     .btn-ghost { background: var(--panel); color: var(--ink); box-shadow: 0 4px 0 var(--line); justify-content: center; }
+    .btn-row { display: flex; gap: 10px; }
+    .btn-row .btn { margin-top: 10px; }
 
     .level-grid { display: grid; gap: 10px; }
-    .hud { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 14px; font-weight: 800; flex-wrap: wrap; }
+    .hud { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; font-weight: 800; flex-wrap: wrap; }
+    .hud-left { display: flex; align-items: center; gap: 8px; }
     .pill { background: var(--panel); color: var(--ink); border-radius: 999px; padding: 7px 13px; font-size: 0.9rem; }
     .pill.combo { background: #ffe8c8; color: #7a4d00; }
     .pill.combo.hot { background: var(--gold); color: #4a3600; }
@@ -120,20 +123,35 @@
     .pill.time.urgent { background: #ffd6de; color: #8b1233; animation: pulse 0.6s ease-in-out infinite alternate; }
     @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.08); } }
 
+    .quit-btn {
+      width: 34px; height: 34px; border-radius: 50%; border: none;
+      background: var(--panel); color: var(--ink-soft); font-size: 1.1rem; font-weight: 800;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; line-height: 1;
+    }
+    .quit-btn:hover { background: #ffe1e8; color: #8b1233; }
+    .quit-btn:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+
     .timer-track { height: 11px; background: var(--panel); border-radius: 999px; overflow: hidden; margin-bottom: 12px; }
     .timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, var(--mint), var(--gold)); border-radius: 999px; transition: width 0.25s linear; }
     .timer-bar.urgent { background: linear-gradient(90deg, var(--gold), var(--rose)); }
 
+    .progress-dots { display: flex; justify-content: center; gap: 6px; margin: 0 0 12px; flex-wrap: wrap; }
+    .progress-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); flex-shrink: 0; transition: transform 0.15s ease, background 0.15s ease; }
+    .progress-dots span.done { background: var(--mint); }
+    .progress-dots span.missed { background: var(--rose); }
+    .progress-dots span.current { background: var(--sky); transform: scale(1.35); }
+
     .question {
       font-family: "Baloo 2", sans-serif;
       text-align: center; font-size: 2.6rem; font-weight: 700;
-      margin: 16px 0 20px; color: var(--ink);
+      margin: 4px 0 20px; color: var(--ink);
     }
     .options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .opt {
       background: var(--panel); border: 3px solid var(--line); border-radius: 16px;
       padding: 18px 10px; font-family: "Baloo 2", sans-serif; font-size: 1.5rem; font-weight: 700;
-      cursor: pointer; color: var(--ink);
+      cursor: pointer; color: var(--ink); position: relative;
       transition: transform 0.08s ease, border-color 0.12s ease, background 0.12s ease;
     }
     .opt:hover:not(:disabled) { border-color: var(--sky); }
@@ -142,6 +160,10 @@
     .opt.correct { background: #d6fff0; border-color: var(--mint); }
     .opt.wrong { background: #ffe1e8; border-color: var(--rose); }
     .opt:disabled { cursor: default; }
+    .opt .key-hint {
+      position: absolute; top: 4px; left: 7px; font-size: 0.65rem; font-weight: 800;
+      color: var(--ink-soft); opacity: 0.55; font-family: "Nunito", sans-serif;
+    }
 
     .feedback { min-height: 28px; text-align: center; margin-top: 14px; font-weight: 800; }
     .feedback.ok { color: var(--mint-dark); }
@@ -181,10 +203,17 @@
     .battle-title { font-family: "Baloo 2", sans-serif; text-align: center; font-weight: 700; margin-bottom: 8px; color: var(--ink); }
     .solo-options.off { display: none; }
 
-    .progress-dots { display: flex; justify-content: center; gap: 6px; margin: 2px 0 4px; flex-wrap: wrap; }
-    .progress-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
-    .progress-dots span.done { background: var(--mint); }
-    .progress-dots span.current { background: var(--sky); transform: scale(1.3); }
+    .confetti-layer {
+      position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50;
+    }
+    .confetti-piece {
+      position: absolute; top: -20px; font-size: 1.4rem;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      from { transform: translateY(0) rotate(0deg); opacity: 1; }
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
@@ -206,7 +235,7 @@
           <button class="btn btn-flame" onclick="startGame('dificil')"><span class="icon">✖️</span> Difícil — Multiplicação (8s)</button>
           <button class="btn" style="background:var(--plasma); color:white; box-shadow:0 4px 0 var(--plasma-dark);" onclick="startGame('divisao')"><span class="icon">➗</span> Divisão (9s)</button>
           <button class="btn btn-primary" onclick="showScreen('tabuada')"><span class="icon">🔢</span> Tabuada (10s)</button>
-          <button class="btn btn-primary" onclick="startBattle()" style="background:var(--nebula); box-shadow:0 4px 0 #3c2966;"><span class="icon">⚔️</span> Batalha 2 jogadores</button>
+          <button class="btn btn-primary" onclick="showScreen('battlePick')" style="background:var(--nebula); box-shadow:0 4px 0 #3c2966;"><span class="icon">⚔️</span> Batalha 2 jogadores</button>
           <button class="btn btn-ghost" onclick="showScreen('howto')"><span class="icon">❓</span> Como jogar</button>
         </div>
       </div>
@@ -216,15 +245,16 @@
         <p class="subtitle" style="text-align:left; line-height:1.6; font-weight:600;">
           1. Escolha um nível.<br>
           2. Responda 10 perguntas.<br>
-          3. Cada conta tem um tempo.<br>
-          4. Clique na resposta certa antes do tempo acabar.<br>
+          3. Cada conta tem um tempo — os pontinhos acima da conta mostram seu progresso.<br>
+          4. Clique na resposta certa antes do tempo acabar (ou use as teclas 1, 2, 3, 4).<br>
           5. Cada acerto vale 10 pontos, e o combo aumenta o bônus.<br>
           6. Se o tempo acabar, a pergunta passa.<br>
-          7. Use o botão de som para ligar ou desligar a música.<br>
-          8. O jogo guarda o recorde de cada nível.<br>
+          7. Use o botão de som para ligar ou desligar a música — sua escolha fica salva.<br>
+          8. O jogo guarda o recorde de cada nível neste navegador.<br>
           9. No modo Tabuada você escolhe o número para treinar.<br>
           10. Você tem 3 vidas. Errar ou deixar o tempo acabar tira 1 vida.<br>
-          11. Na Batalha, os 2 jogam a mesma conta. Quem acertar primeiro ganha o ponto.
+          11. Na Batalha, escolha a dificuldade e os 2 jogam a mesma conta — quem acertar primeiro ganha o ponto.<br>
+          12. O botão ✕ no topo do jogo leva de volta ao menu a qualquer momento.
         </p>
         <button class="btn btn-primary" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
       </div>
@@ -247,9 +277,24 @@
         <button class="btn btn-ghost" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
       </div>
 
+      <div id="battlePick" class="screen">
+        <h1>⚔️ Batalha</h1>
+        <p class="subtitle">Escolha a dificuldade das contas</p>
+        <div class="level-grid">
+          <button class="btn btn-good" onclick="startBattle('facil')"><span class="icon">➕</span> Fácil — Soma</button>
+          <button class="btn btn-warn" onclick="startBattle('medio')"><span class="icon">➖</span> Médio — Soma e Subtração</button>
+          <button class="btn btn-flame" onclick="startBattle('dificil')"><span class="icon">✖️</span> Difícil — Multiplicação</button>
+          <button class="btn" style="background:var(--plasma); color:white; box-shadow:0 4px 0 var(--plasma-dark);" onclick="startBattle('divisao')"><span class="icon">➗</span> Divisão</button>
+        </div>
+        <button class="btn btn-ghost" onclick="showScreen('menu')"><span class="icon">↩️</span> Voltar</button>
+      </div>
+
       <div id="game" class="screen">
         <div class="hud">
-          <span class="pill">Pergunta <span id="qNum">1</span>/10</span>
+          <div class="hud-left">
+            <button class="quit-btn" id="quitBtn" onclick="quitToMenu()" aria-label="Voltar ao menu" title="Voltar ao menu">✕</button>
+            <span class="pill">Pergunta <span id="qNum">1</span>/10</span>
+          </div>
           <span class="pill time" id="timePill">⏱ <span id="timeLeft">10</span>s</span>
           <span class="pill solo-hud" id="scorePill">Pontos: <span id="score">0</span></span>
           <span class="pill combo solo-hud" id="comboPill">Combo: 0</span>
@@ -259,6 +304,7 @@
         </div>
         <button class="sound-btn" id="soundBtnGame" onclick="toggleSound()">🔊 Som ligado</button>
         <div class="timer-track"><div class="timer-bar" id="timerBar"></div></div>
+        <div class="progress-dots" id="progressDots"></div>
         <div class="question" id="question">7 + 5 = ?</div>
         <div class="options solo-options" id="options"></div>
         <div class="battle-board" id="battleBoard">
@@ -271,7 +317,7 @@
             <div class="options" id="optionsP2"></div>
           </div>
         </div>
-        <div class="feedback" id="feedback"></div>
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
       </div>
 
       <div id="result" class="screen">
@@ -282,10 +328,15 @@
         <p class="hint" id="resultMsg"></p>
         <p class="hint" id="recordMsg"></p>
         <button class="sound-btn" id="soundBtnResult" onclick="toggleSound()">🔊 Som ligado</button>
-        <button class="btn btn-good" onclick="showScreen('menu')"><span class="icon">🔁</span> Jogar de novo</button>
+        <div class="btn-row">
+          <button class="btn btn-good" id="playAgainBtn" onclick="playAgain()"><span class="icon">🔁</span> Jogar de novo</button>
+          <button class="btn btn-ghost" onclick="showScreen('menu')"><span class="icon">🏠</span> Menu</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
 
   <script>
     const TOTAL = 10;
@@ -293,49 +344,58 @@
     const LEVEL_NAME = { facil: "Fácil", medio: "Médio", dificil: "Difícil", divisao: "Divisão", tabuada: "Tabuada" };
     const TIME_BY_LEVEL_EXTRA = { tabuada: 10 };
 
-    // ---- Persistent records (uses window.storage; falls back to in-memory if unavailable) ----
+    // ---- Persistent records: localStorage, per-browser, wrapped defensively ----
+    const RECORDS_KEY = "superMathRecords";
+    const SOUND_KEY = "superMathSoundOn";
     let memoryRecordsFallback = {};
-    async function loadRecords() {
+
+    function loadRecords() {
       try {
-        const res = await window.storage.get("superMathRecords", false);
-        return res && res.value ? JSON.parse(res.value) : {};
+        const raw = localStorage.getItem(RECORDS_KEY);
+        return raw ? JSON.parse(raw) : { ...memoryRecordsFallback };
       } catch (e) {
         return { ...memoryRecordsFallback };
       }
     }
-    async function saveRecords(records) {
+    function saveRecords(records) {
       memoryRecordsFallback = { ...records };
       try {
-        const result = await window.storage.set("superMathRecords", JSON.stringify(records), false);
-        if (!result) console.error("Falha ao salvar recordes");
+        localStorage.setItem(RECORDS_KEY, JSON.stringify(records));
       } catch (e) {
-        console.error("Erro ao salvar recordes:", e);
+        console.error("Não foi possível salvar os recordes:", e);
       }
     }
-    async function getRecord(lvl) {
-      const records = await loadRecords();
-      return Number(records[lvl] || 0);
-    }
-    async function setRecord(lvl, value) {
-      const records = await loadRecords();
+    function getRecord(lvl) { return Number(loadRecords()[lvl] || 0); }
+    function setRecord(lvl, value) {
+      const records = loadRecords();
       records[lvl] = value;
-      await saveRecords(records);
+      saveRecords(records);
     }
-    async function updateRecordsText() {
+    function updateRecordsText() {
       const el = document.getElementById("recordsText");
       if (!el) return;
-      const r = await loadRecords();
+      const r = loadRecords();
       el.textContent = "Recordes: Fácil " + (r.facil || 0) +
         " · Médio " + (r.medio || 0) +
         " · Difícil " + (r.dificil || 0) +
         " · Divisão " + (r.divisao || 0) +
         " · Tabuada " + (r.tabuada || 0);
     }
+    function loadSoundPref() {
+      try {
+        const raw = localStorage.getItem(SOUND_KEY);
+        return raw === null ? true : raw === "1";
+      } catch (e) { return true; }
+    }
+    function saveSoundPref(on) {
+      try { localStorage.setItem(SOUND_KEY, on ? "1" : "0"); } catch (e) { /* ignore */ }
+    }
 
     let level = "facil", tabuadaN = 0, current = 0, score = 0, combo = 0, bestCombo = 0, correctCount = 0, lives = 3;
     let isBattle = false, p1Score = 0, p2Score = 0, p1Locked = false, p2Locked = false;
     let answer = 0, locked = false, timeLeft = 10, maxTime = 10, timerId = null, audioCtx = null, lastTickSecond = null;
-    let soundOn = true; // in-memory only; no browser storage used for this preference
+    let dotResults = []; // per-question outcome for the progress dots: 'done' | 'missed'
+    let soundOn = loadSoundPref();
     let musicTimer = null, musicStep = 0, musicGain = null, noiseBuffer = null;
 
     // Two-bar cheerful chiptune phrase (0 = rest). C major, bright and bouncy.
@@ -351,7 +411,6 @@
       220.00,0,0,0, 220.00,0,174.61,0,
       174.61,0,0,0, 196.00,0,220.00,0
     ];
-    // 1 = hit, on a 32-step grid matching the melody above
     const KICK_PATTERN = [1,0,0,0,0,0,1,0, 1,0,0,0,0,0,1,0, 1,0,0,0,0,0,1,0, 1,0,0,0,0,0,1,0];
     const HAT_PATTERN  = [0,1,0,1,0,1,0,1, 0,1,0,1,0,1,0,1, 0,1,0,1,0,1,0,1, 0,1,0,1,0,1,0,1];
     const STEP_MS = 200;
@@ -367,6 +426,7 @@
     }
     function toggleSound() {
       soundOn = !soundOn;
+      saveSoundPref(soundOn);
       updateSoundButtons();
       if (soundOn) { getAudio(); playClick(); startMusic(); } else stopMusic();
     }
@@ -479,13 +539,24 @@
     function playWin() { tone(523.25,0,0.12,"triangle",0.12); tone(659.25,0.12,0.12,"triangle",0.12); tone(783.99,0.24,0.12,"triangle",0.12); tone(1046.5,0.36,0.32,"triangle",0.14); }
     function playTick() { tone(880,0,0.05,"sine",0.05); }
 
+    let lastLevel = "facil", lastBattleLevel = "medio", lastWasBattle = false, lastTabuadaN = 0;
+
     function showScreen(id) {
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
-      // fix: leaving the game/result screen for the menu should reset the wide battle layout
       if (id === "menu") {
         document.getElementById("wrap").classList.remove("battle-wide");
+        updateRecordsText();
       }
+    }
+    function quitToMenu() {
+      stopTimer();
+      showScreen("menu");
+    }
+    function playAgain() {
+      if (lastWasBattle) startBattle(lastBattleLevel);
+      else if (lastLevel === "tabuada") startTabuada(lastTabuadaN);
+      else startGame(lastLevel);
     }
     function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
     function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
@@ -526,17 +597,17 @@
         const fake = result + (noise === 0 ? 3 : noise);
         if (fake >= 0) options.add(fake);
       }
-      // fallback in the rare case the loop couldn't find enough distinct non-negative values
       let filler = result + 11;
       while (options.size < 4) { options.add(filler); filler += 1; }
       return { text, answer: result, options: Array.from(options).sort(() => Math.random() - 0.5) };
     }
-    function startTabuada(n) { tabuadaN = n; startGame("tabuada"); }
-    function startBattle() { startGame("medio", true); }
+    function startTabuada(n) { tabuadaN = n; lastTabuadaN = n; startGame("tabuada"); }
+    function startBattle(pickedLevel) { lastBattleLevel = pickedLevel || "medio"; startGame(lastBattleLevel, true); }
     function setBattleUI(on) {
       document.getElementById("wrap").classList.toggle("battle-wide", on);
       document.getElementById("battleBoard").classList.toggle("on", on);
       document.getElementById("options").classList.toggle("off", on);
+      document.getElementById("progressDots").style.display = on ? "none" : "flex";
       document.querySelectorAll(".solo-hud").forEach(el => el.style.display = on ? "none" : "");
       document.querySelectorAll(".battle-hud").forEach(el => el.style.display = on ? "" : "none");
       updateBattleScores();
@@ -546,27 +617,51 @@
       if (a) a.textContent = "🔵 J1: " + p1Score;
       if (b) b.textContent = "🟠 J2: " + p2Score;
     }
+    function initProgressDots() {
+      const box = document.getElementById("progressDots");
+      box.innerHTML = "";
+      dotResults = new Array(TOTAL).fill(null);
+      for (let i = 0; i < TOTAL; i++) {
+        const dot = document.createElement("span");
+        box.appendChild(dot);
+      }
+    }
+    function renderProgressDots() {
+      const box = document.getElementById("progressDots");
+      const dots = box.children;
+      for (let i = 0; i < dots.length; i++) {
+        const dot = dots[i];
+        dot.className = "";
+        if (dotResults[i] === "done") dot.classList.add("done");
+        else if (dotResults[i] === "missed") dot.classList.add("missed");
+        if (i === current - 1) dot.classList.add("current");
+      }
+    }
     function startGame(chosen, battle) {
       getAudio(); playClick(); startMusic(); stopTimer();
       isBattle = !!battle; level = chosen;
+      if (!isBattle) lastLevel = chosen;
+      lastWasBattle = isBattle;
       current = 0; score = 0; combo = 0; bestCombo = 0; correctCount = 0; lives = 3; p1Score = 0; p2Score = 0;
       document.getElementById("score").textContent = "0";
-      updateComboUI(); updateLivesUI(); setBattleUI(isBattle);
+      updateComboUI(); updateLivesUI(); setBattleUI(isBattle); initProgressDots();
       showScreen("game"); nextQuestion();
     }
     function nextQuestion() {
       if (current >= TOTAL) { finishGame(); return; }
       locked = false; p1Locked = false; p2Locked = false;
       current += 1;
+      renderProgressDots();
       const q = makeQuestion(); answer = q.answer;
       document.getElementById("qNum").textContent = current;
       document.getElementById("question").textContent = q.text;
       document.getElementById("feedback").textContent = isBattle ? "Quem acertar primeiro ganha!" : "";
       document.getElementById("feedback").className = "feedback";
       const box = document.getElementById("options"); box.innerHTML = "";
-      q.options.forEach(opt => {
+      q.options.forEach((opt, i) => {
         const btn = document.createElement("button");
-        btn.className = "opt"; btn.textContent = opt;
+        btn.className = "opt"; btn.dataset.key = String(i + 1);
+        btn.innerHTML = '<span class="key-hint">' + (i + 1) + '</span>' + opt;
         btn.onclick = () => choose(opt, btn);
         box.appendChild(btn);
       });
@@ -619,9 +714,9 @@
       }
     }
     function revealAnswer(wrongBtn) {
-      document.querySelectorAll(".opt").forEach(b => {
+      document.querySelectorAll("#options .opt").forEach(b => {
         b.disabled = true;
-        if (Number(b.textContent) === answer) b.classList.add("correct");
+        if (Number(b.textContent.replace(/^\D+/, "")) === answer) b.classList.add("correct");
       });
       if (wrongBtn) wrongBtn.classList.add("wrong");
     }
@@ -642,19 +737,23 @@
       revealAnswer(value === answer ? null : btn);
       const fb = document.getElementById("feedback");
       if (value === answer) {
+        dotResults[current - 1] = "done";
         combo += 1; if (combo > bestCombo) bestCombo = combo; correctCount += 1;
         const gained = 10 + (combo - 1) * 5; score += gained;
         document.getElementById("score").textContent = score; updateComboUI();
         fb.textContent = combo > 1 ? "Combo x" + combo + "! +" + gained : "Muito bem! +10";
         fb.className = "feedback ok"; playCorrect();
       } else {
+        dotResults[current - 1] = "missed";
         resetCombo();
         const ended = loseLife();
         fb.textContent = ended ? "Sem vidas! A resposta era " + answer : "Quase! A resposta era " + answer;
         fb.className = "feedback no"; playWrong();
+        renderProgressDots();
         setTimeout(ended ? finishGame : nextQuestion, ended ? 1100 : 900);
         return;
       }
+      renderProgressDots();
       setTimeout(nextQuestion, 900);
     }
     function timeUp() {
@@ -671,6 +770,8 @@
         setTimeout(nextQuestion, 1100); return;
       }
       revealAnswer();
+      dotResults[current - 1] = "missed";
+      renderProgressDots();
       const fb = document.getElementById("feedback");
       resetCombo();
       const ended = loseLife();
@@ -678,7 +779,24 @@
       fb.className = "feedback no"; playTimeUp();
       setTimeout(ended ? finishGame : nextQuestion, 1100);
     }
-    async function finishGame() {
+
+    function launchConfetti(count) {
+      const layer = document.getElementById("confettiLayer");
+      const emojis = ["🎉","⭐","✨","🎊","🏆"];
+      for (let i = 0; i < count; i++) {
+        const piece = document.createElement("span");
+        piece.className = "confetti-piece";
+        piece.textContent = emojis[rand(0, emojis.length - 1)];
+        piece.style.left = rand(0, 100) + "vw";
+        const duration = 2.2 + Math.random() * 1.6;
+        piece.style.animationDuration = duration + "s";
+        piece.style.animationDelay = (Math.random() * 0.5) + "s";
+        layer.appendChild(piece);
+        setTimeout(() => piece.remove(), (duration + 0.6) * 1000);
+      }
+    }
+
+    function finishGame() {
       stopTimer();
       if (isBattle) {
         let winner = "Empate!";
@@ -688,8 +806,10 @@
         document.getElementById("finalScore").textContent = p1Score + " x " + p2Score;
         document.getElementById("stars").textContent = "";
         document.getElementById("resultMsg").textContent = winner;
-        document.getElementById("recordMsg").textContent = "Batalha de 10 contas";
-        showScreen("result"); playWin(); return;
+        document.getElementById("recordMsg").textContent = "Batalha de 10 contas — " + LEVEL_NAME[level];
+        showScreen("result"); playWin();
+        if (p1Score !== p2Score) launchConfetti(24);
+        return;
       }
       document.getElementById("resultEmoji").textContent = "🏆";
       document.getElementById("finalScore").textContent = score + " pontos";
@@ -703,21 +823,32 @@
       document.getElementById("stars").textContent = stars;
       document.getElementById("resultMsg").textContent = msg;
       const recordEl = document.getElementById("recordMsg");
-      recordEl.textContent = "Salvando recorde…";
-      showScreen("result"); playWin();
-      try {
-        const best = await getRecord(level);
-        if (score > best) {
-          await setRecord(level, score);
-          recordEl.textContent = "Novo recorde no " + LEVEL_NAME[level] + "!";
-        } else {
-          recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
-        }
-        await updateRecordsText();
-      } catch (e) {
-        recordEl.textContent = "Não foi possível salvar o recorde agora.";
+      const best = getRecord(level);
+      if (score > best) {
+        setRecord(level, score);
+        recordEl.textContent = "Novo recorde no " + LEVEL_NAME[level] + "!";
+      } else {
+        recordEl.textContent = "Recorde do " + LEVEL_NAME[level] + ": " + best + " pontos";
       }
+      showScreen("result"); playWin();
+      if (correctCount >= 10) launchConfetti(28);
     }
+
+    // Keyboard shortcuts: 1-4 to answer in solo mode, Esc to quit mid-game
+    window.addEventListener("keydown", (e) => {
+      const gameActive = document.getElementById("game").classList.contains("active");
+      if (!gameActive) return;
+      if (e.key === "Escape") { quitToMenu(); return; }
+      if (isBattle || locked) return;
+      if (["1","2","3","4"].includes(e.key)) {
+        const btn = document.querySelector('#options .opt[data-key="' + e.key + '"]');
+        if (btn && !btn.disabled) {
+          const value = Number(btn.textContent.replace(/^\D+/, ""));
+          choose(value, btn);
+        }
+      }
+    });
+
     updateSoundButtons();
     updateRecordsText();
   </script>
