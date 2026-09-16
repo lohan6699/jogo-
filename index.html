@@ -51,7 +51,6 @@
         radial-gradient(ellipse 50% 35% at 85% 80%, rgba(58,160,255,0.25), transparent 60%),
         linear-gradient(160deg, var(--space-mid) 0%, var(--space-deep) 65%);
     }
-    /* twinkling starfield, purely decorative */
     body::before, body::after {
       content: "";
       position: fixed;
@@ -72,14 +71,12 @@
     body::after { opacity: 0.25; animation-delay: 1.4s; transform: scale(1.4) translate(5%, -5%); }
     @keyframes twinkle { from { opacity: 0.2; } to { opacity: 0.65; } }
 
-    /* high-contrast overrides */
     body.high-contrast { --card: #ffffff; --panel: #e9e9ef; --ink: #000000; --ink-soft: #202020; --line: #000000; }
     body.high-contrast::before, body.high-contrast::after { opacity: 0 !important; }
     body.high-contrast .opt { border-width: 4px; }
     body.high-contrast .card { box-shadow: 0 0 0 3px #000, 0 25px 60px rgba(0,0,0,0.5); }
     body.high-contrast .pill { border: 2px solid #000; }
 
-    /* skin accent overrides */
     body[data-skin="roxo"] { --sky: var(--plasma); --sky-dark: var(--plasma-dark); }
     body[data-skin="cometa"] { --sky: var(--gold); --sky-dark: var(--gold-dark); }
     body[data-skin="planeta"] { --sky: var(--mint); --sky-dark: var(--mint-dark); }
@@ -245,7 +242,6 @@
       to { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
     }
 
-    /* profiles */
     .profile-row {
       display: flex; align-items: center; gap: 10px; padding: 12px 14px;
       border-radius: 14px; background: var(--panel);
@@ -274,7 +270,6 @@
       font-family: "Nunito", sans-serif; font-size: 1rem; margin-top: 4px; color: var(--ink);
     }
 
-    /* achievements */
     .ach-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--panel); }
     .ach-row.locked { opacity: 0.5; filter: grayscale(0.5); }
     .ach-emoji { font-size: 1.6rem; flex-shrink: 0; }
@@ -283,7 +278,6 @@
     .ach-desc { font-size: 0.85rem; color: var(--ink-soft); }
     .ach-check { margin-left: auto; font-size: 1.2rem; flex-shrink: 0; }
 
-    /* shop */
     .shop-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 14px; background: var(--panel); }
     .shop-emoji { font-size: 1.8rem; flex-shrink: 0; }
     .shop-info { flex: 1; min-width: 0; }
@@ -512,7 +506,6 @@
       { id: "duelista", name: "Duelista", desc: "Termine uma Batalha 2 jogadores sem empate", emoji: "⚔️", check: ctx => ctx.isBattle && ctx.battleWon }
     ];
 
-    // ---- Persistent settings: localStorage, per-browser, wrapped defensively ----
     const OLD_RECORDS_KEY = "superMathRecords";
     const SOUND_KEY = "superMathSoundOn";
     const TEXTSIZE_KEY = "superMathTextSize";
@@ -533,7 +526,6 @@
     function loadPractice() { try { return localStorage.getItem(PRACTICE_KEY) === "1"; } catch (e) { return false; } }
     function savePractice(v) { try { localStorage.setItem(PRACTICE_KEY, v ? "1" : "0"); } catch (e) {} }
 
-    // ---- Profiles ----
     function generateId() { return "p_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 7); }
     function normalizeProfile(p) {
       if (!p.records) p.records = {};
@@ -604,7 +596,6 @@
       if (co) co.textContent = p.coins;
     }
 
-    // ---- Profiles screen ----
     let pendingAvatar = AVATAR_OPTIONS[0];
     function renderProfileList() {
       const box = document.getElementById("profileList");
@@ -691,7 +682,6 @@
       renderProfileList(); updateProfileHeader(); updateRecordsText(); applySkin();
     }
 
-    // ---- Achievements screen ----
     function renderAchievements() {
       const profile = getActiveProfile();
       const box = document.getElementById("achList");
@@ -723,7 +713,6 @@
       });
     }
 
-    // ---- Shop screen ----
     function applySkin() {
       const p = getActiveProfile();
       document.body.setAttribute("data-skin", p.skin);
@@ -1279,7 +1268,6 @@
       if (correctCount >= 10) launchConfetti(28);
     }
 
-    // Keyboard shortcuts: 1-4 to answer in solo mode, Esc to quit mid-game
     window.addEventListener("keydown", (e) => {
       const gameActive = document.getElementById("game").classList.contains("active");
       if (!gameActive) return;
